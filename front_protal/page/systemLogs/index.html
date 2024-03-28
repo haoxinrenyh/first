@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+
+    <link rel="stylesheet" href="/css/systemLogs/index.css">
+</head>
+
+<body>
+    <div class="task-page">
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 breadcrumb-list">
+                    <li class="breadcrumb-item">系统日志</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="filter-params">
+                <div class="input-group input-group-lg medium-input mb-4">
+                    <input type="text" class="form-control search-task" placeholder="请输入关键词进行检索">
+                    <button class="btn btn-primary" type="button" onclick="searchKeyword()">搜索</button>
+                </div>
+                <div class="select-group mb-4">
+                    <div class="select-item">
+                        <div class="select-key">日志等级：</div>
+                        <select class="form-select logs-level" onchange="pickLogsLevel()">
+                            <option selected hidden>请选择日志等级</option>
+                            <option class="option" value="">全部</option>
+                            <option class="option" value="">高</option>
+                            <option class="option" value="">中</option>
+                            <option class="option" value="">低</option>
+                        </select>
+                    </div>
+                    <div class="select-item">
+                        <div class="select-key">信源类型：</div>
+                        <select class="form-select source-kind" onchange="pickSouceKind()">
+                            <option selected hidden>请选择信源类型</option>
+                            <option class="option" value="-1">全部</option>
+                        </select>
+                    </div>
+                    <div class="select-item">
+                        <div class="select-key">站点ID：</div>
+                        <input type="text" class="form-control" placeholder="请输入站点ID">
+                    </div>
+                    <div class="select-item">
+                        <div class="select-key">种子ID：</div>
+                        <input type="text" class="form-control" placeholder="请输入种子ID">
+                    </div>
+                </div>
+            </div>
+            <div class="table-list">
+                <div class="table-top">
+                    <div class="table-title">系统日志列表</div>
+                    <!-- <div class="table-btn-group">
+                        <button type="button" class="btn btn-primary" onclick="addTask()">任务新建</button>
+                    </div> -->
+                </div>
+                <div class="table_mark">
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">日志摘要</th>
+                                <th scope="col">日志等级</th>
+                                <th scope="col">应用名称</th>
+                                <th scope="col">错误类型</th>
+                                <th scope="col">信源类型</th>
+                                <th scope="col">日志时间</th>
+                                <th scope="col" class="center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-task">
+
+                        </tbody>
+                    </table>
+                    <div class="table_empty" style="display: none;">暂无数据</div>
+                    <!-- 加载状态 遮罩层 -->
+                    <div class="modal fade marklayer">
+                        <div class="load_item">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pagination"></div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                        line-height: 24px;
+                        font-size: 18px;
+                        color: #303133;
+                      ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+                                    确定要删除吗？
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitDelete()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="pausedModal" tabindex="-1" aria-labelledby="pausedModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                        line-height: 24px;
+                        font-size: 18px;
+                        color: #303133;
+                      ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+                                    确定要暂停吗？
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitPaused()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="controlModal" tabindex="-1" aria-labelledby="closedModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                        line-height: 24px;
+                        font-size: 18px;
+                        color: #303133;
+                      ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitControl()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/js/intercept.js"></script>
+    <!-- <script src="/js/collectTask/index.js"></script> -->
+</body>
+
+</html>

@@ -1,0 +1,45 @@
+{
+  "manifest_version": 2, //版本号，由google指定为2
+  "name": "plugins", //插件名称
+  "version": "1.0", //插件版本
+  "description": "插件", //插件描述
+  "icons": { //插件图标
+  },
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false //是否在页面上一直运行
+  },
+  "permissions": [  // 在permission标签中，添加了tabs及<all_urls>，可以更便捷地注入代码executeScript，不需要每次都用content_scripts注入一个个的js或者css
+    "storage",
+    "notifications",
+    "contextMenus",
+    "tabs",
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_end" //控制文件注入的时机
+    }
+  ],
+  "browser_action": {
+    "default_icon": "/images/logo.png", //插件图标
+    "default_popup": "popup.html" //点击图标后弹出的html互动文件
+  },
+  "commands": {    // 新增命令
+    "_execute_browser_action": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+F",
+        "mac": "MacCtrl+Shift+F"
+      },
+      "description": "Opens popup.html"
+    }
+  }
+}

@@ -1,0 +1,187 @@
+.main-content {
+  background-color: transparent;
+  padding: 0;
+}
+
+.page-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.update-time {
+  font-size: 15px;
+}
+
+.pd-4 {
+  padding: 1rem;
+}
+
+.media {
+  display: flex;
+}
+
+.avatar-sm {
+  height: 3rem;
+  width: 3rem;
+  margin-right: 1rem;
+}
+
+.rounded-circle {
+  background-color: #eff2f7;
+  border-radius: 50%;
+}
+
+.avatar-title {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-title i {
+  font-size: 24px;
+}
+
+.media-body {
+  flex: 1;
+}
+
+h5 {
+  font-size: 1.125rem;
+  color: #343a40;
+  margin-bottom: 0.5rem;
+}
+
+h4 {
+  font-size: 1.35rem;
+  color: #343a40;
+  margin-bottom: 0.5rem;
+}
+
+.br-t {
+  border-top: 1px solid #eff2f7;
+}
+
+.br-b {
+  border-bottom: 1px solid #eff2f7;
+}
+
+.text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.card-chunks-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chart-title {
+  font-size: 17px;
+}
+
+.chart-filter {
+  display: flex;
+}
+
+#polylines-chart {
+  width: 811px;
+  height: 310px;
+}
+
+.d-inline-flex {
+  display: inline-flex;
+}
+
+.br-0 {
+  border: none;
+}
+
+#cirque-chart-one,
+#cirque-chart-two {
+  width: 373px;
+  height: 234px;
+}
+
+.bottom-chart-title {
+  font-size: 17px;
+  padding-bottom: 1rem;
+}
+
+#cirque-chart-three {
+  width: 600px;
+  height: 353px;
+}
+
+.nav-underline .nav-link {
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 1rem;
+  color: #aaa;
+}
+
+.nav-underline .nav-link.active,
+.nav-underline .show > .nav-link {
+  font-weight: 700;
+  color: #0d6efd;
+  border-bottom: 2px solid #0d6efd;
+}
+
+.table thead tr {
+  background-color: transparent;
+}
+
+.top1 {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #f54545;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 2px;
+}
+
+.top2 {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #ff8447;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 2px;
+}
+
+.top3 {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #ffac37;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 2px;
+}
+
+.top4 {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #8eb9f5;
+  color: #fff;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 2px;
+}

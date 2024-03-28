@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+    <link rel="stylesheet" href="/css/spiderMarket/templateDetail.css">
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer" onclick="toBackback()">采集市场</li>
+                    <li class="breadcrumb-item pointer" onclick="rollBack()">模板列表</li>
+                    <li class="breadcrumb-item active" aria-current="page">模板详情</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="template_intro">
+                <div class="template_intro_top">
+                    <div class="template_intro_img">
+                        <img src="/images/weibo.png" alt="">
+                    </div>
+                    <div class="template_intro_info">
+                        <div class="template_intro_info_title">
+                            <span class="template_name">微博搜索关键词采集</span>
+                            <span class="template_tag">媒体阅读</span>
+                        </div>
+                        <div class="template_intro_info_tip">
+                            用于采集新浪微博搜索界面中的综合搜索信息，通过输入关键词后进行搜索，具体采集内容请点击【采集字段预览】和【示例数据】
+                        </div>
+                        <div class="template_action scroll-show">
+                            <button type="button" class="btn btn-primary use-now">立即使用</button>
+                            <button type="button" class="btn collect" onclick="collectTemplate(0)"><i
+                                    class="iconfont icon-jushoucang"></i><span>收藏</span></button>
+                            <div class="like">
+                                <button type="button" class="btn like-up" onclick="likeTemplate(0)"><i
+                                        class="iconfont icon-dianzan"></i><span>赞</span><span
+                                        class="like-count">136</span></button>
+                                <button type="button" class="btn like-down"><i
+                                        class="iconfont icon-chaping-xianxing"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template_intro_bottom">
+                    <div class="more-tag-list">
+                        <div class="tag-item">
+                            <div class="tag-item-value"><i class="iconfont icon-duigou"></i>个人版本及以上</div>
+                            <div class="tag-item-key">版本限制</div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="tag-item">
+                            <div class="tag-item-value"><i class="iconfont icon-diannao_o"></i></div>
+                            <div class="tag-item-key">采集方式</div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="tag-item">
+                            <div class="tag-item-value">免费</div>
+                            <div class="tag-item-key">云采集数据单价</div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="tag-item">
+                            <div class="tag-item-value">无限制</div>
+                            <div class="tag-item-key">每日上限<i class="iconfont icon-wenhao" id="tooltip"
+                                    data-bs-toggle="tooltip" data-bs-placement="bottom"
+                                    data-bs-title="该模板下创建的所有任务，累计每日云采集的数据总量。(本地采集无此限制)"></i></div>
+                        </div>
+                        <div class="line"></div>
+                        <div class="tag-item">
+                            <div class="tag-item-value">2023/10/13</div>
+                            <div class="tag-item-key">模板更新时间</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="template_action scroll-hidden">
+                    <button type="button" class="btn btn-primary use-now">立即使用</button>
+                    <button type="button" class="btn collect" onclick="collectTemplate(1)"><i
+                            class="iconfont icon-jushoucang"></i><span>收藏</span></button>
+                    <div class="like">
+                        <button type="button" class="btn like-up" onclick="likeTemplate(1)"><i
+                                class="iconfont icon-dianzan"></i><span>赞</span><span
+                                class="like-count">136</span></button>
+                        <button type="button" class="btn like-down"><i
+                                class="iconfont icon-chaping-xianxing"></i></button>
+                    </div>
+                </div>
+            </div>
+            <div class="template_content">
+                <div class="tab-nav">
+                    <span class="tab-nav-item active"><a>模板介绍</a></span>
+                    <span class="tab-nav-item"><a>采集字段预览</a></span>
+                    <span class="tab-nav-item"><a>采集参数预览</a></span>
+                    <span class="tab-nav-item"><a>推荐</a></span>
+                </div>
+                <div class="template_info">
+                    <div id="template_description" class="template_info_module">
+                        <div class="template_info_item">
+                            <div class="template_info_item_title">使用方法</div>
+                            <div class="template_info_item_content">
+                                <p>1.点击【立即使用】进入参数配置界面。</p>
+                                <p>2.输入要采集的<span class="highlight">关键词</span>，如“<span
+                                        class="highlight">沃尔玛</span>”。如您要输入<span class="highlight">多个关键词</span>，请每个<span
+                                        class="highlight">关键词之间</span>用<span class="highlight">回车</span>进行<span
+                                        class="highlight">换行</span>。支持直接从Excel表格中直接复制粘贴一列关键词进来。建议每个任务中的关键词<span
+                                        class="highlight">不要超过了200个</span>。
+                                </p>
+                                <p>3.设置要<span class="highlight">翻页的次数</span>，即点击下一页的次数。请输入<span
+                                        class="highlight">数字</span>，如“<span class="highlight">5</span>”，可实现<span
+                                        class="highlight">只采集前五页</span>的内容。</p>
+                                <p>4.所有参数设置完毕后，请点击【保存并启动】进行采集。</p>
+                            </div>
+                        </div>
+                        <div class="template_info_item">
+                            <div class="template_info_item_title">注意事项</div>
+                            <div class="template_info_item_content">
+                                <p>模板因需要扫码登陆，无法使用云采集。<span
+                                        class="highlight">使用本地采集，在启动采集之后，任务会自动占未登寻跳中扫码登是资口，请快速使用微博app扫码登录，如果登录失败，可以多试几次</span>。
+                                </p>
+                                <p><span class="highlight" style="margin-left: 0;">微博发布者字段涉及个人昵称，属于隐私数据，模板已做打星处理</span>。
+                                </p>
+                            </div>
+                        </div>
+                        <div class="template_info_item">
+                            <div class="template_info_item_title">采集数据预览</div>
+                            <div class="spider_data_preview">
+                                <table class="table table-hover">
+                                    <thead class="thead-head">
+                                        <tr>
+                                            <th>关键词</th>
+                                            <th>微博发布者</th>
+                                            <th>微博发布者链接</th>
+                                            <th>微博内容</th>
+                                            <th>博文详情链接</th>
+                                            <th>微博发布时间</th>
+                                            <th>发布来源</th>
+                                            <th>转发数</th>
+                                            <th>评论数</th>
+                                            <th>点赞数</th>
+                                            <th>当前时间</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-body">
+                                        <tr>
+                                            <td>沃尔玛</td>
+                                            <td>新***</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>#今日跨境资讯...</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>2023-10-13 16:50:00</td>
+                                            <td>微博 weibo.com</td>
+                                            <td>1000</td>
+                                            <td>10000</td>
+                                            <td>500</td>
+                                            <td>2023-10-13 17:20:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>沃尔玛</td>
+                                            <td>新***</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>#今日跨境资讯...</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>2023-10-13 16:50:00</td>
+                                            <td>微博 weibo.com</td>
+                                            <td>1000</td>
+                                            <td>10000</td>
+                                            <td>500</td>
+                                            <td>2023-10-13 17:20:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>沃尔玛</td>
+                                            <td>新***</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>#今日跨境资讯...</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>2023-10-13 16:50:00</td>
+                                            <td>微博 weibo.com</td>
+                                            <td>1000</td>
+                                            <td>10000</td>
+                                            <td>500</td>
+                                            <td>2023-10-13 17:20:00</td>
+                                        </tr>
+                                        <tr>
+                                            <td>沃尔玛</td>
+                                            <td>新***</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>#今日跨境资讯...</td>
+                                            <td>https://weibo.com...</td>
+                                            <td>2023-10-13 16:50:00</td>
+                                            <td>微博 weibo.com</td>
+                                            <td>1000</td>
+                                            <td>10000</td>
+                                            <td>500</td>
+                                            <td>2023-10-13 17:20:00</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="field_preview" class="template_info_module">
+                        <div class="template_info_item_title">采集字段预览</div>
+                        <div class="frame">
+                            <div class="frame_item_left">
+                                <div class="frame_item_menu_list">
+                                    <div class="frame_item_menu active">微博发布时间</div>
+                                    <div class="frame_item_menu">微博内容</div>
+                                    <div class="frame_item_menu">微博发布者</div>
+                                    <div class="frame_item_menu">关键词</div>
+                                    <div class="frame_item_menu">微博发布者链接</div>
+                                    <div class="frame_item_menu">页面网址</div>
+                                    <div class="frame_item_menu">当前时间</div>
+                                    <div class="frame_item_menu">发布来源</div>
+                                </div>
+                            </div>
+                            <div class="frame_item_right">
+                                <div class="frame_item_content">
+                                    <div class="frame_item_content_title">微博发布时间</div>
+                                    <div class="frame_item_content_img">
+                                        <img src="/images/example1.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="params_preview" class="template_info_module">
+                        <div class="template_info_item_title">采集参数预览</div>
+                        <div class="frame">
+                            <div class="frame_item_left">
+                                <div class="frame_item_menu_list">
+                                    <div class="frame_item_menu active">翻页次数</div>
+                                    <div class="frame_item_menu">关键词</div>
+                                    <div class="frame_item_menu">密码</div>
+                                    <div class="frame_item_menu">用户名</div>
+                                </div>
+                            </div>
+                            <div class="frame_item_right">
+                                <div class="frame_item_content">
+                                    <div class="frame_item_content_title">翻页次数</div>
+                                    <div class="frame_item_content_img">
+                                        <img src="/images/example2.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="template_recommend" class="template_info_module">
+                        <div class="template_info_item_title">使用了该模板的人还使用了以下模板</div>
+                        <div class="recommend_template_list">
+                            <div class="recommend_template_item">
+                                <div class="recommend_template_item_row">
+                                    <img class="recommend_template_img" src="/images/jingdong.png" alt="">
+                                    <span class="recommend_template_name">微博-热搜榜</span>
+                                </div>
+                                <div class="recommend_template_item_row">
+                                    <div class="template_tag">媒体阅读</div>
+                                    <div class="template_tag"><i class="iconfont icon-diannao_o"></i></div>
+                                </div>
+                                <div class="recommend_template_item_row" style="margin-top: 30px;">微博-热搜榜</div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;">个人版及以上<span
+                                        class="price">免费</span></div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;display: block;">
+                                    <div class="hover-hidden">
+                                        <div class="like_bottom">
+                                            <i class="iconfont icon-dianzan"></i>
+                                            <span>103</span>
+                                        </div>
+                                        <div class="update_time">2023/08/23</div>
+                                    </div>
+                                    <div class="hover-show">
+                                        <button type="button" class="btn btn-light">数据预览</button>
+                                        <button type="button" class="btn btn-primary">查看详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recommend_template_item">
+                                <div class="recommend_template_item_row">
+                                    <img class="recommend_template_img" src="/images/jingdong.png" alt="">
+                                    <span class="recommend_template_name">微博-热搜榜</span>
+                                </div>
+                                <div class="recommend_template_item_row">
+                                    <div class="template_tag">媒体阅读</div>
+                                    <div class="template_tag"><i class="iconfont icon-diannao_o"></i></div>
+                                </div>
+                                <div class="recommend_template_item_row" style="margin-top: 30px;">微博-热搜榜</div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;">个人版及以上<span
+                                        class="price">免费</span></div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;display: block;">
+                                    <div class="hover-hidden">
+                                        <div class="like_bottom">
+                                            <i class="iconfont icon-dianzan"></i>
+                                            <span>103</span>
+                                        </div>
+                                        <div class="update_time">2023/08/23</div>
+                                    </div>
+                                    <div class="hover-show">
+                                        <button type="button" class="btn btn-light">数据预览</button>
+                                        <button type="button" class="btn btn-primary">查看详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recommend_template_item">
+                                <div class="recommend_template_item_row">
+                                    <img class="recommend_template_img" src="/images/jingdong.png" alt="">
+                                    <span class="recommend_template_name">微博-热搜榜</span>
+                                </div>
+                                <div class="recommend_template_item_row">
+                                    <div class="template_tag">媒体阅读</div>
+                                    <div class="template_tag"><i class="iconfont icon-diannao_o"></i></div>
+                                </div>
+                                <div class="recommend_template_item_row" style="margin-top: 30px;">微博-热搜榜</div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;">个人版及以上<span
+                                        class="price">免费</span></div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;display: block;">
+                                    <div class="hover-hidden">
+                                        <div class="like_bottom">
+                                            <i class="iconfont icon-dianzan"></i>
+                                            <span>103</span>
+                                        </div>
+                                        <div class="update_time">2023/08/23</div>
+                                    </div>
+                                    <div class="hover-show">
+                                        <button type="button" class="btn btn-light">数据预览</button>
+                                        <button type="button" class="btn btn-primary">查看详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="recommend_template_item">
+                                <div class="recommend_template_item_row">
+                                    <img class="recommend_template_img" src="/images/jingdong.png" alt="">
+                                    <span class="recommend_template_name">微博-热搜榜</span>
+                                </div>
+                                <div class="recommend_template_item_row">
+                                    <div class="template_tag">媒体阅读</div>
+                                    <div class="template_tag"><i class="iconfont icon-diannao_o"></i></div>
+                                </div>
+                                <div class="recommend_template_item_row" style="margin-top: 30px;">微博-热搜榜</div>
+                                <div class="recommend_template_item_row" style="margin-top: 80px;">个人版及以上<span
+                                        class="price">免费</span></div>
+                                <div class="recommend_template_item_row bottom-info"
+                                    style="margin-top: 80px;display: block;">
+                                    <div class="hover-hidden">
+                                        <div class="like_bottom">
+                                            <i class="iconfont icon-dianzan"></i>
+                                            <span>103</span>
+                                        </div>
+                                        <div class="update_time">2023/08/23</div>
+                                    </div>
+                                    <div class="hover-show">
+                                        <button type="button" class="btn btn-light">数据预览</button>
+                                        <button type="button" class="btn btn-primary">查看详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <script src="/js/spiderMarket/templateDetail.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.IServerResourceDao">
+
+	<select id="queryServerResourceAll" parameterType="com.stonedt.spider.entity.ServerResource" resultType="com.stonedt.spider.entity.ServerResource">
+		SELECT
+			id,
+			servername,
+			serveraddress,
+			ipaddress,
+			diskstorageremain,
+			systemmemoryremain,
+			cpuusage,
+			starttime,
+			STATUS
+		FROM
+		serverresource
+	</select>
+
+	<update id="removeWeb" parameterType="java.lang.Integer"  >
+		update data_source set is_del=1 where id=#{id}
+	</update>
+
+
+	<select id="findWebInfoPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlow">
+		select sf.id,seed_name,seed_type,seed_status,cron,website_id,create_date,data_type_id,spider_level,sole_sign,typename,type,update_time,
+		       (select count(id) from es_record where seed_id=sf.id ) as spider_count ,
+		       (select count(id) from es_record where seed_id=sf.id and spider_time>CURDATE()) as spider_day_count
+		from spider_flow sf left join  websitetype wt on sf.data_type_id=wt.id
+		<where>
+			sf.is_del=0
+			<if test="webId>0">
+				and website_id=#{webId}
+			</if>
+			<if test="status!=null and status!=-1">
+				and seed_status=#{status}
+			</if>
+			<if test="level!=null and level!=0">
+				<choose>
+					<when test="level==1">
+						and spider_level=1
+					</when>
+					<when test="level==2">
+						and (spider_level=2 or spider_level=3)
+					</when>
+					<otherwise>
+						and spider_level>3
+					</otherwise>
+				</choose>
+			</if>
+			<if test="type!=null and type!=-1">
+				and type=#{type}
+			</if>
+			<if test="keyword!=null and keyword!='' ">
+				and (seed_name like '%${keyword}' or sole_sign like '%${keyword}')
+			</if>
+		</where>
+		order by update_time desc
+		<if test="limit!=null">
+			${limit}
+		</if>
+	</select>
+
+	<select id="findWebInfoCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+		select count(*)
+		from spider_flow
+		<where>
+			is_del=0
+			<if test="webId>0">
+				and website_id=#{webId}
+			</if>
+			<if test="status!=null and status!=-1">
+				and seed_status=#{status}
+			</if>
+			<if test="level!=null and level!=0">
+				<choose>
+					<when test="level==1">
+						and spider_level=1
+					</when>
+					<when test="level==2">
+						and (spider_level=2 or spider_level=3)
+					</when>
+					<otherwise>
+						and spider_level>3
+					</otherwise>
+				</choose>
+			</if>
+			<if test="type!=null and type!=-1">
+				and type=#{type}
+			</if>
+			<if test="keyword!=null and keyword!='' ">
+				and (seed_name like '%${keyword}' or sole_sign like '%${keyword}')
+			</if>
+		</where>
+	</select>
+
+
+
+
+	<select id="websiteCategoryPage" parameterType="java.lang.String" resultType="com.stonedt.spider.entity.WebsiteCategory">
+		select wc.*,su.username as username from website_category wc left  join  stonedt_user su on wc.create_user_id=su.id
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				category_name like '%${keyword}'
+			</if>
+		</where>
+
+		order by wc.create_time desc
+		<if test="limit!=null and limit!='' ">
+			${limit}
+		</if>
+	</select>
+
+	<select id="WebsiteCategoryCount" parameterType="java.lang.String" resultType="java.lang.Integer" >
+		select count(*) from website_category
+		<where>
+			<if test="keyword!=null and keyword!=''">
+				category_name like '%${keyword}'
+			</if>
+		</where>
+	</select>
+
+	<insert id="categorySave" parameterType="java.lang.Object">
+		insert  into website_category(category_name,create_user_id,update_user_id) values(#{category_name},#{user_id},#{user_id})
+	</insert>
+
+	<select id="findOneWebsiteCategory" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.WebsiteCategory">
+		select * from website_category where category_name = #{category_name} limit 1
+	</select>
+
+	<select id="findOneUpdateWebsiteCategory" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.WebsiteCategory">
+		select * from website_category where category_name = #{category_name} and id!=#{id} limit 1
+	</select>
+
+	<update id="UpdateWebsiteCategory" parameterType="java.lang.Object">
+		update website_category set update_user_id=#{user_id}
+		<if test="category_name!=null and category_name!='' ">
+			,category_name = #{category_name}
+		</if>
+		where id = #{id}
+	</update>
+
+	<delete id="removeWebsiteCategory" parameterType="java.lang.Object">
+		delete from website_category where id=#{id}
+	</delete>
+
+<!--	<select id="list" parameterType="com.stonedt.spider.entity.NewEntity" resultType="com.stonedt.spider.entity.NewEntity">
+		select
+		    ds.id,website_name,website_url,new_website_type,icp_info,sponsor,
+			mainstream_flag,website_pr,baidu_weight,site_rank,website_province,
+			website_city,create_date,create_user,update_user,wc.category_name as category_name
+		from
+		    data_source  ds left join  website_category wc
+			on ds.new_website_type=wc.id
+		where 1=1 and is_del=0
+		<if test="keyword != null">
+			and (website_name like concat('%',#{keyword},'%')
+			or website_url like concat('%',#{keyword},'%')
+			or website_remark like concat('%',#{keyword},'%')
+			or icp_info like concat('%',#{keyword},'%'))
+		</if>
+		<if test="typeList != null">
+			and new_website_type in
+			<foreach collection="typeList" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+		<if test="sponsor != null">
+			and sponsor like concat('%', #{sponsor}, '%')
+		</if>
+		<if test="sponsor_nature != null">
+			and sponsor_nature=#{sponsor_nature}
+		</if>
+		<if test="mainstream_flag != null">
+			and mainstream_flag=#{mainstream_flag}
+		</if>
+		<if test="min_pr != null">
+			and website_pr&gt;=#{min_pr}
+		</if>
+		<if test="max_pr != null">
+			and website_pr&lt;#{max_pr}
+		</if>
+		<if test="min_bd != null">
+			and baidu_weight&gt;=#{min_bd}
+		</if>
+		<if test="max_bd != null">
+			and baidu_weight&lt;#{max_bd}
+		</if>
+		<if test="min_defined != null">
+			and site_rank&gt;=#{min_defined}
+		</if>
+		<if test="max_defined != null">
+			and site_rank&lt;#{max_defined}
+		</if>
+		<if test="website_city != null">
+			and website_city=#{website_city}
+		</if>
+		<if test="website_province != null">
+			and website_province=#{website_province}
+		</if>
+		<if test="sort_field == 0">
+			order by website_pr
+		</if>
+		<if test="sort_field == 1">
+			order by baidu_weight
+		</if>
+		<if test="sort_field == 2">
+			order by site_rank
+		</if>
+		<if test="sort_field == 3">
+			order by create_date
+		</if>
+		<if test="sort_field == 4">
+			order by update_time
+		</if>
+		<if test="sort_type == 1">
+			desc
+		</if>
+	</select>-->
+	<select id="webCategory" resultType="java.util.Map">
+		select id ,website_name from data_source
+	</select>
+
+	<select id="webInfo" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.NewEntity">
+		select * from data_source where id=#{id}
+	</select>
+
+	<select id="list" parameterType="com.stonedt.spider.entity.NewEntity" resultType="com.stonedt.spider.entity.NewEntity">
+		select
+		ds.id,website_name,website_url,new_website_type,icp_info,sponsor,
+		mainstream_flag,website_pr,baidu_weight,site_rank,website_province,
+		website_city,create_date,create_user,update_user,wc.category_name as category_name,log_error
+		from
+		data_source  ds left join  website_category wc
+		on ds.new_website_type=wc.id
+		where 1=1 and is_del=0
+		<if test="keyword != null">
+			and (website_name like concat('%',#{keyword},'%')
+			or website_url like concat('%',#{keyword},'%')
+			or website_remark like concat('%',#{keyword},'%')
+			or icp_info like concat('%',#{keyword},'%'))
+		</if>
+		<if test="typeList != null">
+			and new_website_type in
+			<foreach collection="typeList" item="type" open="(" separator="," close=")">
+				#{type}
+			</foreach>
+		</if>
+		<if test="log_error!=null">
+			and log_error=#{log_error}
+		</if>
+
+		<if test="sort_field == 0">
+			order by website_pr
+		</if>
+		<if test="sort_field == 1">
+			order by baidu_weight
+		</if>
+		<if test="sort_field == 2">
+			order by site_rank
+		</if>
+		<if test="sort_field == 3">
+			order by create_date
+		</if>
+		<if test="sort_field == 4">
+			order by update_time
+		</if>
+		<if test="sort_type == 1">
+			desc
+		</if>
+	</select>
+
+
+	<select id="loadSponsorNature" resultType="java.lang.String">
+		select sponsor_nature from new_spider_factory.data_source
+	</select>
+
+	<update id="updateWebType" parameterType="java.util.Map">
+		update data_source set new_website_type=#{webType} where id=#{id}
+	</update>
+
+	<select id="listDataSource" resultType="map" parameterType="java.lang.Integer">
+		select * from data_source where new_website_type=#{type} and manually_review = 1
+	</select>
+
+	<update id="updateError" parameterType="java.lang.Object" >
+		update data_source set log_error=#{info_error} where id in (${ids})
+	</update>
+
+</mapper> 

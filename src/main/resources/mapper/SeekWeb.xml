@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SeekwebDao">
+
+
+	<select id="getSeekList"  resultType="com.stonedt.spider.entity.Seekweb">
+
+		SELECT
+			sec.isOnSite
+		FROM search_engine_config sec
+		WHERE sec.id=#{extend_int_two}
+        
+	</select>
+	
+	<select id="getoneList"  resultType="com.stonedt.spider.entity.Seekweb">
+
+		SELECT
+		sp.website_name,sec.*
+		FROM search_engine_config sec
+		LEFT JOIN spider_website sp ON sec.website_id =sp.id
+		WHERE sec.id=#{extend_int_two}
+        
+	</select>
+
+</mapper> 

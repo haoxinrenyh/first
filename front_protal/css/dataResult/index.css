@@ -1,0 +1,88 @@
+.table_mark {
+  overflow: auto;
+}
+
+.thead-result tr th {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.table-result td div {
+  max-width: 200px;
+  min-width: 80px;
+  height: 40px;
+  line-height: 40px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.thead-result th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #f8f9fa;
+}
+
+.table-result td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background-color: #fff;
+  white-space: nowrap;
+}
+
+.thead-result th:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background-color: #f8f9fa;
+}
+
+.table-result td:last-child {
+  position: sticky;
+  right: 0;
+  z-index: 1;
+  background-color: #fff;
+  white-space: nowrap;
+}
+
+.table-btn-group button {
+  margin-right: 15px;
+}
+
+.table-btn-group button:last-child {
+  margin-right: 0;
+}
+
+.select-key {
+  margin-top: 3px;
+}
+
+#previewModal .modal-body {
+  max-height: 450px;
+  overflow: auto;
+}
+
+.file-classify {
+  margin-bottom: 25px;
+}
+
+.file-list .file {
+  margin-top: 10px;
+}
+
+.batch_export,
+.export_all {
+  color: #fff;
+}
+
+.batch_export:hover,
+.export_all:hover {
+  color: #fff;
+}
+
+.thead-result-hide {
+  display: none;
+}

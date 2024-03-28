@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SpiderSourceDao">
+
+
+    <select id="findVpsPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.Vps">
+        select v.*,su.username as create_user_name
+        from vps v left join stonedt_user su on v.create_user_id=su.id
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and  ip like '%${keyword}%'
+            </if>
+        </where>
+        order by update_time desc
+        <if test="limit!=null and limit!=''">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="findVpsCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(*)
+        from vps
+        <where>
+            <if test="keyword!=null and keyword!=''">
+                and  ip like '%${keyword}%'
+            </if>
+        </where>
+    </select>
+
+    <insert id="saveVps" parameterType="com.stonedt.spider.entity.Vps">
+        insert into
+        vps(
+            <if test="vps.type!=null "> type, </if>
+            <if test="vps.environment!=null "> environment, </if>
+            <if test="vps.ip!=null "> ip, </if>
+            <if test="vps.configure!=null "> configure, </if>
+            <if test="vps.port!=null "> port, </if>
+            <if test="vps.password!=null "> password, </if>
+            <if test="vps.remark!=null "> remark, </if>
+            <if test="vps.create_user_id!=null "> create_user_id, </if>
+            <if test="vps.update_user_id!=null "> update_user_id, </if>
+            update_time,cpu_count,ram_count,disk_count
+        )
+        values (
+            <if test="vps.type!=null "> #{vps.type}, </if>
+            <if test="vps.environment!=null "> #{vps.environment}, </if>
+            <if test="vps.ip!=null "> #{vps.ip}, </if>
+            <if test="vps.configure!=null "> #{vps.configure}, </if>
+            <if test="vps.port!=null "> #{vps.port}, </if>
+            <if test="vps.password!=null "> #{vps.password}, </if>
+            <if test="vps.remark!=null "> #{vps.remark}, </if>
+            <if test="vps.create_user_id!=null "> #{vps.create_user_id}, </if>
+            <if test="vps.update_user_id!=null "> #{vps.update_user_id}, </if>
+            now(),0,0,0
+        )
+    </insert>
+
+
+
+    <select id="findAccountPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.Account">
+        select a.* ,su.username as create_user_name
+        from account a left join  stonedt_user su on a.create_user_id=su.id
+        where is_del=0
+        order by update_time desc
+        <if test="limit!=null and limit!=''">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="findAccountCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(*)
+        from account
+        where is_del=0
+    </select>
+
+    <insert id="saveAccount" parameterType="com.stonedt.spider.entity.Account" >
+        insert into
+        account(
+        <if test="account.username!=null "> username, </if>
+        <if test="account.password!=null "> password, </if>
+        <if test="account.site!=null "> site, </if>
+        <if test="account.status!=null "> status, </if>
+        <if test="account.create_user_id!=null "> create_user_id, </if>
+        <if test="account.update_user_id!=null "> update_user_id, </if>
+        update_time
+        )
+        values (
+        <if test="account.username!=null "> #{account.username}, </if>
+        <if test="account.password!=null "> #{account.password}, </if>
+        <if test="account.site!=null "> #{account.site}, </if>
+        <if test="account.status!=null "> #{account.status}, </if>
+        <if test="account.create_user_id!=null "> #{account.create_user_id}, </if>
+        <if test="account.update_user_id!=null "> #{account.update_user_id}, </if>
+        now()
+        )
+    </insert>
+
+    <update id="updateAccount" parameterType="com.stonedt.spider.entity.Account">
+        update account  set
+            <if test="account.username!=null "> username=#{account.username}, </if>
+            <if test="account.password!=null "> password=#{account.password}, </if>
+            <if test="account.site!=null "> site=#{account.site}, </if>
+            <if test="account.status!=null "> status=#{account.status}, </if>
+            <if test="account.create_user_id!=null "> create_user_id=#{account.create_user_id}, </if>
+            <if test="account.update_user_id!=null "> update_user_id=#{account.update_user_id}, </if>
+            <if test="account.is_del!=null "> is_del=#{account.is_del}, </if>
+            update_time = now()
+        where id=#{account.id}
+    </update>
+
+
+
+    <select id="findAgentPoolPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.AgentPool">
+        select ap.*,su.username as create_user_name, (UNIX_TIMESTAMP(term)- UNIX_TIMESTAMP(now()))/(60*60*24) as term_day
+        from agent_pool ap left join stonedt_user su on ap.create_user_id=su.id
+        where is_del=0
+        order by update_time  desc
+        <if test="limit!=null and limit!=''">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="findAgentPoolCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(*)
+        from agent_pool
+        where is_del=0
+    </select>
+
+    <insert id="saveAgentPool" parameterType="com.stonedt.spider.entity.AgentPool" >
+        insert into
+        agent_pool(
+        <if test="agent_pool.service_name!=null "> service_name, </if>
+        <if test="agent_pool.term!=null "> term, </if>
+        <if test="agent_pool.url!=null "> url, </if>
+        <if test="agent_pool.status!=null "> status, </if>
+        <if test="agent_pool.create_user_id!=null "> create_user_id, </if>
+        <if test="agent_pool.update_user_id!=null "> update_user_id, </if>
+        update_time
+        )
+        values (
+        <if test="agent_pool.service_name!=null "> #{agent_pool.service_name}, </if>
+        <if test="agent_pool.term!=null "> #{agent_pool.term}, </if>
+        <if test="agent_pool.url!=null "> #{agent_pool.url}, </if>
+        <if test="agent_pool.status!=null "> #{agent_pool.status}, </if>
+        <if test="agent_pool.create_user_id!=null "> #{agent_pool.create_user_id}, </if>
+        <if test="agent_pool.update_user_id!=null "> #{agent_pool.update_user_id}, </if>
+        now()
+        )
+    </insert>
+
+    <update id="updateAgentPool" parameterType="com.stonedt.spider.entity.AgentPool">
+        update agent_pool  set
+        <if test="agent_pool.service_name!=null "> service_name=#{agent_pool.service_name}, </if>
+        <if test="agent_pool.term!=null "> term=#{agent_pool.term}, </if>
+        <if test="agent_pool.url!=null "> url=#{agent_pool.url}, </if>
+        <if test="agent_pool.status!=null "> status=#{agent_pool.status}, </if>
+        <if test="agent_pool.update_user_id!=null "> update_user_id=#{agent_pool.update_user_id}, </if>
+        <if test="agent_pool.is_del!=null "> is_del=#{agent_pool.is_del}, </if>
+        update_time = now()
+        where id=#{agent_pool.id}
+    </update>
+
+
+</mapper> 

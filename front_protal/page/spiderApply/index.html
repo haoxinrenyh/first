@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+    <link rel="stylesheet" href="/css/spiderApply/index.css">
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">采集应用</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="top-search">
+                <div class="input-group input-group-lg medium-input mb-3">
+                    <input type="text" class="form-control" placeholder="请输入要采集的网址  (建议列表或表格页)"
+                        aria-label="Recipient's username" aria-describedby="button-addon2">
+                    <button class="btn btn-primary" type="button" id="button-addon2">智能采集</button>
+                </div>
+            </div>
+            <div class="novice-guide">
+                <div class="center-container">
+                    <div class="novice-guide-btn">
+                        <i class="iconfont icon-dengpao"></i>
+                        <span>新手入门</span>
+                    </div>
+                </div>
+            </div>
+            <div class="mode-list">
+                <div class="mode-list-center">
+                    <div class="mode-item">
+                        <div class="mode-item-top">
+                            <div class="mode-item-name">流程图模式</div>
+                        </div>
+                        <div class="mode-item-bottom">
+                            <div class="mode-item-intro">可视化操作流程，根据提示在网页中点选内容即可生成采集规则，可以模拟任何人为操作</div>
+                            <div class="mode-item-enter-btn" onclick="startGather()">开始采集</div>
+                        </div>
+                    </div>
+                    <div class="mode-item">
+                        <div class="mode-item-top">
+                            <div class="mode-item-name">智能模式</div>
+                        </div>
+                        <div class="mode-item-bottom">
+                            <div class="mode-item-intro">基于人工智能算法，输入网址即可自动识别网页内容和分页，无需配置采集规则，一键采集</div>
+                            <div class="mode-item-enter-btn" onclick="startGather()">开始采集</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderApply/index.js"></script>
+</body>
+
+</html>

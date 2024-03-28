@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.IStonedtUserDao">
+
+	
+	<!-- 登录验证用户名密码 -->
+	<select id="cheakUser" resultType="com.stonedt.spider.entity.StonedtUser"
+		parameterType="String">
+		select
+		id,username,password,name,status,user_power,company,create_time
+		from
+		stonedt_user
+		where
+		username = #{username}
+	</select>
+	
+	<select id="ifUserExist" resultType="Integer" parameterType="String">
+		select count(0) from stonedt_user where username = #{username}
+	</select>
+
+	<!-- 查询所有用户 -->
+	<select id="queryUserAll" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.StonedtUser">
+		select
+		username,name, status,user_power,create_time,company
+		from stonedt_user
+		<where>
+			<if test="power==2"> id=${id} </if>
+			<if test="keyword!=null and keyword!='' "> and username like '%${keyword}%' </if>
+		</where>
+		order by create_time desc
+	</select>
+	
+	<!-- 修改用户状态 -->
+	<update id="modifyState">
+		UPDATE stonedt_user
+			SET status = #{status}
+		WHERE
+		username = #{username}
+
+	</update>
+
+	<!-- 修改用户 -->
+	<update id="updateUser" parameterType="java.lang.Object" >
+		UPDATE stonedt_user
+			set create_time = create_time
+			<if test="name!=null">
+				,name = #{name}
+			</if>
+			<if test="status!=null and status>0">
+				, status = #{status}
+			</if>
+			<if test="power!=null and power>0">
+				,user_power = #{power}
+			</if>
+			<if test="company!=null">
+				,company = #{company}
+			</if>
+		WHERE
+			username = #{username}
+
+	</update>
+	
+	<!-- 删除对应用户 -->
+	<delete id="delStonedtUser">
+		DELETE
+		FROM
+		stonedt_user
+		WHERE
+		username = #{username}
+	</delete>
+	
+	<!-- 重置用户密码 -->
+	<update id="resetPwd">
+		UPDATE stonedt_user
+		SET
+		password = #{password}
+		WHERE
+		username = #{username}
+
+	</update>
+	
+	<!-- 插入新用户 -->
+	<insert id="insertUser" parameterType="com.stonedt.spider.entity.StonedtUser">
+		insert into
+		stonedt_user(username,password,name,status,user_power,company) values
+		(#{username},#{password},#{name},#{status},#{user_power},#{company})
+	</insert>
+
+	<select id="selectUserCount" resultType="Integer">
+		select count(0) from stonedt_user
+	</select>
+	
+	<select id="selectUserByIdAndPassword" resultType="com.stonedt.spider.entity.StonedtUser">
+		select * from stonedt_user where id = #{user_id} and password = #{password}
+	</select>
+	
+	<update id="updatePassword" parameterType="com.stonedt.spider.entity.StonedtUser">
+		update stonedt_user set password = #{password} where id = #{id}
+	</update>
+</mapper> 

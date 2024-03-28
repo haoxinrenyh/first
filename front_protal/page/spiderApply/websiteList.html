@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+
+    <link rel="stylesheet" href="/css/spiderApply/websiteList.css">
+</head>
+
+<body>
+    <div class="website-page">
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item pointer" onclick="rollBack()">采集应用</li>
+                    <li class="breadcrumb-item active" aria-current="page">网站列表</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="filter-params">
+                <div class="input-group input-group-lg medium-input mb-4">
+                    <input type="text" class="form-control search-website" placeholder="请输入关键词进行检索">
+                    <button class="btn btn-primary" type="button" onclick="searchKeyword()">搜索</button>
+                </div>
+                <div class="options-select">
+                    <div class="select-key" style="margin-top: 3px;">网站类型：</div>
+                    <div class="options-list website-type">
+                        <span vlaue="" class="active">全部</span>
+                    </div>
+                </div>
+                <div class="select-group mb-4">
+                    <div class="select-item">
+                        <div class="select-key">排序方式：</div>
+                        <select class="form-select sort-type" onchange="pickSort()">
+                            <option selected hidden>请选择排序方式</option>
+                            <option class="option" value="0">创建时间从小到大</option>
+                            <option class="option" value="1">创建时间从大到小</option>
+                        </select>
+                    </div>
+                    <div class="select-item">
+                        <div class="select-key">预警筛选：</div>
+                        <select class="form-select alert-site" onchange="pickSite()">
+                            <option selected hidden>请选择预警站点</option>
+                            <option class="option" value="">全部</option>
+                            <option class="option" value="0">正常站点</option>
+                            <option class="option" value="1">预警站点</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-list">
+                <div class="table-top">
+                    <div class="table-title">采集网站列表</div>
+                    <div class="table-btn-group">
+                        <button type="button" class="btn btn-primary" onclick="fieldManage()">字段注释管理</button>
+                        <button type="button" class="btn btn-primary" onclick="websiteTypeManage()">网站类型管理</button>
+                        <button type="button" class="btn btn-primary" onclick="dataTypeManage()">数据类型管理</button>
+                        <button type="button" class="btn btn-primary" onclick="addSource()">添加信源</button>
+                    </div>
+                </div>
+                <div class="table_mark">
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">网站名称</th>
+                                <th scope="col">网站链接</th>
+                                <th scope="col">采集模式</th>
+                                <th scope="col" class="center">网站类型</th>
+                                <th scope="col">创建人</th>
+                                <th scope="col">创建时间</th>
+                                <th scope="col" class="center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-website">
+
+                        </tbody>
+                    </table>
+                    <div class="table_empty" style="display: none;">暂无数据</div>
+                    <!-- 加载状态 遮罩层 -->
+                    <div class="modal fade marklayer">
+                        <div class="load_item">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pagination"></div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                    line-height: 24px;
+                    font-size: 18px;
+                    color: #303133;
+                  ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+                                    确定要删除吗？
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitDelete()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade " id="editWebsiteModal" tabindex="-1" aria-labelledby="editWebsiteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">网站信息编辑</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="row needs-validation edit-website-form" novalidate onsubmit="return false;"
+                        style="--bs-gutter-x:0">
+                        <div class="modal-body">
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom01">网址名称：</label>
+                                <input type="text" class="form-control website-name" id="validationCustom01" value=""
+                                    placeholder="请输入网址名称(必填)" required>
+                                <div class="invalid-feedback">
+                                    网址名称不能为空
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom02" class="form-label">网站链接：</label>
+                                <input type="text" class="form-control website-url" id="validationCustom02" value=""
+                                    placeholder="请输入网站链接(必填)" required>
+                                <div class="invalid-feedback">
+                                    网站链接不能为空
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom03" class="form-label">网站类型：</label>
+                                <select class="form-select website-type" id="validationCustom03" required>
+                                    <option selected hidden value="">请选择网站类型(必选)</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    请选择网站类型
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">确定</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderApply/websiteList.js"></script>
+</body>
+
+</html>

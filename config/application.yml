@@ -1,0 +1,74 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /spider_factory
+    session:
+      cookie:
+        name: spider_factory
+        max-age: 3600
+      timeout: 3600
+
+spring:
+  jackson:
+    #  格式化返回时间 yyyy-MM-dd HH:mm:ss
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 设置时区
+    time-zone: GMT+8
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+    mode: LEGACYHTML5 # 用非严格的 HTML
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  #配置国际化
+  messages:
+    basename: i18n/login
+  http:
+    # 设置编码
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  devtools:
+    restart:
+      enabled: true #热部署生效
+  application:
+    name: spider_factory
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://192.168.7.134:3306/spider_factory?useUnicode=true&characterEncoding=utf8&autoReconnect=true&failOverReadOnly=false&serverTimezone=Asia/Shanghai&useSSL=false
+      username: root
+      password: dxy2021
+  redis:
+    database: 0
+    host: 172.16.9.60
+    port: 6379
+    password: jwzt2022
+    max-active: 10000
+    max-idle: 10
+    max-wait: 100000
+    timeout: 100000
+mybatis:
+  type-aliases-package: com.stonedt.spider.entity
+  mapper-locations: classpath:mapper/*.xml
+
+logging:
+  level:
+    com.stonedt.data.dao : debug
+
+# callback:登录验证回调地址, login-expire-time:二维码生存时间
+wx:
+  mp:
+    callback: http://127.0.0.1/spider_factory/wechatLogin/portal/public/callBack
+    login-expire-time: 5
+    contact-us: '如果您想深入了解产品特性或者与我们产品合作，请添加产品经理微信：javabloger或拨打电话：13913853100'
+    nlp-message: "自然语言处理&人工智能文本挖掘引擎\nhttps://nlp.stonedt.com\n电脑端打开网页进行微信扫码登录"
+    data-message: "欢迎使用思通数据采集\n演示系统：http://s1.stonedt.com:5180/spider-factory/\n体验账号密码请联系产品经理"
+    sentiment-message: "欢迎使用思通舆情\n演示系统：http://open-yuqing.stonedt.com\n账号：13900000000\n密码：stonedt123"
+    configs:
+      - appId: appid # 第一个公众号的appid
+        secret: appsecret # 公众号的appsecret
+        token: test123 # 接口配置里的Token值
+        aesKey: sha1 # 接口配置里的EncodingAESKey值

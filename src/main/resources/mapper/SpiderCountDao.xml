@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.SpiderCountDao">
+
+	<select id="getNum" parameterType="com.stonedt.spider.entity.SpiderCount" resultType="int">
+		select ifnull(sum(gathering_value),0) from spider_count where 1=1
+		<if test="website_id!=null and website_id!=''">
+		                    and website_id = #{website_id}
+		</if>
+		<if test="create_date!=null and create_date!=''">
+		                   and create_date = #{create_date}
+		</if>
+		<if test="seed_id!=null and seed_id!=''">
+		        and seed_id = #{seed_id}
+		</if>
+	</select>
+	
+	<select id="getTimeNum" parameterType="com.stonedt.spider.entity.SpiderCount" resultType="int">
+		select ifnull(sum(gathering_value),0) from spider_count 
+			where create_date <![CDATA[>=]]> #{create_date} and seed_id = #{seed_id}
+	</select>
+
+	<select id="seedall" resultType="com.stonedt.spider.entity.SeedAll">
+		SELECT ss.* 
+		FROM spider_seed ss
+	</select>
+	
+	<select id="seeiddall" resultType="com.stonedt.spider.entity.SeedAll">
+		SELECT ss.*,sw.website_name
+		FROM spider_seed ss
+		LEFT JOIN spider_website sw ON sw.id = ss.website_id
+		WHERE ss.id=#{id}
+	</select>
+	
+	<select id="dimseed" resultType="com.stonedt.spider.entity.SeedAll">
+		select * from spider_seed where seed_name LIKE CONCAT('%',#{id},'%')
+	</select>
+	
+	
+
+ 
+
+</mapper> 

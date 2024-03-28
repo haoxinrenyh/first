@@ -1,0 +1,8 @@
+.form-check-group {
+  display: flex;
+  align-items: center;
+}
+
+.form-check {
+  width: 120px;
+}

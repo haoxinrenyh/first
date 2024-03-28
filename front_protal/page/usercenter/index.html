@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="image/x-icon" rel="shortcut icon" href="/images/logo.png">
+    <title>思通数科 Open-Spider</title>
+
+    <script src="/js/rem.js"></script>
+
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <script src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/icon/iconfont.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/usercenter/index.css">
+</head>
+
+<body>
+    <div id="page">
+        <!-- 接口调用成功提示 -->
+        <div class="message message-success message-hide" style="top: 20px; z-index: 2014">
+            <i class="iconfont icon-check-circle"></i>
+            <p class="message_content"></p>
+        </div>
+        <!-- 接口调用失败提示 -->
+        <div class="message message-error message-hide" style="top: 20px; z-index: 2014">
+            <i class="iconfont icon-times-circle"></i>
+            <p class="message_content"></p>
+        </div>
+        <div id="header">
+            <div class="logo">
+                <img src="/images/logo.png" alt="">
+                <span class="system_name">思通数科 Open-Spider</span>
+            </div>
+            <div class="top-menu">
+                <div class="menu pointer" onclick="toSource()">
+                    <i class="iconfont icon-gitee-fill-round"></i>
+                    <span>源码</span>
+                </div>
+                <div class="menu pointer">
+                    <i class="layui-icon layui-icon-username"></i>
+                    <span>个人中心</span>
+                </div>
+                <div class="menu pointer" onclick="logoff()">
+                    <i class="layui-icon layui-icon-logout"></i>
+                    <span>退出</span>
+                </div>
+            </div>
+        </div>
+        <div id="core-container">
+            <div id="left-side">
+                <nav class="nav column-column  menuList">
+                    <a class="nav-link active">
+                        <i class="iconfont icon-user"></i>
+                        <span>用户信息</span>
+                    </a>
+                    <a class="nav-link" onclick="location.href='/index.html'">
+                        <i class="iconfont icon-line-back"></i>
+                        <span>返回控制台</span>
+                    </a>
+                </nav>
+            </div>
+            <div id="right-side">
+                <div id="main">
+                    <div class="row">
+                        <div class="col-xl-12">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-0 pb-2 border-bottom header-title">
+                                        基本信息
+                                    </h5>
+                                    <div class="column">
+                                        <div class="column-item">
+                                            <span class="item-key">用户：</span>
+                                            <span class="item-value username"></span>
+                                        </div>
+                                        <div class="column-item">
+                                            <span class="item-key">密码：</span>
+                                            <span class="item-value">
+                                                <span class="text-primary pointer" onclick="editPassword()">修改</span>
+                                            </span>
+                                            </span>
+                                        </div>
+                                        <div class="column-item">
+                                            <span class="item-key">姓名：</span>
+                                            <span class="item-value realname"></span>
+                                        </div>
+                                        <div class="column-item">
+                                            <span class="item-key">角色：</span>
+                                            <span class="item-value charter"></span>
+                                        </div>
+                                        <div class="column-item">
+                                            <span class="item-key">部门：</span>
+                                            <span class="item-value department"></span>
+                                        </div>
+                                        <div class="column-item">
+                                            <span class="item-key">注册时间：</span>
+                                            <span class="item-value register-time"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer">© 2014-2024 思通数科（南京）信息技术有限公司 苏ICP备17066984号-1</div>
+            </div>
+        </div>
+        <div class="modal fade " id="editPasswordModal" tabindex="-1" aria-labelledby="editPasswordModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">密码修改</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="row needs-validation edit-password-form" novalidate onsubmit="return false;"
+                        style="--bs-gutter-x:0">
+                        <div class="modal-body">
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom01" class="form-label">旧密码：</label>
+                                <input type="password" class="form-control old-password" id="validationCustom01"
+                                    placeholder="请输入原来的密码(必填)" autocomplete="new-password" required>
+                                <div class="invalid-feedback">
+                                    旧密码不能为空
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom02" class="form-label">新密码：</label>
+                                <input type="password" class="form-control new-password" id="validationCustom02"
+                                    placeholder="请输入新的密码(必填)" autocomplete="new-password" required
+                                    oninput="confirmPassword()">
+                                <div class="invalid-feedback">
+                                    新的密码不能为空
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom03" class="form-label">确认密码：</label>
+                                <input type="password" class="form-control confirm-password" id="validationCustom03"
+                                    placeholder="再输入新的密码(必填)" autocomplete="new-password" required
+                                    oninput="confirmPassword()">
+                                <div class="invalid-feedback">
+                                    两次密码不一致
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">确定</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/usercenter/index.js"></script>
+    <script>
+        sessionStorage.removeItem("path");
+        sessionStorage.removeItem("name");
+        sessionStorage.removeItem("parentname");
+
+        //登出
+        function logoff() {
+            $.ajax({
+                method: "POST",
+                url: baseUrl + "/exit",
+                contentType: "application/json",
+                dataType: "json",
+                data: {},
+                success: function (res) {
+                    if (res.code == 200) {
+                        localStorage.removeItem("token");
+                        window.location.replace("/page/login/index.html");
+                    }
+
+                }
+            })
+
+        }
+
+
+        function toSource() {
+            window.open("https://gitee.com/stonedtx/open-spider")
+        }
+    </script>
+</body>
+
+</html>

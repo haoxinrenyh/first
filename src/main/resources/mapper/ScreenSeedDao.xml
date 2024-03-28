@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.ScreenSeedDao">
+
+	<select id="getList" resultType="com.stonedt.spider.entity.ScreenWord">
+		select * from screen_word order by create_date desc
+	</select>
+	
+	
+	<select id="getStringList" resultType="string">
+		select GROUP_CONCAT(key_words) from screen_word
+	</select>
+	
+	<select id="getforeignStringList" resultType="string">
+		select GROUP_CONCAT(key_words) from international.screen_word
+	</select>
+	
+	
+	<delete id="remove">
+		DELETE FROM screen_word WHERE id = #{id}
+	</delete>
+	
+	<select id="getbyword" resultType="string">
+		select key_words FROM screen_word WHERE key_words = #{word}
+	</select>
+	
+	<insert id="add" >
+		insert into screen_word (type,create_date,key_words)values(1,now(),#{word})
+	</insert>
+</mapper> 

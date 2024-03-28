@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a class="pointer" onclick="rollBack()">采集应用</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">添加信源</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <form class="row g-3 needs-validation source-form" novalidate onsubmit="return false;">
+                <div class="col-md-4">
+                    <label for="validationCustom01" class="form-label"><span class="require">*</span>网站名称</label>
+                    <input type="text" class="form-control website-name" id="validationCustom01" value=""
+                        placeholder="请输入网站名称(必填)" required maxlength="10">
+                    <div class="invalid-feedback">
+                        网站名称不能为空
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="validationCustom02" class="form-label"><span class="require">*</span>网站类型</label>
+                    <select class="form-select website-type" id="validationCustom02" required>
+                        <option selected hidden value="">请选择网站类型(必选)</option>
+                    </select>
+                    <div class="invalid-feedback">
+                        网站类型不能为空
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="validationCustom03" class="form-label">网站logo</label>
+                    <input type="text" class="form-control website-logo" id="validationCustom03" placeholder="请输入logo">
+                </div>
+                <div class="col-md-6">
+                    <label for="validationCustom04" class="form-label"><span class="require">*</span>网站地址</label>
+                    <input type="url" class="form-control website-url" id="validationCustom04" placeholder="请输入网站地址(必填)"
+                        required onblur="domainAnalyze()">
+                    <div class="invalid-feedback">
+                        网站地址格式不正确
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="validationCustom05" class="form-label">一级域名</label>
+                    <input type="text" class="form-control one-domain" id="validationCustom05" placeholder="请输入一级域名"
+                        disabled />
+                    <div class="invalid-feedback">
+                        域名格式不正确
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <label for="validationCustom06" class="form-label">二级域名</label>
+                    <input type="text" class="form-control two-domain" id="validationCustom06" placeholder="请输入二级域名"
+                        disabled>
+                    <div class="invalid-feedback">
+                        域名格式不正确
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="validationCustom07" class="form-label">网站备注</label>
+                    <textarea name="" id="" cols="30" rows="5" class="form-control website-note" id="validationCustom07"
+                        placeholder="请输入网站备注"></textarea>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">确认添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderApply/addSource.js"></script>
+</body>
+
+</html>

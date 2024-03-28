@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper  namespace="com.stonedt.spider.dao.ResearchReportDao" >
+	
+	
+	<!-- 根据用户选择的类型展示相关研报 -->
+	<select id="getResearchReport" parameterType="int" resultType="com.stonedt.spider.entity.ResearchReport">
+		SELECT
+			title,
+			reportDate AS publish_time,
+			rate,
+			org,
+			url,
+			pagenum,
+			id,
+			industry 
+		FROM
+			bigdata.notice 
+		WHERE
+			seedid = #{seed_id}
+		ORDER BY
+			reportDate DESC
+	</select>	
+	
+	<!-- 自选股研报查询 -->
+	<select id="getOptionalResearchReport"  resultType="com.stonedt.spider.entity.ResearchReport">
+		SELECT
+			title,
+			reportDate AS publish_time,
+			rate,
+			org,
+			url,
+			pagenum,
+			id,
+			industry,
+			rtype 
+		FROM
+			bigdata.stock_report 
+		WHERE
+			code = #{code}
+		<if test="rtype != null and rtype !=''">
+		 and rtype = #{rtype}
+		</if>
+		ORDER BY
+			reportDate DESC
+	</select>
+	
+	<select id="getrtyps" resultType="com.stonedt.spider.entity.reportType">
+	select count(0) as num,rtype from bigdata.stock_report where code = #{code} group by rtype order by count(0) desc
+	</select>
+	
+	
+	<!-- 根据用户选择的标签查询对应的名字 -->
+	<select id="getResearchReportName" parameterType="int" resultType="String">
+		SELECT NAME 
+		FROM
+			bigdata.noticeseed 
+		WHERE
+			id = #{seed_id};
+	</select>
+	<select id="getNoticeReport" parameterType="int" resultType="com.stonedt.spider.entity.ResearchReport">
+	 select * from bigdata.noticeseed 
+		WHERE
+			id = #{seed_id}
+	
+	</select>
+	
+	
+	<select id="getResearchReportdetail" parameterType="int" resultType="com.stonedt.spider.entity.ResearchReport">
+			
+			SELECT
+			notice.title ,
+			notice.reportDate AS publish_time ,
+			notice.rate ,
+			notice.org ,
+			notice.url ,
+			notice.pagenum ,
+			notice.id ,
+			notice.industry ,
+			seed.firstname,
+			notice.authorList,
+			notice.seedid,
+			seed.name
+			
+		FROM
+			bigdata.notice
+		JOIN noticeseed seed ON notice.seedid = seed.id
+		AND notice.id = #{id}
+	
+	
+	
+	
+	
+	
+	</select>
+	
+	<select id="getOptionalResearchReportdetail" parameterType="int" resultType="com.stonedt.spider.entity.ResearchReport">
+			
+			SELECT
+			notice.title ,
+			notice.reportDate AS publish_time ,
+			notice.rate ,
+			notice.org ,
+			notice.url ,
+			notice.pagenum ,
+			notice.id ,
+			notice.industry ,
+			
+			notice.authorList,
+			notice.seedid
+		FROM
+			bigdata.stock_notice notice
+		where notice.id = #{id}
+	
+	
+	
+	
+	
+	</select>
+	
+	<select id="getOptionalResearchReportdetail1" parameterType="int" resultType="com.stonedt.spider.entity.ResearchReport">
+			
+			SELECT
+			notice.title ,
+			notice.reportDate AS publish_time ,
+			notice.rate ,
+			notice.org ,
+			notice.url ,
+			notice.pagenum ,
+			notice.id ,
+			notice.industry ,
+			
+			notice.authorList,
+			notice.seedid
+		FROM
+			bigdata.stock_report notice
+		where notice.id = #{id}
+	
+	</select>
+	
+	
+	
+	
+	
+</mapper>

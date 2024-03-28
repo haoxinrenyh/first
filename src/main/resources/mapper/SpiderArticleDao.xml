@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.SpiderArticleDao">
+<select id="listArticle" parameterType="int" resultType="com.stonedt.spider.entity.SpiderArticle">
+
+select * from spider_article where otherseedid = #{seedid} order by publish_time desc
+</select>
+
+
+</mapper> 

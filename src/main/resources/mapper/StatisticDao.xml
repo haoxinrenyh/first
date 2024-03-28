@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.ResultDao">
+
+
+    <select id="findStatistic" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.Statistic">
+        select * from statistic where id=1
+    </select>
+
+    <select id="findEsIndexAll" resultType="java.lang.String">
+        SELECT esindex FROM websitetype
+        where is_del=0 and esindex is not null
+        GROUP BY esindex
+    </select>
+
+
+    <insert id="saveStatisticCount" parameterType="com.stonedt.spider.entity.StatisticCount">
+        insert into
+        statistic_count(es_count,es_size,es_count_today,es_count_day,minio_count,minio_size,minio_disk_size,es_count_yesterday,es_count_week,group_json,category_json,type_json,create_time,create_date)
+        values (#{es_count},#{es_size},#{es_count_today},#{es_count_day},#{minio_count},#{minio_size},#{minio_disk_size},#{es_count_yesterday},#{es_count_week},#{group_json},#{category_json},#{type_json},#{create_time},#{create_date})
+    </insert>
+
+    <select id="findStatisticCount" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.StatisticCount">
+        select * from statistic_count
+        <where>
+            <if test="create_time!=null">
+                create_time &lt; #{create_time}
+            </if>
+        </where>
+        order by create_time desc
+        limit 1
+    </select>
+
+    <insert id="saveMinioFile" parameterType="com.stonedt.spider.entity.MinioFileData">
+        replace into minio_file_data(file_name,size,file_time,update_time) values(#{file_name},#{size},#{file_time},now())
+    </insert>
+
+    <select id="findMinioFileCount"  resultType="com.stonedt.spider.entity.MinioFileCount">
+        select count(id) as count ,sum(size) as size
+        from minio_file_data
+    </select>
+
+
+    <select id="findEsRecordCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(id) from es_record
+        <where>
+            <if test="beginTime">
+                and spider_time >= #{beginTime}
+            </if>
+            <if test="endTime">
+                and spider_time &lt;= #{endTime}
+            </if>
+        </where>
+    </select>
+
+    <select id="pageResultNote" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.ResultNote">
+        select * from result_note
+        <where>
+            <if test="keyword!=null and keyword!='' ">
+                and ( english_key like '%${keyword}%' or china_key like '%${keyword}%')
+            </if>
+        </where>
+        order by update_time desc
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="noteCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(id) from result_note
+        <where>
+            <if test="keyword!=null and keyword!='' ">
+                and ( english_key like '%${keyword}%' or china_key like '%${keyword}%')
+            </if>
+        </where>
+    </select>
+
+    <select id="infoNote" parameterType="java.lang.Object"  resultType="com.stonedt.spider.entity.ResultNote">
+        select * from result_note
+        <where>
+            <if test="english!=null and english!='' ">
+                english_key=#{english}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <insert id="saveNote" parameterType="com.stonedt.spider.entity.ResultNote" >
+        insert into result_note(english_key,china_key,create_time,update_time) values (#{note.english_key}, #{note.china_key}, now(), now())
+    </insert>
+
+    <update id="updateNote" parameterType="com.stonedt.spider.entity.ResultNote">
+        update result_note set  english_key=#{note.english_key} , china_key=#{note.china_key} , update_time=now()
+        where id=#{note.id}
+    </update>
+
+    <delete id="removeNote" parameterType="java.lang.Object" >
+        delete from result_note where id=#{id}
+    </delete>
+
+    <select id="noteList"  resultType="com.stonedt.spider.entity.ResultNote">
+        select * from result_note
+    </select>
+
+</mapper> 

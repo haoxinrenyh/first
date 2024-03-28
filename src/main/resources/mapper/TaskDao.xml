@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.TaskDao">
+
+    <select id="taskPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlowTask">
+        SELECT
+            sft.id,seed_name,sole_sign,seed_status,spider_level,data_type_id,type,create_date,sft.create_user_id,sft.create_user,wc.category_name typename
+        FROM spider_flow_task sft left join  website_category wc on sft.data_type_id=wc.id
+        <where>
+            is_del=0
+            <if test="keyword!=null and keyword!='' ">
+                and (
+                    seed_name like '%${keyword}%' or  sole_sign like '%${keyword}%'
+                )
+            </if>
+            <if test="status!=null">
+                and seed_status=#{status}
+            </if>
+            <if test="level!=null">
+                and spider_level=#{level}
+            </if>
+        </where>
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="taskCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM spider_flow_task
+        <where>
+            is_del=0
+            <if test="keyword!=null and keyword!='' ">
+                and (
+                seed_name like '%${keyword}%' or  sole_sign like '%${keyword}%'
+                )
+            </if>
+            <if test="status!=null">
+                and seed_status=#{status}
+            </if>
+            <if test="level!=null">
+                and spider_level=#{level}
+            </if>
+        </where>
+    </select>
+
+
+    <select id="taskInfo" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlowTask">
+        SELECT *
+        FROM spider_flow_task
+        where is_del=0 and id=#{id}
+    </select>
+
+    <update id="updateTask" parameterType="com.stonedt.spider.entity.SpiderFlowTask" >
+        update spider_flow_task
+        <trim prefix="set" suffixOverrides=",">
+            <if test="task.seed_name !=null and task.seed_name !=''">
+                seed_name=#{task.seed_name},
+            </if>
+            <if test="task.seed_type !=null ">
+                seed_type=#{task.seed_type},
+            </if>
+            <if test="task.seed_status !=null ">
+                seed_status=#{task.seed_status},
+            </if>
+            <if test="task.cron !=null and task.cron !=''">
+                cron=#{task.cron},
+            </if>
+            <if test="task.website_id != null ">
+                website_id =#{task.website_id},
+            </if>
+            <if test="task.xml !=null and task.xml !=''">
+                `xml`=#{task.xml},
+            </if>
+            <if test="task.data_type_id !=null">
+                data_type_id=#{task.data_type_id},
+            </if>
+            <if test="task.spider_level !=null ">
+                spider_level=#{task.spider_level},
+            </if>
+            <if test="task.sole_sign !=null and task.sole_sign != '' ">
+                sole_sign=#{task.sole_sign},
+            </if>
+            <if test="task.customlable !=null and task.customlable != '' ">
+                customlable=#{task.customlable},
+            </if>
+            <if test="task.key_sources_flag !=null and task.key_sources_flag != '' ">
+                key_sources_flag = #{task.key_sources_flag},
+            </if>
+            <if test="task.spider_type !=null and task.spider_type != '' ">
+                spider_type = #{task.spider_type},
+            </if>
+            <if test="task.sole_sign !=null and task.sole_sign != '' ">
+                sole_sign=#{task.sole_sign},
+            </if>
+            <if test="task.create_user !=null and task.create_user != '' ">
+                create_user=#{task.create_user},
+            </if>
+            <if test="task.create_user_id !=null and task.create_user_id != '' ">
+                create_user_id=#{task.create_user_id},
+            </if>
+            <if test="task.update_user !=null and task.update_user != '' ">
+                update_user=#{task.update_user},
+            </if>
+            <if test="task.update_user_id !=null and task.update_user_id != '' ">
+                update_user_id=#{task.update_user_id},
+            </if>
+            <if test="task.is_del!=null ">
+                is_del=#{task.is_del},
+            </if>
+        </trim>
+        where id = #{task.id}
+    </update>
+
+    <insert id="saveTask" parameterType="com.stonedt.spider.entity.SpiderFlowTask" >
+        insert into
+        spider_flow_task(
+            <if test="task.seed_name !=null and task.seed_name !=''">
+                seed_name,
+            </if>
+            <if test="task.seed_type !=null ">
+                seed_type,
+            </if>
+            <if test="task.seed_status !=null ">
+                seed_status,
+            </if>
+            <if test="task.cron !=null and task.cron !=''">
+                cron,
+            </if>
+            <if test="task.website_id != null">
+                website_id,
+            </if>
+            <if test="task.xml !=null and task.xml !=''">
+                `xml`,
+            </if>
+            <if test="task.data_type_id !=null">
+                data_type_id,
+            </if>
+            <if test="task.spider_level !=null ">
+                spider_level,
+            </if>
+            <if test="task.sole_sign !=null and task.sole_sign != '' ">
+                sole_sign,
+            </if>
+            <if test="task.customlable !=null and task.customlable != '' ">
+                customlable,
+            </if>
+            <if test="task.key_sources_flag !=null and task.key_sources_flag != '' ">
+                key_sources_flag,
+            </if>
+            <if test="task.spider_type !=null and task.spider_type != '' ">
+                spider_type,
+            </if>
+            <if test="task.create_user !=null and task.create_user != '' ">
+                create_user,
+            </if>
+            <if test="task.create_user_id !=null and task.create_user_id != '' ">
+                create_user_id,
+            </if>
+            <if test="task.update_user !=null and task.update_user != '' ">
+                update_user,
+            </if>
+            <if test="task.update_user_id !=null and task.update_user_id != '' ">
+                update_user_id,
+            </if>
+            update_time
+        )
+        values (
+            <if test="task.seed_name !=null and task.seed_name !=''">
+                #{task.seed_name},
+            </if>
+            <if test="task.seed_type !=null ">
+                #{task.seed_type},
+            </if>
+            <if test="task.seed_status !=null ">
+                #{task.seed_status},
+            </if>
+            <if test="task.cron !=null and task.cron !=''">
+                #{task.cron},
+            </if>
+            <if test="task.website_id != null ">
+                #{task.website_id},
+            </if>
+            <if test="task.xml !=null and task.xml !=''">
+                #{task.xml},
+            </if>
+            <if test="task.data_type_id !=null">
+                #{task.data_type_id},
+            </if>
+            <if test="task.spider_level !=null ">
+                #{task.spider_level},
+            </if>
+            <if test="task.sole_sign !=null and task.sole_sign != '' ">
+                #{task.sole_sign},
+            </if>
+            <if test="task.customlable !=null and task.customlable != '' ">
+                #{task.customlable},
+            </if>
+            <if test="task.key_sources_flag !=null and task.key_sources_flag != '' ">
+                #{task.key_sources_flag},
+            </if>
+            <if test="task.spider_type !=null and task.spider_type != '' ">
+                #{task.spider_type},
+            </if>
+
+            <if test="task.create_user !=null and task.create_user != '' ">
+                #{task.create_user},
+            </if>
+
+            <if test="task.create_user_id !=null and task.create_user_id != '' ">
+                #{task.create_user_id},
+            </if>
+
+            <if test="task.update_user !=null and task.update_user != '' ">
+                #{task.update_user},
+            </if>
+
+            <if test="task.update_user_id !=null and task.update_user_id != '' ">
+                #{task.update_user_id},
+            </if>
+            now()
+        )
+    </insert>
+
+    <select id="taskSpiderCronPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlowTask">
+        select * from spider_flow_task
+        <where>
+            is_del=0
+            <if test="seed_status!=null and seed_status>0">
+                and seed_status=#{seed_status}
+            </if>
+            <if test="cron!=null and cron!='' ">
+                and cron=#{cron}
+            </if>
+        </where>
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="taskSpiderCronPage_map" parameterType="java.lang.Object" resultType="java.util.Map">
+        select * from spider_flow_task
+        <where>
+            is_del=0
+            <if test="seed_status!=null and seed_status>0">
+                and seed_status=#{seed_status}
+            </if>
+            <if test="cron!=null and cron!='' ">
+                and cron=#{cron}
+            </if>
+        </where>
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+</mapper>

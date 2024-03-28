@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.OptionalStockDao">
+
+	<select id="getOptionStockInfo" parameterType="int"
+		resultType="com.stonedt.spider.entity.OptionalStock">
+		SELECT
+		opt_stack.id ,
+		opt_stack.simple_name ,
+		opt_stack.user_id ,
+		st.full_name ,
+		st.stock_id ,
+		opt_stack. CODE ,
+		opt_stack.market,
+        st.builddate as establishment_time,
+        st.listdate as dateOfListing,
+        st.totalMarket as totalMarket,
+        st.currentpricetoday,
+        st.recentTrend,
+        st.gain
+		FROM
+		bigdata.optional_stock opt_stack
+		JOIN stock st ON opt_stack.stock_id = st.stock_id
+		AND opt_stack.user_id =  #{userid}  ORDER BY opt_stack.createTime desc
+		
+
+	</select>
+
+	<!-- 推荐自选股 -->
+	<select id="getRecommendStock" parameterType="list"
+		resultType="map">
+		SELECT
+		code,
+		simple_name,
+		recentTrend,
+		currentpricetoday,
+		gain,
+		boards,
+		upsAndDowns
+		FROM
+		bigdata.stock
+
+		<if test="list.size() > 0 and list != null">
+			WHERE
+			simple_name
+			not in
+
+			<foreach item="list" index="index" collection="list" open="("
+				separator="," close=")">
+				#{list}
+			</foreach>
+		</if>
+
+	</select>
+
+	<!-- 根据code 查询个股 -->
+	<select id="selectStockByCode"
+		resultType="com.stonedt.spider.entity.StockSearch">
+		SELECT
+		stock_id,
+		code,
+		simple_name,
+		recentTrend,
+		currentpricetoday,
+		gain,
+		upsAndDowns
+		FROM
+		bigdata.stock
+		where code LIKE CONCAT('%','${code}','%') or simple_name LIKE
+		CONCAT('%','${code}','%') 
+	</select>
+	
+	<select id="selectStockByCodeList" resultType="com.stonedt.spider.entity.StockSearch">
+	
+	SELECT
+		stock.stock_id,
+		stock.code,
+		stock.simple_name,
+		stock.full_name,
+		stock.product,
+		stock.recentTrend,
+		stock.currentpricetoday,
+		stock.gain,
+		stock.upsAndDowns,
+		stock.builddate,
+		stock.listdate,
+		stock.totalMarket,
+		(select count(*) from bigdata.optional_stock where optional_stock.user_id =#{user_id} and optional_stock.stock_id = stock.stock_id) as ifoption
+		FROM
+		bigdata.stock
+		where code LIKE CONCAT('%','${code}','%') or simple_name LIKE
+		CONCAT('%','${code}','%')
+		and stock.stock_id &lt;= 82431  
+	</select>
+
+	<select id="selectStockByCodeAndName" resultType="com.stonedt.spider.entity.Stock">
+		SELECT *
+		FROM
+		bigdata.stock where code like CONCAT(CONCAT('%',#{code})) limit 1;  
+	    
+	</select>
+
+	<insert id="setMyStock">
+		INSERT INTO optional_stock ( CODE,simple_name, market, user_id,stock_id )
+		VALUES
+		( #{code},#{simple_name}, #{market}, #{user_id},#{stock_id} );
+	</insert>
+
+	<!-- 删除自选股 -->
+	<delete id="delMyStock">
+		DELETE
+		FROM
+		bigdata.optional_stock
+		WHERE
+		CODE = #{code}
+	</delete>
+
+	<select id="getStockbycode" parameterType="map"
+		resultType="com.stonedt.spider.entity.OptionalStock">
+		select code,market,simple_name from bigdata.optional_stock where code = #{code} and user_id = #{userid}
+	</select>
+	<select id="getCount"
+		parameterType="com.stonedt.spider.entity.OptionalStock"
+		resultType="int">
+		select count(1) from bigdata.optional_stock where user_id = #{user_id} and stock_id
+		= #{stock_id}
+	</select>
+
+
+	<select id="getNotice" parameterType="String" resultType="map">
+		SELECT
+		id,
+		title,
+		url,
+		reportDate as date
+		FROM
+		bigdata.stock_notice
+		WHERE
+		code = #{noticecode} order by date desc
+	</select>
+
+
+
+	<select id="getstockinfo" parameterType="String"
+		resultType="String">
+		select json from bigdata.code_info where code = #{code}
+	</select>
+	<select id="getstocknewsbycode" parameterType="String"
+		resultType="map">
+
+		select * from bigdata.code_news where
+		
+		code = #{code} order by date desc
+
+
+	</select>
+	
+	
+	
+	<select id="getstockbaseinfo" parameterType="String" resultType="String">
+	   select json from bigdata.code_info where code = #{code}
+	</select>
+	
+	<select id="getArticleByArticleId" resultType="com.stonedt.spider.entity.NewsEntity">
+		select id,code,Title AS title,Date AS publishTime,contentHtml from bigdata.code_news where id = #{articleId}
+	</select>
+	
+	<!-- 上一篇 -->
+	<select id="getLastNews" resultType="com.stonedt.spider.entity.NewsEntity" >
+		SELECT
+		id ,
+		code,
+		Title as title ,
+		Date as publishTime,
+		contenthtml
+		FROM
+			bigdata.code_news
+		WHERE
+			Date &gt; #{publishTime}
+			<if test="code != null and code != ''">
+				AND code = #{code}
+			</if>
+			<if test="oldId != null and oldId != ''">
+				AND id != #{oldId}
+			</if>
+			AND contenthtml IS NOT NULL 
+		  	order by publishTime  limit 1
+	</select>
+	
+	<!-- 下一篇 -->
+	<select id="getNextNews"  resultType="com.stonedt.spider.entity.NewsEntity">
+		SELECT
+		id ,
+		code,
+		Title as title ,
+		Date as publishTime,
+		contenthtml
+		FROM
+			bigdata.code_news
+		WHERE
+			Date &lt; #{publishTime}
+			<if test="code != null and code != ''">
+				AND code = #{code}
+			</if>
+			<if test="oldId != null and oldId != ''">
+				AND id != #{oldId}
+			</if>
+			AND contenthtml IS NOT NULL 
+		  	order by publishTime desc limit 1
+	</select>
+	
+	
+</mapper>

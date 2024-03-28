@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+
+    <link rel="stylesheet" href="/css/spiderApply/websiteDetail.css">
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a class="pointer" onclick="rollBack()">采集应用</a></li>
+                    <li class="breadcrumb-item websiteName"></li>
+                    <li class="breadcrumb-item active" aria-current="page">网站详情</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="filter-params">
+                <div class="input-group input-group-lg medium-input mb-4">
+                    <input type="text" class="form-control search-task" placeholder="请输入关键词进行检索">
+                    <button class="btn btn-primary" type="button" onclick="searchKeyword()">搜索</button>
+                </div>
+                <div class="select-group mb-4">
+                    <div class="select-item">
+                        <div class="select-key">状态筛选：</div>
+                        <select class="form-select task-status" onchange="pickseedStatus()">
+                            <option selected hidden>请选择任务状态</option>
+                            <option class="option" value="-1">全部</option>
+                            <option class="option" value="0">关闭</option>
+                            <option class="option" value="1">开启</option>
+                        </select>
+                    </div>
+                    <div class="select-item">
+                        <div class="select-key">优先级筛选：</div>
+                        <select class="form-select task-priority" onchange="pickPriority()">
+                            <option selected hidden>请选择优先级</option>
+                            <option class="option" value="0">全部</option>
+                            <option class="option" value="1">高</option>
+                            <option class="option" value="2">中</option>
+                            <option class="option" value="3">低</option>
+                        </select>
+                    </div>
+                    <div class="select-item">
+                        <div class="select-key">采集方式：</div>
+                        <select class="form-select collect-type" onchange="pickCollectType()">
+                            <option selected hidden>请选择采集方式</option>
+                            <option class="option" value="-1">全部</option>
+                            <option class="option" value="0">网站采集</option>
+                            <option class="option" value="1">文件采集</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-list">
+                <div class="table-top">
+                    <div class="table-title">采集任务列表</div>
+                    <div class="table-btn-group">
+                        <button type="button" class="btn btn-primary" onclick="addTask()">任务新建</button>
+                    </div>
+                </div>
+                <div class="table_mark">
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">任务名称</th>
+                                <th scope="col">任务优先级</th>
+                                <th scope="col">今日采集量</th>
+                                <th scope="col">总采集量</th>
+                                <th scope="col">采集方式</th>
+                                <th scope="col">运行状态</th>
+                                <th scope="col">创建时间</th>
+                                <th scope="col" class="center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-seed">
+
+                        </tbody>
+                    </table>
+                    <div class="table_empty" style="display: none;">暂无数据</div>
+                    <!-- 加载状态 遮罩层 -->
+                    <div class="modal fade marklayer">
+                        <div class="load_item">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pagination"></div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                    line-height: 24px;
+                    font-size: 18px;
+                    color: #303133;
+                  ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+                                    确定要删除吗？
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitDelete()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="controlModal" tabindex="-1" aria-labelledby="closedModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                        line-height: 24px;
+                        font-size: 18px;
+                        color: #303133;
+                      ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitControl()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderApply/websiteDetail.js"></script>
+</body>
+
+</html>

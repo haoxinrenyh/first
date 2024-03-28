@@ -1,0 +1,81 @@
+## 省级政府招标信源站点
+
+### 更新日期：2022-3-158
+
+如有任何问题请联系经理，
+
+ **微信号： techflag | 电话： 13505146123** 
+
+<br><br>
+北京政府采购	http://www.ccgp-beijing.gov.cn
+福建政府采购	http://www.ccgp-fujian.gov.cn/
+浙江政府采购	https://zfcg.czt.zj.gov.cn/
+上海政府采购	http://www.ccgp-shanghai.gov.cn
+天津政府采购	http://www.ccgp-tianjin.gov.cn
+河北政府采购	http://www.ccgp-hebei.gov.cn/zfcg
+河南政府采购	http://www.ccgp-henan.gov.cn
+湖北政府采购	http://www.ccgp-hubei.gov.cn
+湖南政府采购	http://www.ccgp-hunan.gov.cn
+山西政府采购	http://www.ccgp-shanxi.gov.cn/default.html
+山东政府采购	http://www.ccgp-shandong.gov.cn/sdgp2014/site/index.jsp
+黑龙江政府采购	http://www.ccgp-heilongj.gov.cn
+吉林省政府采购	http://www.ccgp-jilin.gov.cn
+辽宁省政府采购	http://www.ccgp-liaoning.gov.cn
+海南省政府采购	http://www.ccgp-hainan.gov.cn
+内蒙古政府采购	http://www.ccgp-neimenggu.gov.cn
+广东省政府采购	http://www.ccgp-guangdong.gov.cn，http://gdgpo.czt.gd.gov.cn
+陕西政府采购	http://www.ccgp-shaanxi.gov.cn
+甘肃政府采购	http://www.ccgp-gansu.gov.cn
+青海政府采购	http://www.ccgp-qinghai.gov.cn
+江西政府采购	http://www.ccgp-jiangxi.gov.cn
+新疆政府采购	http://www.ccgp-xinjiang.gov.cn
+宁夏政府采购	http://www.ccgp-ningxia.gov.cn
+四川政府采购	http://www.ccgp-sichuan.gov.cn
+西藏政府采购	http://www.ccgp-xizang.gov.cn
+江苏政府采购	http://www.ccgp-jiangsu.gov.cn
+广西政府采购	http://www.ccgp-guangxi.gov.cn
+云南政府采购	http://www.ccgp-yunnan.gov.cn
+贵州政府采购	http://www.ccgp-guizhou.gov.cn
+安徽政府采购	http://www.ccgp-anhui.gov.cn
+重庆政府采购	http://www.ccgp-chongqing.gov.cn
+中国政府购买服务信息平台	http://www.ccgp.gov.cn/gpsr
+北京公共资源	https://ggzyfw.beijing.gov.cn/
+福建公共资源	https://ggzyfw.fj.gov.cn/web/index.html#/index/new
+浙江公共资源	http://zjpubservice.zjzwfw.gov.cn
+上海公共资源	https://www.shggzy.com
+天津公共资源	http://ggzy.zwfwb.tj.gov.cn
+河北公共资源	http://ggzy.hebei.gov.cn/hbggfwpt
+河南公共资源	http://hnsggzyfwpt.hndrc.gov.cn
+湖北公共资源	https://www.hbggzyfwpt.cn
+湖南公共资源	https://www.hnsggzy.com
+山西公共资源	http://prec.sxzwfw.gov.cn
+山东公共资源	http://ggzyjy.shandong.gov.cn
+黑龙江公共资源	http://www.hljggzyjyw.org.cn
+吉林省公共资源	http://www.jl.gov.cn/ggzy/
+辽宁省公共资源	http://www.lnggzy.gov.cn/lnggzy
+海南省公共资源	http://zw.hainan.gov.cn/ggzy
+内蒙古公共资源	http://ggzyjy.nmg.gov.cn
+广东省公共资源	http://ggzy.gd.gov.cn
+陕西公共资源	http://www.sxggzyjy.cn
+甘肃公共资源	https://ggzyjy.gansu.gov.cn
+青海公共资源	https://www.qhdzzbfw.gov.cn/fwpt/
+江西公共资源	https://jxsggzy.cn/web
+新疆公共资源	http://zwfw.xinjiang.gov.cn/xinjiangggzy
+宁夏公共资源	http://www.nxggzyjy.org/ningxiaweb
+四川公共资源	http://ggzyjy.sc.gov.cn
+西藏公共资源	http://ggzy.xizang.gov.cn
+江苏公共资源	http://jsggzy.jszwfw.gov.cn
+广西公共资源	http://gxggzy.gxzf.gov.cn
+云南公共资源	http://ggzy.yn.gov.cn
+贵州公共资源	http://ggzy.guizhou.gov.cn
+安徽公共资源	http://ggzy.ah.gov.cn
+重庆公共资源	https://www.cqggzy.com
+新疆生产建设兵团	http://ggzy.xjbt.gov.cn
+中华人民共和国财政部	http://www.mof.gov.cn/pub/mof
+政府采购信息网	http://www.caigou2003.com
+政府采购机票管理网站	https://www.gpticket.org/login.action
+中国政府采购新闻网	http://www.cgpnews.cn
+全国公共资源交易平台	http://www.ggzy.gov.cn
+中国招投标公共服务平台	http://www.cebpubservice.com
+湖南省政府采购电子卖场	https://hunan.zcygov.cn/
+云南省投资审批中介超市	http://220.163.118.100/yns/purchaseNotice 

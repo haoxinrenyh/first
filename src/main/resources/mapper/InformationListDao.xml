@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.stonedt.spider.dao.InformationListDao">
+	<select id="getInformationList" parameterType="int"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+
+		SELECT
+		art.title,
+		art.source_name,
+		art.publish_time,
+		art.contenthtml,
+		seed_name,
+		art.article_id,
+		art.emotionalIndex AS emotiontype,
+		spread_num AS plate,
+		read_num AS stock
+		FROM
+		spider_article AS art,
+		spider_seed
+		WHERE
+		spider_seed.id = art.seed_id
+		AND art.contenthtml IS NOT NULL
+		AND art.seed_id = #{seed_id}
+		ORDER BY
+		art.publish_time DESC
+
+	</select>
+
+	<select id="getInformationListByType" parameterType="int"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+
+		SELECT
+		title,
+		originwebsitename,
+		publish_time,
+		content,
+		emotionalIndex as emotiontype,
+		contenthtml,
+		article_id
+		FROM
+		spider_article
+		WHERE
+		1=1
+		AND contenthtml IS NOT NULL
+		AND article_type = #{article_type}
+		ORDER BY
+		publish_time DESC
+
+	</select>
+
+	<select id="getInformationById" parameterType="int"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+
+		SELECT
+		art.title,
+		art.publish_time,
+		art.contenthtml,
+		art.content,
+		art.article_id,
+		art.originwebsitename AS source_name,
+		art.source_url
+		FROM
+		spider_article AS art
+		WHERE
+		art.article_id =#{id}
+
+	</select>
+
+	<!-- 根据用户选择的类型，查询对应的大分类 -->
+	<select id="getFirstType" parameterType="int" resultType="String">
+		SELECT
+		first_type
+		FROM
+		spider_seed
+		WHERE
+		id = #{seed_id}
+	</select>
+
+	<!-- 根据用户选择的类型，查询对应的标签名 -->
+	<select id="getSeedName" parameterType="int" resultType="String">
+		SELECT
+		seed_name
+		FROM
+		spider_seed
+		WHERE
+		id = #{seed_id}
+	</select>
+
+	<select id="getWechatInformationList" parameterType="int"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+		select * from spider_article where seed_id = #{id} AND
+		article_type = 9
+	</select>
+
+	<select id="getWechatName" parameterType="int"
+		resultType="com.stonedt.spider.entity.Wechat">
+
+		select * from wechat_weibo_carrier where id = #{id}
+	</select>
+	<select id="getWeboInformationList" parameterType="int"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+
+		select * from spider_article where seed_id = #{id} AND article_type = 8
+
+	</select>
+
+	<!-- 上一篇 -->
+	<select id="getLastinfo" parameterType="com.stonedt.spider.entity.InformationEntity"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+		SELECT
+		article_id ,
+		title ,
+		seed_id
+		FROM
+		spider_article
+		WHERE
+		publish_time &lt; #{publish_time}
+		<if test="seed_id != null and seed_id != ''">
+			AND seed_id = #{seed_id}
+		</if>
+		<if test="article_type != null and article_type != ''">
+			AND article_type = #{article_type}
+		</if>
+		AND contenthtml IS NOT NULL
+		order by publish_time desc limit 1
+	</select>
+
+
+	<select id="getLastinfoNew" parameterType="com.stonedt.spider.entity.InformationEntity"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+		SELECT
+		article_id ,
+		title ,
+		seed_id
+		FROM
+		spider_article
+		WHERE
+		publish_time &lt; #{publish_time}
+		AND contenthtml IS NOT NULL
+		order by publish_time desc limit 1
+	</select>
+
+	<!-- 下一篇 -->
+	<select id="getNextinfo" parameterType="com.stonedt.spider.entity.InformationEntity"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+		SELECT
+		article_id ,
+		title ,
+		seed_id
+		FROM
+		spider_article
+		WHERE
+		publish_time &gt; #{publish_time}
+		<if test="seed_id != null and seed_id != ''">
+			AND seed_id = #{seed_id}
+		</if>
+		<if test="article_type != null and article_type != ''">
+			AND article_type = #{article_type}
+		</if>
+		AND contenthtml IS NOT NULL
+		order by publish_time limit 1
+	</select>
+
+	<!-- 下一篇 -->
+	<select id="getNextinfoNew" parameterType="com.stonedt.spider.entity.InformationEntity"
+		resultType="com.stonedt.spider.entity.InformationEntity">
+		SELECT
+		article_id ,
+		title ,
+		seed_id
+		FROM
+		spider_article
+		WHERE
+		publish_time &gt; #{publish_time}
+
+		AND contenthtml IS NOT NULL
+		order by publish_time limit 1
+	</select>
+
+	<!-- 详情页获取当前页码 -->
+	<select id="getPagenumInfo" parameterType="com.stonedt.spider.entity.InformationEntity"
+		resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		spider_article
+		WHERE
+			<![CDATA[ publish_time > #{publish_time} ]]>
+		<if test="seed_id != null and seed_id != ''">
+			AND seed_id = #{seed_id}
+		</if>
+		<if test="article_type != null and article_type != ''">
+			AND article_type = #{article_type}
+		</if>
+		AND contenthtml IS NOT NULL
+	</select>
+
+	<!-- 详情页获取当前页码 -->
+	<select id="getPagenumInfoNew" parameterType="com.stonedt.spider.entity.InformationEntity"
+		resultType="Integer">
+		SELECT
+		count(1)
+		FROM
+		spider_article
+		WHERE
+		publish_time &gt; #{publish_time}
+		AND contenthtml IS NOT NULL
+	</select>
+
+	<select id="getNewArticle" resultType="com.stonedt.spider.entity.InformationEntity">
+		SELECT
+		art.title,
+		art.source_name,
+		art.publish_time,
+		art.contenthtml,
+		art.article_id,
+		art.emotionalIndex AS emotiontype,
+		spread_num AS plate,
+		read_num AS stock
+		FROM
+		spider_article as art
+		WHERE
+		art.contenthtml IS NOT NULL
+		ORDER BY
+		art.publish_time DESC
+	</select>
+
+	<select id="getNewsByEmotionation" resultType="com.stonedt.spider.entity.InformationEntity">
+		SELECT
+		art.title,
+		art.source_name,
+		art.publish_time,
+		art.contenthtml,
+		art.article_id,
+		art.emotionalIndex AS emotiontype,
+		spread_num AS plate,
+		read_num AS stock
+		FROM
+		spider_article as art
+		WHERE
+		art.contenthtml IS NOT NULL
+		AND art.emotionalIndex = #{gradenum}
+		ORDER BY
+		art.publish_time DESC
+	</select>
+
+</mapper>

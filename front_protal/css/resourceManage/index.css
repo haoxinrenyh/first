@@ -1,0 +1,33 @@
+.nav-underline .nav-link {
+  padding-left: 0;
+  padding-right: 0;
+  margin-right: 1rem;
+  color: #aaa;
+}
+
+.nav-underline .nav-link.active,
+.nav-underline .show > .nav-link {
+  font-weight: 700;
+  color: #0d6efd;
+  border-bottom: 2px solid #0d6efd;
+}
+
+#pagination-1,
+#pagination-2,
+#pagination-3 {
+  text-align: right;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  min-width: 60px;
+}
+
+.invalid-feedback {
+  position: absolute;
+  left: 60px;
+  top: 45px;
+}

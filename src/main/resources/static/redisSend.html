@@ -1,0 +1,71 @@
+<div class="layui-tab layui-tab-fixed layui-tab-brief">
+  <ul class="layui-tab-title">
+    <li class="layui-this">配置</li>
+  </ul>
+  <div class="layui-tab-content">
+    <div class="layui-tab-item layui-show">
+    	<form class="layui-form editor-form-node">
+			<div class="layui-row">
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">节点名称</label>
+						<div class="layui-input-block">
+							<input type="text" name="value" placeholder="请输入节点名称" value="{{=d.value}}" autocomplete="off" class="layui-input">
+							<input type="text" name="redis" placeholder="redis" autocomplete="off" class="layui-input input-default" value="{{=d.data.object.redis}}">
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="layui-row layui-col-space20">
+				<div class="layui-col-md3">
+					<div class="layui-form-item">
+						<label class="layui-form-label">数据输出</label>
+						<div class="layui-input-block">
+							<input type="radio" name="redis-send"   title="SendToKafkaWithRedisServer" checked value="0" lay-skin="primary" {{d.data.object['redis-send'] == '0' ? 'checked' : ''}}  />
+							<input type="radio" name="redis-send" title="TestSendToKafkaWithRedisServer" value="1" lay-skin="primary" {{d.data.object['redis-send'] == '1' ? 'checked' : ''}}  />
+
+
+						</div>
+					</div>
+				</div>
+			</div>
+			<table class="layui-table" id="spider-output" data-cell="{{=d.cell.id}}" data-keys="output-name,output-value"></table>
+    		<hr>
+    		<div class="layui-form-item">
+    			<div class="layui-input-inline">
+	    			<button class="layui-btn table-row-add" type="button" for="spider-output">添加一个输出项</button>
+	    		</div>
+	    	</div>
+    	</form>
+    </div>
+  </div>
+</div>
+<script th:inline="none">
+	function renderSpiderOutput(data){
+		layui.table.render({
+			elem : '#spider-output',
+			limit: 50,
+			cols : [[{
+				title : '输出项',
+				width : 150,
+				templet : '#output-name-tmpl'
+			},{
+				title : '输出值',
+				templet : '#output-value-tmpl'
+			},{
+				title : '操作',
+				width : 120,
+				align : 'center',
+				templet : '#common-operation'
+			}]],
+			data : data,
+			text : {
+				none : '暂未设置输出项'
+			}
+		})
+	}
+	renderSpiderOutput(getCellData({{d.cell.id}},$("#spider-output").data('keys').split(",")));
+
+
+</script>

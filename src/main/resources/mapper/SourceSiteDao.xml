@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SourceSiteDao">
+
+	<select id="searchSiteById" parameterType="int"
+		resultType="com.stonedt.spider.entity.SourceSite">
+		Select * from data_source where id =#{id}
+	</select>
+
+
+	<update id="updatestate" parameterType="int">
+		update  data_source set intelligent_match = #{state}  where id =#{id}
+	</update>
+
+
+	<update id="eliminate" parameterType="int">
+		update  spider_test_data set state = #{state}  where web_id =#{id} and kind = 2
+	</update>
+
+	<select id="seeSection" resultType="com.stonedt.spider.entity.SpiderTestData">
+         select * from spider_test_data where state is null and web_id =#{id} and kind = 2
+	</select>
+
+
+	<select id="searchSpiderFlows" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderFlow">
+		SELECT
+		s.id,
+		s.seed_name,
+		s.website_id,
+		s.data_type_id,
+		s.spider_level,
+		t.typename
+		FROM
+				spider_flow s,
+		spider_website w,
+		websitetype t
+		WHERE
+		s.website_id = w.id
+		AND s.data_type_id = t.id
+		and w.id = #{website_id}
+	</select>
+
+	<select id="searchSpiderFlow"  parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderFlow">
+		SELECT
+		w.website_name,
+		w.website_ico,
+		s.id,
+		s.seed_name,
+		s.website_id,
+		s.xml,
+		s.data_type_id,
+		s.spider_level,
+		t.estype,
+		t.esindex,
+		t.hbase_table,
+		t.kafka_queue_name,
+		t.bloomname
+		FROM
+				spider_flow s,
+		spider_website w,
+		websitetype t
+		WHERE
+		s.website_id = w.id
+		AND s.data_type_id = t.id
+		and s.id = #{id}
+	</select>
+	
+	
+	<update id="updateUserByID" parameterType="com.stonedt.spider.entity.SourceSite">
+	
+	
+	update data_source set update_user = #{update_user},update_user_id=#{update_user_id} where id = #{id}
+	
+	
+	
+	</update>
+	
+	
+
+</mapper> 

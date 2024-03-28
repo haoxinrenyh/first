@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.stonedt.spider.dao.FunctionDao">
+	<select id="list" resultType="com.stonedt.spider.entity.Function">
+	
+	select * from spider-flow.sp_function
+	
+	</select>
+	
+	
+	<delete id="removeById" parameterType="String">
+	delete from spider-flow.sp_function where id = #{id}
+	</delete>
+	
+	
+	<select id="getById" parameterType="String" resultType="com.stonedt.spider.entity.Function">
+	
+	select * from spider-flow.sp_function where id = #{id}
+	</select>
+	
+	
+	<update id="update" parameterType="com.stonedt.spider.entity.Function">
+	
+	update spider-flow.sp_function set name = #{name},parameter = #{parameter},script = #{script},explain_data = #{explain_data},type = #{type} where id = #{id}
+	
+	</update>
+	
+	
+	<insert id="save" parameterType="com.stonedt.spider.entity.Function">
+	
+	insert into spider-flow.sp_function (id,name,parameter,script,type,explain_data) values (#{id},#{name},#{parameter},#{script},#{type},#{explain_data})
+	
+	
+	</insert>
+	
+	
+
+	 
+</mapper>

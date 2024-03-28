@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.LandingUserLogDao">
+
+
+	<!-- 查询所有用户 -->
+	<select id="queryUserLandingLogAll" resultType="com.stonedt.spider.entity.UserLandingLog">
+		select
+		lul.id,
+		su.username as user,
+		su.name as user_name,
+		lul.user_id,
+		su.create_time as create_date,
+		lul.landing_date,
+		IFNULL(lul.landing_count,0) as landing_count ,
+		su.company as institution_name
+		from
+		landing_user_log as lul right join stonedt_user su
+		on lul.user_id = su.id order by lul.landing_count desc,lul.landing_date desc
+	</select>
+	
+	
+	<!-- 插入新用户 -->
+	<insert id="insertOrUpdateUserLandingLog" parameterType="com.stonedt.spider.entity.StonedtUser">
+		INSERT INTO landing_user_log ( `user`, `user_name`, `user_id`, `create_date`, `landing_date` )
+		  VALUES
+				      ( #{user}, #{user_name}, #{user_id}, #{landing_date},#{landing_date} ) 
+				      ON DUPLICATE KEY UPDATE landing_count = landing_count + 1,
+							landing_date = #{landing_date};
+	</insert>
+
+</mapper> 

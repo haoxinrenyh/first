@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+
+<mapper namespace="com.stonedt.spider.dao.WebSiteTypeDao">
+
+    <select id="selectList" resultType="java.util.Map">
+        select id , typename ,esindex, estype, hbase_table, kafka_queue_name, bloomname  from websitetype
+        <where>is_del=0</where>
+    </select>
+
+
+    <select id="websitetypes" parameterType="java.lang.Object" resultType="java.util.Map">
+        select id , typename, esindex, estype, hbase_table, kafka_queue_name, bloomname from websitetype
+        <where>
+            is_del=0
+            <if test="categoryId!=null and categoryId>0">
+                and id in (
+                select data_type_id as id
+                from spider_flow
+                where  data_type_id is not null
+                and id in ( select seed_id from es_record group by seed_id )
+                and website_id in (select id as website_id from data_source where new_website_type=#{categoryId})
+                )
+            </if>
+        </where>
+    </select>
+
+    <select id="page" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.WebsiteType">
+        select wt.id , wt.typename ,wt.esindex, wt.estype, wt.hbase_table, wt.kafka_queue_name, wt.bloomname , wt.updatetime,  su.username as username
+        from websitetype wt left  join  stonedt_user su on wt.userid=su.id
+        <where>
+            is_del=0
+        </where>
+        order by wt.updatetime desc
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="pageCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(id)
+        from websitetype
+        <where>
+            is_del=0
+        </where>
+    </select>
+
+    <insert id="insertWebsiteType" parameterType="com.stonedt.spider.entity.WebsiteType">
+        insert into websitetype(typename,estype,esindex,kafka_queue_name,bloomname,userid,updatetime) values(#{typename},#{estype},#{esindex},#{kafka_queue_name},#{bloomname},#{userid},now())
+    </insert>
+
+    <update id="updateWebsiteType" parameterType="com.stonedt.spider.entity.WebsiteType">
+        update  websitetype
+        set updatetime=now()
+            <if test="typename!=null and typename!='' "> ,typename=#{typename} </if>
+            <if test="estype!=null and estype!='' "> ,estype=#{estype} </if>
+            <if test="esindex!=null and esindex!='' "> ,esindex=#{esindex} </if>
+            <if test="kafka_queue_name!=null and kafka_queue_name!='' "> ,kafka_queue_name=#{kafka_queue_name} </if>
+            <if test="bloomname!=null and bloomname!='' "> ,bloomname=#{bloomname} </if>
+            <if test="userid!=null and userid>0 "> ,userid=#{userid} </if>
+            <if test="is_del!=null and is_del>0 "> ,is_del=#{is_del} </if>
+        where id=#{id}
+    </update>
+
+    <select id="findOne"  parameterType="com.stonedt.spider.entity.WebsiteType" resultType="com.stonedt.spider.entity.WebsiteType">
+        select id , typename ,esindex, estype, hbase_table, kafka_queue_name, bloomname , updatetime
+        from websitetype
+        <where>
+            is_del=0
+            <if test="id!=null and id>0">
+                and id=#{id}
+            </if>
+        </where>
+        limit 1
+    </select>
+
+    <select id="findWebsiteTypeAll" resultType="com.stonedt.spider.entity.EsIndexRatio">
+        select typename as name , esindex as esIndex from websitetype where is_del=0 and esindex is not null
+    </select>
+
+    <select id="findWebsiteCategoryAll" resultType="com.stonedt.spider.entity.EsWebsiteCategoryRatio">
+        select id,category_name as name from website_category
+    </select>
+    
+</mapper>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+    <link rel="stylesheet" href="/css/spiderMarket/index.css">
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0 breadcrumb-list">
+                    <li class="breadcrumb-item">采集市场</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="top-nav">
+                <div class="top-nav-left">
+                    <div class="filter-list">
+                        <span class="filter-item active">全部</span>
+                    </div>
+                </div>
+                <div class="top-nav-right">
+                    <div class="input-group input-group-lg">
+                        <input type="text" class="form-control search-apply" placeholder="搜索应用">
+                    </div>
+                </div>
+            </div>
+            <div class="market-list">
+
+            </div>
+        </div>
+
+        <div class="rnav-menu">
+            <!-- <div class="control-button">
+                <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseWidthExample"
+                    aria-expanded="false" aria-controls="collapseWidthExample" onclick="controlPopover()">
+                    收起
+                </button>
+            </div> -->
+            <div class="collapse collapse-horizontal show" id="collapseWidthExample">
+                <a class="item should-popover">
+                    <span class="circle-box"><i class="iconfont icon-weixin"></i></span>
+                    <div class="rnav-name">联系我们</div>
+                    <div class="popover-img"><img src="/images/wxcode.jpg" alt=""></div>
+                </a>
+                <a class="item" onclick="submitFeedback()">
+                    <span class="circle-box"><i class="iconfont icon-fankui"></i></span>
+                    <div class="rnav-name">反馈建议</div>
+                </a>
+                <a class="item" href="https://docs.qq.com/doc/DVE9TWm1JR2hlRERF" target="_blank">
+                    <span class="circle-box"><i class="iconfont icon-anzhuangshouce"></i></span>
+                    <div class="rnav-name">用户手册</div>
+                </a>
+            </div>
+        </div>
+        <div class="modal fade" id="feedbackModal" tabindex="-1" aria-labelledby="feedbackModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" style="width: 40%;max-width: auto">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px;">
+                        <div class="modal-title" id="feedbackModalLabel" style="
+                      line-height: 24px;
+                      font-size: 18px;
+                      color: #303133;
+                    ">
+                            反馈建议
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="feedback">
+                            <p>1.系统中没有找到您需要的数据？</p>
+                            <p>2.您在使用产品上遇到的哪些问题？</p>
+                            <p>3.在产品上还有哪些未满足您的需求？</p>
+                            <p>可以在 issues list 中发布您的提问 (<a href="https://gitee.com/stonedtx/open-spider/issues"
+                                    style="color: blue;text-decoration: underline"
+                                    target="_blank">https://gitee.com/stonedtx/open-spider</a>)
+                            </p>
+                            <p>或者</p>
+                            <p>填写 思通舆情·用户反馈表 提交您的提问 (<a href="https://docs.qq.com/form/page/DQWFFWUtIQWhXQkZB"
+                                    style="color: blue;text-decoration: underline"
+                                    target="_blank">https://docs.qq.com</a>)</p>
+                            <p>还可以</p>
+                            <p>直接拨打电话( 13913853100 )或者添加产品经理微信( javabloger )， 直接与我们联系。</p>
+                            <div class="weixin-code">
+                                <h5 class="scan-code-tip">添加产品经理微信，加入微信群</h5>
+                                <img src="/images/wxcode.jpg" alt="">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer" style="border: none">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderMarket/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.WeMediaListDao">
+
+
+
+	<select id="Getmedia"  resultType="com.stonedt.spider.entity.WeMedia" parameterType="com.stonedt.spider.entity.WeMedia">
+			SELECT *,swp.platform_name FROM we_media sw LEFT JOIN we_media_platform swp ON swp.id=sw.platform_id WHERE 1=1
+		<if test="platform_id!=null and platform_id!=''">AND platform_id=#{platform_id}</if>
+		<if test="name!=null  and name!=''">AND name LIKE concat(concat('%',#{name}),'%')</if>
+		</select>
+
+	
+	<select id="Getplatform"  resultType="com.stonedt.spider.entity.platform">
+		SELECT * FROM we_media_platform
+	</select>
+	
+	<select id="platname"  resultType="com.stonedt.spider.entity.platform">
+		SELECT * FROM we_media_platform WHERE id=#{id}
+	</select>
+	
+	
+
+</mapper> 

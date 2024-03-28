@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SpiderSearchEngineDao">
+
+
+	<select id="getSearchEngineConfigList"  resultType="com.stonedt.spider.entity.AllocationEntity">
+
+		SELECT
+		sp.website_name,sec.config_name,
+		sec.create_date,sec.status,sec.id,
+		IFNULL((SELECT SUM(ssc.gathering_value) FROM search_spider_count ssc WHERE ssc.search_config_id=sec.id AND to_days(create_date) = to_days(now())),0)AS sum_value
+		FROM spider_website sp,search_engine_config sec
+		WHERE sec.website_id=sp.id
+
+	</select>
+
+	<select id="getConfiglist"  resultType="com.stonedt.spider.entity.AllocationEntity">
+		SELECT
+		sp.website_name,sec.config_name,
+		sec.create_date,sec.status,sec.id,
+		IFNULL((SELECT SUM(ssc.gathering_value) FROM search_spider_count ssc WHERE ssc.search_config_id=sec.id AND to_days(create_date) = to_days(now())),0)AS sum_value
+		FROM spider_website sp,search_engine_config sec
+		WHERE sec.website_id=sp.id
+		AND sp.website_name LIKE CONCAT('%',#{map.keywords},'%' )
+	</select>
+
+	<select id="sumEditor"  resultType="com.stonedt.spider.entity.AllocationEntity">
+		SELECT
+			sec.*,
+			sw.website_name
+		FROM search_engine_config sec
+		LEFT JOIN spider_website sw ON sec.website_id=sw.id
+		WHERE sec.id=#{id}
+
+	</select>
+	
+	<select id="getConfig_name"  resultType="com.stonedt.spider.entity.AllocationEntity">
+
+		SELECT
+		 website_name ,
+		 id
+		FROM
+		 spider_website
+		WHERE
+		 id NOT IN(
+		  SELECT
+		   website_id
+		  FROM
+		   search_engine_config where website_id is not null
+		 )
+
+	</select>
+
+
+
+
+	
+	<insert id="add" parameterType="com.stonedt.spider.entity.AllocationEntity">
+		INSERT INTO `spider_factory`.`search_engine_config` (
+			  
+			  `config_name`,
+			  `url`,
+			  `search_rule`,
+			  `url_config`,
+			  	<if test="title_config != ''">
+			    	`title_config`,
+			    </if>
+			    <if test="date_config != ''">
+			    	`date_config`,
+			    </if>
+			    <if test="text_config != ''">
+			    	`text_config`,
+			    </if>
+			    <if test="text_config_type != ''">
+			    	`text_config_type`,
+			    </if>
+			    <if test="request_config != ''">
+			    	`request_config`,
+			    </if>
+			  `spider_type`,
+			  `Request_type`,
+			  `result_type`,
+			  `website_id`,
+			  `create_date`,
+			  `isOnSite`
+			  
+			) 
+			VALUES
+			  (
+			    
+			    #{config_name},
+			    #{url},
+			    #{search_rule},
+			    #{url_config},
+			    <if test="title_config != ''">
+			    	#{title_config},
+			    </if>
+			    <if test="date_config != ''">
+			    	#{date_config},
+			    </if>
+			    <if test="text_config != ''">
+			    	#{text_config},
+			    </if>
+			    <if test="text_config_type != ''">
+			    	#{text_config_type},
+			    </if>
+			    <if test="request_config != ''">
+			    	#{request_config},
+			    </if>
+			    #{spider_type},
+			    #{request_type},
+			    #{result_type},
+			    #{website_id},
+			    #{create_date},
+			    #{isOnSite}
+			    
+			  ) ;
+	</insert>
+	
+	<update id="Editor" parameterType="com.stonedt.spider.entity.AllocationEntity">
+		UPDATE 
+		  search_engine_config 
+		SET
+		  config_name = #{config_name},
+		  url = #{url},
+		  search_rule = #{search_rule},
+		  url_config = #{url_config},
+			<if test="title_config == ''">
+				title_config = null,
+			</if>
+			<if test="title_config != ''">
+				title_config = #{title_config},
+			</if>
+			<if test="date_config == ''">
+				date_config = null,
+			</if>
+			<if test="date_config != ''">
+				date_config = #{date_config},
+			</if>
+			<if test="text_config == ''">
+				text_config = null,
+			</if>
+			<if test="text_config != ''">
+				text_config = #{text_config},
+			</if>
+			<if test="text_config_type == ''">
+				text_config_type = null,
+			</if>
+			<if test="text_config_type != ''">
+				text_config_type = #{text_config_type},
+			</if>
+			<if test="request_config == ''">
+				request_config = null,
+			</if>
+			<if test="request_config != ''">
+				request_config = #{request_config},
+			</if>
+		  spider_type = #{spider_type},
+		  Request_type = #{request_type},
+		  result_type = #{result_type},
+		  update_date = #{update_date},
+		  isOnSite = #{isOnSite},
+		  website_id =#{website_id}
+		WHERE id = #{id} ;
+	</update>
+	<update id="runcole" parameterType="com.stonedt.spider.entity.AllocationEntity">
+		UPDATE 
+		  search_engine_config 
+		SET
+			status = #{msg}
+		WHERE id = #{id} ;
+	</update>
+</mapper> 

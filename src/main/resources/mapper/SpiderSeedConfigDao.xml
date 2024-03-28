@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SeedConfigDao">
+	<select id="listseedconfig" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfig">
+		select * from spider_seed_config where seed_id=#{seed_id}
+	</select>
+
+	<insert id="insertSeedconfig"
+		parameterType="com.stonedt.spider.entity.SpiderSeedConfig">
+<!-- 		insert into -->
+<!-- 		spider_seed_config(seed_page_rule_config,seed_author_config,seed_author_url_config,seed_author_avatar_config,seed_name,seed_list_url,seed_url_config,seed_title_config,seed_date_config,seed_text_config, -->
+<!-- 		seed_text_config_type,seed_interval_config,seed_thread_config,seed_id,create_user_id,create_date,seed_storage_type,seed_sleep_config,seed_linkurl_config,seed_origin_config,seed_origin_url_config,website_id,seed_spider_type,other_seed_id,other_website_id,url_reg) -->
+<!-- 		value(#{seed_page_rule_config},#{seed_author_config},#{seed_author_url_config},#{seed_author_avatar_config},#{seed_name},#{seed_list_url},#{seed_url_config},#{seed_title_config},#{seed_date_config},#{seed_text_config}, -->
+<!-- 		#{seed_text_config_type},#{seed_interval_config},#{seed_thread_config},#{seed_id},#{create_user_id},#{create_date},#{seed_storage_type},#{seed_sleep_config},#{seed_linkurl_config},#{seed_origin_config},#{seed_origin_url_config},#{website_id},#{seed_spider_type},#{seed_id},#{website_id},#{url_reg}) -->
+		insert into
+		spider_seed_config(seed_page_rule_config,seed_author_config,seed_author_url_config,seed_author_avatar_config,seed_name,seed_list_url,seed_url_config,seed_title_config,seed_date_config,seed_text_config,
+		seed_text_config_type,seed_interval_config,seed_thread_config,seed_id,create_user_id,create_date,seed_storage_type,seed_sleep_config,seed_linkurl_config,seed_origin_config,seed_origin_url_config,website_id,seed_spider_type,other_seed_id,other_website_id,url_reg)
+		value(#{seed_page_rule_config},#{seed_author_config},#{seed_author_url_config},#{seed_author_avatar_config},#{seed_name},#{seed_list_url},#{seed_url_config},#{seed_title_config},#{seed_date_config},#{seed_text_config},
+		#{seed_text_config_type},#{seed_interval_config},#{seed_thread_config},#{seed_id},#{create_user_id},#{create_date},#{seed_storage_type},#{seed_sleep_config},#{seed_linkurl_config},#{seed_origin_config},#{seed_origin_url_config},#{website_id},#{seed_spider_type},#{seed_id},#{website_id},#{url_reg})
+	</insert>
+	
+	<update id="updateseedsflag" parameterType="java.util.List">
+		update mapping_spider
+		set flag = 1
+		where id in
+		<foreach collection="successids" item="item" index="index"
+			separator="," open="(" close=")">
+			#{item,jdbcType=BIGINT}
+		</foreach>
+	</update>
+	
+	
+	<insert id="insertSeedconfigtest"
+		parameterType="com.stonedt.spider.entity.SpiderSeedConfig">
+		insert into
+		spider_seed_config_test(seed_page_rule_config,seed_author_config,seed_author_url_config,seed_author_avatar_config,seed_name,seed_list_url,seed_url_config,seed_title_config,seed_date_config,seed_text_config,
+		seed_text_config_type,seed_interval_config,seed_thread_config,seed_id,create_user_id,create_date,seed_storage_type,seed_sleep_config,seed_linkurl_config,seed_origin_config,seed_origin_url_config,website_id,seed_spider_type,other_seed_id,other_website_id,url_reg)
+		value(#{seed_page_rule_config},#{seed_author_config},#{seed_author_url_config},#{seed_author_avatar_config},#{seed_name},#{seed_list_url},#{seed_url_config},#{seed_title_config},#{seed_date_config},#{seed_text_config},
+		#{seed_text_config_type},#{seed_interval_config},#{seed_thread_config},#{seed_id},#{create_user_id},#{create_date},#{seed_storage_type},#{seed_sleep_config},#{seed_linkurl_config},#{seed_origin_config},#{seed_origin_url_config},#{website_id},#{seed_spider_type},#{seed_id},#{website_id},#{url_reg})
+	</insert>
+	
+	<insert id="insertForeignSeedconfig"
+		parameterType="com.stonedt.spider.entity.SpiderSeedConfig">
+		insert into
+		international.spider_seed_config(seed_name,seed_list_url,seed_url_config,seed_title_config,seed_date_config,seed_text_config,
+		seed_text_config_type,seed_interval_config,seed_thread_config,seed_id,create_user_id,create_date,seed_storage_type,seed_sleep_config,seed_linkurl_config,seed_origin_config,seed_origin_url_config,website_id,seed_spider_type,other_seed_id,other_website_id,url_reg)
+		value(#{seed_name},#{seed_list_url},#{seed_url_config},#{seed_title_config},#{seed_date_config},#{seed_text_config},
+		#{seed_text_config_type},#{seed_interval_config},#{seed_thread_config},#{seed_id},#{create_user_id},#{create_date},#{seed_storage_type},#{seed_sleep_config},#{seed_linkurl_config},#{seed_origin_config},#{seed_origin_url_config},#{website_id},#{seed_spider_type},#{seed_id},#{website_id},#{url_reg})
+	</insert>
+	
+
+	<update id="updateSeedConfig"
+		parameterType="com.stonedt.spider.entity.SpiderSeedConfig">
+		update spider_seed_config set
+		seed_name=#{seed_name},seed_list_url=#{seed_list_url},seed_url_config=#{seed_url_config},
+		seed_title_config=#{seed_title_config},seed_date_config=#{seed_date_config},seed_text_config=#{seed_text_config},
+		seed_text_config_type=#{seed_text_config_type},seed_interval_config=#{seed_interval_config},seed_thread_config=#{seed_thread_config},
+		create_user_id=#{create_user_id},create_date=#{create_date},seed_origin_config=#{seed_origin_config},seed_origin_url_config
+		= #{seed_origin_url_config},seed_storage_type = #{seed_storage_type},seed_spider_type = #{seed_spider_type},other_seed_id=#{other_seed_id},other_website_id=#{other_website_id}
+		where seed_id=#{seed_id}
+	</update>
+	
+	<update id="updateForeignSeedConfig"
+		parameterType="com.stonedt.spider.entity.SpiderSeedConfig">
+		update international.spider_seed_config set
+		seed_name=#{seed_name},seed_list_url=#{seed_list_url},seed_url_config=#{seed_url_config},
+		seed_title_config=#{seed_title_config},seed_date_config=#{seed_date_config},seed_text_config=#{seed_text_config},
+		seed_text_config_type=#{seed_text_config_type},seed_interval_config=#{seed_interval_config},seed_thread_config=#{seed_thread_config},
+		create_user_id=#{create_user_id},create_date=#{create_date},seed_origin_config=#{seed_origin_config},seed_origin_url_config
+		= #{seed_origin_url_config},seed_storage_type = #{seed_storage_type},seed_spider_type = #{seed_spider_type},other_seed_id=#{other_seed_id},other_website_id=#{other_website_id}
+		where seed_id=#{seed_id}
+	</update>
+	<select id="getseedconfig" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfig">
+
+		select * from spider_seed_config where seed_id = #{seedid}
+	</select>
+	
+	
+	
+	<select id="getseedconfigtest" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfig">
+		select * from spider_seed_config_test where seed_id = #{seedid}
+	</select>
+	
+	<select id="getforeignseedconfig" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfig">
+
+		select s.*,ss.vpn_flag from international.spider_seed_config s left join international.spider_seed ss on s.seed_id=ss.id where seed_id = #{seedid}
+	</select>
+	
+	<select id="selectForeignSeedAtrticleType" resultType="com.stonedt.spider.entity.SpiderSeed" parameterType="int">
+		select id,
+	seed_name,
+	seed_type,
+	seed_status,
+	seed_flag,
+	website_id,
+	create_user_id,
+	create_date,
+	second_type as seed_article_type,
+	selenium_flag,
+	daili_flag,seed_first_type from international.spider_seed where id = #{id}
+	</select>
+	
+	<select id="selectSeedAtrticleType" resultType="com.stonedt.spider.entity.SpiderSeed" parameterType="int">
+		select id,
+	seed_name,
+	seed_type,
+	seed_status,
+	seed_flag,
+	website_id,
+	create_user_id,
+	create_date,
+	second_type as seed_article_type,
+	selenium_flag,
+	daili_flag,seed_first_type from spider_seed where id = #{id}
+	</select>
+	
+	
+	
+		<select id="selectSeedAtrticleTypetest" resultType="com.stonedt.spider.entity.SpiderSeed" parameterType="int">
+		select id,
+	seed_name,
+	seed_type,
+	seed_status,
+	seed_flag,
+	website_id,
+	create_user_id,
+	create_date,
+	second_type as seed_article_type,
+	selenium_flag,
+	daili_flag,seed_first_type from spider_seed_test where id = #{id}
+	</select>
+	
+	<update id="closeMapping">
+		update mapping_spider
+		set flag = 1
+		where id = #{id}
+	</update>
+
+
+
+
+</mapper> 

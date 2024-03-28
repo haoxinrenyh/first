@@ -1,0 +1,60 @@
+#main {
+  padding-top: 20px;
+}
+
+.card {
+  border: none;
+}
+
+.card-body {
+  padding: 1.25rem;
+}
+
+.header-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.border-bottom {
+  border-bottom: 1px solid #f6f6f7 !important;
+}
+
+.pb-2 {
+  padding-bottom: 0.5rem;
+}
+
+.column-item {
+  margin-top: 12px;
+}
+
+.text-button {
+  margin-left: 15px;
+}
+
+.line {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background-color: #000;
+  vertical-align: sub;
+  margin: 0 3px;
+}
+
+.hide {
+  display: none;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  min-width: 72px;
+}
+
+.invalid-feedback {
+  position: absolute;
+  left: 72px;
+  top: 50px;
+  margin-top: 0 !important;
+}

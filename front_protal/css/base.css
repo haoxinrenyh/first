@@ -1,0 +1,420 @@
+#page {
+  min-height: 100vh;
+  background-color: #efefef;
+  display: flex;
+}
+
+#header {
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background-color: #fff;
+  padding: 0 22px 0 37px;
+  position: fixed;
+  top: 0;
+  right: 0;
+  box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
+  z-index: 1000;
+}
+
+.logo {
+  display: inline-block;
+  height: 24px;
+  line-height: 24px;
+  margin: 10px 0;
+}
+
+.logo img {
+  height: 100%;
+  object-fit: contain;
+}
+
+.logo .system_name {
+  font-size: 17px;
+  letter-spacing: 1px;
+  font-family: "Nunito Sans", sans-serif;
+  color: #4b4b5a;
+  font-weight: 600;
+  vertical-align: middle;
+}
+
+.top-menu {
+  display: flex;
+  float: right;
+  color: #9a9c9e;
+}
+
+.top-menu .menu {
+  margin-right: 30px;
+}
+
+.top-menu .menu:last-child {
+  margin-right: 0;
+}
+
+.top-menu .iconfont {
+  margin-right: 1px;
+}
+
+.top-menu .iconfont::before {
+  vertical-align: bottom;
+}
+
+.top-menu span {
+  padding: 2px;
+}
+
+#core-container {
+  width: 100%;
+  margin-top: 60px;
+}
+
+#left-side {
+  width: 180px;
+  height: calc(100vh - 60px);
+  background-color: #fff;
+  padding: 15px 0;
+  position: fixed;
+  left: 0;
+  top: 60px;
+  box-shadow: 0 0.05rem 0.01rem rgba(75, 75, 90, 0.075);
+}
+
+#left-side .nav-link {
+  display: inline-block;
+  width: 100%;
+  color: #4b4b5a;
+  padding: 0.75rem 2rem;
+  cursor: pointer;
+}
+
+#left-side .active {
+  color: #5369f8;
+  background-color: #f7f7ff;
+  /* font-weight: 600; */
+}
+
+#left-side .nav-link:hover {
+  color: #5369f8;
+  background-color: #f7f7ff;
+}
+
+#right-side {
+  width: calc(100% - 180px);
+  height: 100%;
+  margin-left: 180px;
+  position: relative;
+  padding-bottom: 60px;
+}
+
+.layui-icon-logout:before {
+  vertical-align: bottom;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.footer {
+  width: 100%;
+  bottom: 0;
+  padding: 19px 15px 20px;
+  position: absolute;
+  right: 0;
+  color: #6c757d;
+  font-size: 16px;
+  text-align: center;
+}
+
+#main {
+  padding: 0 18px;
+}
+
+.main-content {
+  background-color: #fff;
+  padding: 20px;
+  overflow: hidden;
+}
+
+.page-title {
+  padding: 18px 0;
+}
+
+.breadcrumb-item {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.medium-input {
+  width: 500px;
+}
+
+.input-group-lg > .btn,
+.input-group-lg > .form-control,
+.input-group-lg > .form-select,
+.input-group-lg > .input-group-text {
+  padding: 0.5rem 0.75rem;
+  font-size: 14px;
+}
+
+.form-control:focus,
+.form-select:focus,
+.btn-close:focus {
+  box-shadow: none !important;
+}
+
+.table {
+  color: #6c757d;
+}
+
+.table thead tr {
+  background-color: #f8f9fa;
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border-style: none;
+  vertical-align: middle;
+}
+
+.table .btn-link {
+  padding: 0 5px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.center {
+  text-align: center;
+}
+
+#pagination {
+  text-align: right;
+}
+
+.table_mark {
+  position: relative;
+  min-height: 120px;
+}
+
+.marklayer {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* 显示加载动画 */
+.mark-show {
+  opacity: unset !important;
+  display: block;
+}
+
+.load_item {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%);
+}
+
+.spinner-border {
+  width: 3rem;
+  height: 3rem;
+  color: #5369f8;
+}
+
+.table_empty {
+  min-height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #909399;
+}
+
+.loading {
+  opacity: 0.2;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  margin-top: 2px;
+}
+
+.breadcrumb-item.active {
+  color: #5369f8 !important;
+}
+
+a {
+  color: rgb(13, 110, 253);
+}
+
+.breadcrumb-item a {
+  color: #333;
+}
+
+.modal-title {
+  font-size: 15px !important;
+}
+
+.modal-body .form-group {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.require {
+  color: red;
+  margin-right: 5px;
+}
+
+.nav-link .iconfont {
+  margin-right: 10px;
+  vertical-align: text-bottom;
+  font-size: 17px;
+}
+
+.options-select {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.options-list span {
+  display: inline-block;
+  padding: 4px 15px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  border-radius: 15px;
+}
+
+.options-list .active {
+  background-color: #5369f8;
+  color: #fff;
+}
+
+.select-key {
+  white-space: nowrap;
+  /* margin-top: 4px; */
+  color: #505050;
+  font-weight: 600;
+}
+
+/* .options-select .select-key {
+  margin-top: 2px;
+} */
+
+.select-group {
+  display: flex;
+}
+
+.select-item {
+  display: flex;
+  align-items: center;
+  margin-right: 40px;
+}
+
+.select-item select,
+.select-item input {
+  width: 160px;
+}
+
+.table-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-chunks {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
+  border-radius: 0.25rem;
+}
+
+.badge-soft-success {
+  color: #1cbb8c;
+  background-color: rgba(28, 187, 140, 0.18);
+}
+
+.badge-soft-danger {
+  color: #ff3d60;
+  background-color: rgba(255, 61, 96, 0.18);
+}
+
+.message {
+  min-width: 380px;
+  box-sizing: border-box;
+  border-radius: 4px;
+  border: 1px solid;
+  /* border-color: #ebeef5; */
+  position: fixed;
+  left: 50%;
+  top: 20px;
+  transform: translate(-50%, 0);
+  /* background: #edf2fc; */
+  transition: opacity 0.3s, transform 0.4s, top 0.4s;
+  overflow: hidden;
+  padding: 15px 15px 15px 20px;
+  display: flex;
+  align-items: center;
+}
+
+.message-error {
+  background: #fef0f0;
+  border-color: #fde2e2;
+  color: #f56c6c;
+}
+
+.message-success {
+  background-color: #f0f9eb;
+  border-color: #e1f3d8;
+  color: #67c23a;
+}
+
+.message_content {
+  margin-left: 10px;
+  margin-bottom: 0 !important;
+}
+
+.message-hide {
+  transform: translate(-50%, -100px);
+  opacity: 0;
+}
+
+.message-success .iconfont::before,
+.message-error .iconfont::before {
+  vertical-align: middle;
+}
+
+.btn-primary {
+  background-color: #5369f8 !important;
+}
+
+a,
+.btn-link {
+  color: #5369f8;
+}
+
+.layui-laypage a:hover {
+  color: #0d6efd;
+}
+
+.layui-laypage input:focus,
+.layui-laypage select:focus {
+  border-color: #0d6efd !important;
+}
+
+.text-bg-info {
+  color: #fff !important;
+}
+
+.form-check-input {
+  margin-top: 1.5px;
+}
+
+.form-check-input:focus {
+  box-shadow: none;
+}

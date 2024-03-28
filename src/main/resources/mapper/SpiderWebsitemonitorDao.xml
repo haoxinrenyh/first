@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SpiderWebsitemonitorDao">
+
+    <!-- <select id="listmonitorwebsite" resultType="map">
+    SELECT
+        *
+            FROM
+                (
+                    SELECT
+                        *
+                    FROM
+                        (
+                            SELECT
+                                website.website_name ,
+                                websitespidertype.transferid ,
+                                websitespidertype.totalnum ,
+                                websitespidertype.todaynum,
+                                websitespidertype.updatetime create_date,
+                                websitespidertype.addnum ,
+                                websitespidertype.type,
+                                websitespidertype.websiteprimaryid
+                            FROM
+                                spider_website website
+                            JOIN websitespidertype ON website.id = websitespidertype.websiteprimaryid
+                        ) websitedata
+                    JOIN transferinfo ON websitedata.transferid = transferinfo.id
+                ) paramdata
+            JOIN websitetype ON paramdata.typeid = websitetype.id
+    </select> -->
+
+
+    <!-- <select id="listmonitorwebsite" resultType="map">
+    SELECT
+        *
+    FROM
+        (
+            SELECT
+                *
+            FROM
+                (
+                    SELECT
+
+                        website.id websiteId,
+                        website.website_ico,
+                        website.website_name ,
+                        websitespidertype.transferid ,
+                        websitespidertype.totalnum ,
+                        websitespidertype.todaynum ,
+                        websitespidertype.updatetime create_date ,
+                        websitespidertype.addnum ,
+                        websitespidertype.type ,
+                        websitespidertype.websiteprimaryid
+                    FROM
+                        spider_website website
+                    LEFT JOIN websitespidertype ON website.id = websitespidertype.websiteprimaryid
+                ) websitedata
+            LEFT JOIN transferinfo ON websitedata.transferid = transferinfo.id
+        ) paramdata LEFT JOIN websitetype ON paramdata.typeid = websitetype.id
+    </select>
+     -->
+
+
+    <select id="listtypename" parameterType="int" resultType="map">
+
+SELECT
+	*
+		FROM
+			(
+				SELECT
+					*
+				FROM
+					(
+						SELECT
+							website.website_name ,
+							websitespidertype.transferid ,
+							websitespidertype.totalnum ,
+                                                        websitespidertype.todaynum,
+                                                        websitespidertype.updatetime create_date,
+							websitespidertype.addnum ,
+							websitespidertype.type,
+							websitespidertype.websiteprimaryid
+						FROM
+							spider_website website
+						JOIN websitespidertype ON website.id = websitespidertype.websiteprimaryid
+					) websitedata
+				JOIN transferinfo ON websitedata.transferid = transferinfo.id
+			) paramdata
+		JOIN websitetype ON paramdata.typeid = websitetype.id and paramdata.websiteprimaryid = #{websiteId}
+
+</select>
+
+    <select id="gettypename" resultType="map">
+    select * from websitetype
+</select>
+
+
+    <insert id="addtransdata" parameterType="com.stonedt.spider.entity.TransferinfoEntity" keyProperty="id"
+            useGeneratedKeys="true">
+
+insert into transferinfo(typeid,paramexample,param)values(#{typeid},#{paramexample},#{param})
+
+</insert>
+
+
+    <insert id="addwebsitespidertype" parameterType="com.stonedt.spider.entity.WebsitespidertypeEntity">
+
+insert into websitespidertype (websiteprimaryid,type,transferid,errorlogtransid)
+values(#{websiteprimaryid},#{type},#{transferid},#{errorlogtransid})
+
+</insert>
+
+    <select id="listmonitorwebsite" parameterType="map" resultType="map">
+
+        <!-- SELECT
+            *
+        FROM
+            (
+                SELECT
+                    *
+                FROM
+                    (
+                        SELECT
+
+                            website.id websiteId,
+                            website.website_ico,
+                            website.website_name ,
+                            websitespidertype.transferid ,
+                            websitespidertype.totalnum ,
+                            websitespidertype.todaynum ,
+                            websitespidertype.updatetime create_date ,
+                            websitespidertype.addnum ,
+                            websitespidertype.type ,
+                            websitespidertype.websiteprimaryid
+                        FROM
+                            spider_website website
+                        LEFT JOIN websitespidertype ON website.id = websitespidertype.websiteprimaryid
+                    ) websitedata
+                LEFT JOIN transferinfo ON websitedata.transferid = transferinfo.id
+            ) paramdata LEFT JOIN websitetype ON
+            paramdata.typeid = websitetype.id -->
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        paramdata.*,websitetype.estype,websitetype.esindex,websitetype.id sitetypeid,websitetype.typename
+        FROM
+        (
+        SELECT
+        *
+        FROM
+        (
+        SELECT
+        website.id websiteId ,
+        website.website_ico ,
+        website.website_name ,
+        websitespidertype.transferid ,
+        websitespidertype.totalnum ,
+        websitespidertype.todaynum ,
+        websitespidertype.updatetime create_date ,
+        websitespidertype.addnum ,
+        websitespidertype.type ,
+        websitespidertype.websiteprimaryid,websitespidertype.latestdatatime
+        FROM
+        spider_website website
+        LEFT JOIN websitespidertype ON website.id = websitespidertype.websiteprimaryid
+        ) websitedata
+        LEFT JOIN transferinfo ON websitedata.transferid = transferinfo.id
+        ) paramdata
+        LEFT JOIN websitetype ON paramdata.typeid = websitetype.id
+        ) websitedata where 1=1
+        <if test="website_name!='' and website_name!=null">
+            and website_name LIKE CONCAT('%',#{website_name},'%')
+        </if>
+        <if test="countnum!=0">
+            <if test="countnum==1">
+                and todaynum >0
+            </if>
+            <if test="countnum==2">
+                and (todaynum ='' or todaynum is null)
+            </if>
+
+
+        </if>
+
+        order by totalnum desc
+
+    </select>
+
+
+    <!--查询当前种子信息-->
+    <select id="selectSeedInfo" resultType="map">
+                SELECT
+         transferinfo.id ,
+         transferinfo.paramexample ,
+         transferinfo.param ,
+         websitespidertype.type ,websitespidertype.websiteprimaryid,
+         websitetype.*,spider_website.website_name
+        FROM
+         transferinfo
+        LEFT JOIN websitespidertype ON transferinfo.id = websitespidertype.transferid
+        LEFT JOIN spider_website ON spider_website.id = websitespidertype.websiteprimaryid
+        JOIN websitetype ON websitespidertype.type = websitetype.id
+        WHERE
+         websitespidertype.websiteprimaryid = #{map.websiteprimaryid}
+        AND websitespidertype.transferid =  #{map.transferid}
+    </select>
+
+    <!--更新种子-->
+    <update id="updateSeendInfo">
+        UPDATE transferinfo SET  paramexample = #{paramexample},
+
+        param = #{param}
+
+        WHERE id = #{transferid}
+    </update>
+
+
+    <select id="getTypeIndexInfo"  resultType="map">
+        SELECT  * FROM  websitetype WHERE id = #{typeid}
+    </select>
+</mapper> 

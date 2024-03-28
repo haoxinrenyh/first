@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SeedDao">
+
+
+	<resultMap type="com.stonedt.spider.entity.SeedCountOb" id="spiderSeedMap">
+		<id column="id" property="seedid"/>
+		<result column="level" property="level"/>
+   		<collection property="count" ofType="com.stonedt.spider.entity.SeedCount">
+   			<result column="count" property="count"/>
+   			<result column="date" property="date"/>
+   		</collection>
+	</resultMap>
+
+	<select id="getSeedCountForWeek" resultMap="spiderSeedMap">
+<!-- 		SELECT -->
+<!-- 			seed.id,seed.level,  IFNULL( count.gathering_value, 0 ) count,count.create_date date -->
+<!-- 		FROM -->
+<!-- 			spider_seed seed -->
+<!-- 			LEFT JOIN spider_count count ON seed.id  = count.seed_id -->
+<!-- 		WHERE -->
+<!-- 			seed.seed_status =1 and count.create_date &gt; #{date} -->
+			SELECT
+				seed.id,seed.level,  IFNULL( count.gathering_value, 0 ) count ,count.create_date date
+			FROM
+				spider_seed seed
+				LEFT JOIN spider_count count ON seed.id  = count.seed_id
+			WHERE
+				seed.seed_status =1 ORDER BY count.create_date desc
+	</select>
+
+	<select id="listseed"
+		resultType="com.stonedt.spider.entity.SpiderSeed" parameterType="int">
+		select * from spider_seed where website_id = #{website_id}
+	</select>
+	
+	<select id="listseedtest"
+		resultType="com.stonedt.spider.entity.SpiderSeed" parameterType="int">
+		select * from spider_seed_test where website_id = #{website_id}
+	</select>
+
+	<select id="foreignlistseed"
+		resultType="com.stonedt.spider.entity.SpiderSeed" parameterType="int">
+		select * from international.spider_seed where website_id = #{website_id}
+	</select>
+	
+	<insert id="insertseed"
+		parameterType="com.stonedt.spider.entity.SpiderSeed" useGeneratedKeys="true" keyProperty="id">
+<!-- 		insert into -->
+<!-- 		spider_seed(seed_name,seed_type,seed_status,seed_flag,website_id,create_user_id,create_date,second_type,selenium_flag,daili_flag,seed_first_type) -->
+<!-- 		value(#{seed_name},#{seed_type},#{seed_status},#{seed_flag},#{website_id},#{create_user_id},#{create_date},#{seed_article_type},#{selenium_flag},#{daili_flag},#{seed_first_type}) -->
+		insert into
+		spider_seed(seed_name,seed_type,seed_status,seed_flag,website_id,create_user_id,create_date,second_type,selenium_flag,daili_flag,seed_first_type)
+		value(#{seed_name},#{seed_type},#{seed_status},#{seed_flag},#{website_id},#{create_user_id},#{create_date},#{seed_article_type},#{selenium_flag},#{daili_flag},#{seed_first_type})
+	</insert>
+	
+	
+	<insert id="insertseedtest"
+		parameterType="com.stonedt.spider.entity.SpiderSeed" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		spider_seed_test(seed_name,seed_type,seed_status,seed_flag,website_id,create_user_id,create_date,second_type,selenium_flag,daili_flag,seed_first_type)
+		value(#{seed_name},#{seed_type},#{seed_status},#{seed_flag},#{website_id},#{create_user_id},#{create_date},#{seed_article_type},#{selenium_flag},#{daili_flag},#{seed_first_type})
+	</insert>
+	
+	<insert id="insertforeignseed"
+		parameterType="com.stonedt.spider.entity.SpiderSeed" useGeneratedKeys="true" keyProperty="id">
+		insert into
+		international.spider_seed(seed_name,seed_type,seed_status,seed_flag,website_id,create_user_id,create_date,second_type,selenium_flag,daili_flag,seed_first_type,vpn_flag)
+		value(#{seed_name},#{seed_type},#{seed_status},#{seed_flag},#{website_id},#{create_user_id},#{create_date},#{seed_article_type},#{selenium_flag},#{daili_flag},#{seed_first_type},#{vpn_flag})
+	</insert>
+	
+
+	<update id="updateSeed" parameterType="com.stonedt.spider.entity.SpiderSeed">
+		UPDATE spider_seed
+		<trim prefix="set" suffixOverrides=",">
+			<if test="seed_name!=null and seed_name!=''">seed_name=#{seed_name},</if>
+			<if test="seed_type!=null and seed_type!=''">seed_type=#{seed_type},</if>
+			<!-- <if test="seed_status!=null and seed_status!=''">seed_status=#{seed_status},</if>
+			<if test="seed_flag!=null and seed_flag!=''">seed_flag=#{seed_flag},</if> -->
+			<if test="website_id!=null and website_id!=''">website_id=#{website_id},</if>
+			<if test="create_user_id!=null and create_user_id!=''">create_user_id=#{create_user_id},</if>
+			<if test="create_date!=null and create_date!=''">create_date=#{create_date},</if>
+			<if test="seed_article_type!=null and seed_article_type!=''">second_type=#{seed_article_type},</if>
+			<if test="seed_first_type!=null and seed_first_type!=''">seed_first_type=#{seed_first_type},</if>
+			<if test="selenium_flag!=null ">selenium_flag=#{selenium_flag},</if>
+			<if test="daili_flag!=null ">daili_flag=#{daili_flag}</if>
+		</trim>
+		where id = #{id}
+	</update>
+	
+	
+	<update id="updateForeignSeed" parameterType="com.stonedt.spider.entity.SpiderSeed">
+		UPDATE international.spider_seed
+		<trim prefix="set" suffixOverrides=",">
+			<if test="seed_name!=null and seed_name!=''">seed_name=#{seed_name},</if>
+			<if test="seed_type!=null and seed_type!=''">seed_type=#{seed_type},</if>
+			<!-- <if test="seed_status!=null and seed_status!=''">seed_status=#{seed_status},</if>
+			<if test="seed_flag!=null and seed_flag!=''">seed_flag=#{seed_flag},</if> -->
+			<if test="website_id!=null and website_id!=''">website_id=#{website_id},</if>
+			<if test="create_user_id!=null and create_user_id!=''">create_user_id=#{create_user_id},</if>
+			<if test="create_date!=null and create_date!=''">create_date=#{create_date},</if>
+			<if test="seed_article_type!=null and seed_article_type!=''">second_type=#{seed_article_type},</if>
+			<if test="seed_first_type!=null and seed_first_type!=''">seed_first_type=#{seed_first_type},</if>
+			<if test="selenium_flag!=null ">selenium_flag=#{selenium_flag},</if>
+			<if test="daili_flag!=null ">daili_flag=#{daili_flag},</if>
+			<if test="vpn_flag!=null ">vpn_flag=#{vpn_flag} </if>
+		</trim>
+		 where id = #{id}
+	</update>
+	
+	<select id="getInfo" parameterType="int" resultType="com.stonedt.spider.entity.SpiderSeed">
+	
+	select ss.id,
+		ss.seed_name,
+		ss.seed_type,
+		ss.seed_status,
+		ss.seed_flag,
+		ss.website_id,
+		ss.create_user_id,
+		ss.create_date,
+		ss.first_type,
+		sw.website_name
+	from spider_seed as ss join spider_website  as sw
+	on ss.website_id = sw.id
+	and ss.id = #{seedid}
+	</select>
+	
+	
+	<select id="getInfotest" parameterType="int" resultType="com.stonedt.spider.entity.SpiderSeed">
+	
+	select ss.id,
+		ss.seed_name,
+		ss.seed_type,
+		ss.seed_status,
+		ss.seed_flag,
+		ss.website_id,
+		ss.create_user_id,
+		ss.create_date,
+		ss.first_type,
+		sw.website_name
+	from spider_seed_test as ss join spider_website  as sw
+	on ss.website_id = sw.id
+	and ss.id = #{seedid}
+	</select>
+	
+	<select id="getforeignInfo" parameterType="int" resultType="com.stonedt.spider.entity.SpiderSeed">
+	
+	select ss.id,
+		ss.seed_name,
+		ss.seed_type,
+		ss.seed_status,
+		ss.seed_flag,
+		ss.website_id,
+		ss.create_user_id,
+		ss.create_date,
+		ss.first_type,
+		sw.website_name
+	from international.spider_seed as ss join international.spider_website  as sw
+	on ss.website_id = sw.id
+	and ss.id = #{seedid}
+	</select>
+	
+	
+	<update id="updateSeedstatus" parameterType="com.stonedt.spider.entity.SpiderSeed">
+	update spider_seed set seed_status = #{seed_status},seed_flag = #{seed_flag} where id = #{id}
+	</update>
+	
+	
+	<update id="updateSeedstatustest" parameterType="com.stonedt.spider.entity.SpiderSeed">
+	update spider_seed_test set seed_status = #{seed_status},seed_flag = #{seed_flag} where id = #{id}
+	</update>
+	
+	<update id="updateForeignSeedstatus" parameterType="com.stonedt.spider.entity.SpiderSeed">
+	update international.spider_seed set seed_status = #{seed_status},seed_flag = #{seed_flag} where id = #{id}
+	</update>
+	
+	<delete id="removeSeedById" parameterType="int">
+		DELETE FROM spider_seed WHERE id = #{id}
+	</delete>
+	
+	<delete id="removeForeignSeedById" parameterType="int">
+		DELETE FROM international.spider_seed WHERE id = #{id}
+	</delete>
+	
+	<select id="getAllLabels" resultType="com.stonedt.spider.entity.SecLabel">
+		SELECT
+			* 
+		FROM
+			(
+		SELECT
+			COUNT( 1 ) AS num,
+			seedid.seed_id,
+			seed_name,
+			first_type 
+		FROM
+			( SELECT seed_id, seed_name, first_type FROM spider_article, spider_seed WHERE spider_seed.id = seed_id AND first_type IS NOT NULL AND first_type != "b7" GROUP BY seed_id ) seedid
+			JOIN spider_article article ON seedid.seed_id = article.seed_id 
+		GROUP BY
+			article.seed_id 
+			) seednum 
+		ORDER BY
+			seednum.num DESC
+	</select>
+	
+	<select id="getNumByType" resultType="String">
+		SELECT
+			count( 1 ) 
+		FROM
+			spider_seed 
+		WHERE
+			first_type = #{first_type}
+	</select>
+	
+	<select id="nulldataseedlist" resultType="com.stonedt.spider.entity.SpiderSeed">
+		SELECT
+			gathervalue.id AS id,
+			gathervalue.seed_name,
+			seed_type,
+			seed_status,
+			seed_flag,
+			websiteid as website_id,
+			createuserid as create_user_id,
+			createdate as create_date
+		FROM
+			(
+		SELECT
+			spider_seed.id AS id,
+			spider_seed.seed_name,
+			seed_type,
+			seed_status,
+			seed_flag,
+			spider_seed.website_id as websiteid,
+			spider_seed.create_user_id as createuserid,
+			spider_seed.create_date as createdate,
+			ifnull( spider_count.gathering_value, 0 ) AS todaynum 
+		FROM
+			spider_seed
+			LEFT JOIN spider_count ON spider_count.create_date = #{date}
+			AND spider_seed.id = spider_count.seed_id 
+			) gathervalue
+			JOIN spider_seed_config config ON gathervalue.id = config.seed_id 
+		WHERE
+			todaynum = 0
+	</select>
+	
+	<select id="dataseedlist" resultType="com.stonedt.spider.entity.SpiderSeed">
+		SELECT
+			gathervalue.id AS id,
+			gathervalue.seed_name,
+			gathervalue.todaynum,
+			seed_type,
+			seed_status,
+			seed_flag,
+			websiteid as website_id,
+			website.website_name as website_name,
+			createuserid as create_user_id,
+			createdate as create_date
+		FROM
+			(
+		SELECT
+			spider_seed.id AS id,
+			spider_seed.seed_name,
+			seed_type,
+			seed_status,
+			seed_flag,
+			spider_seed.website_id as websiteid,
+			spider_seed.create_user_id as createuserid,
+			spider_seed.create_date as createdate,
+			ifnull( spider_count.gathering_value, 0 ) AS todaynum 
+		FROM
+			spider_seed
+			LEFT JOIN spider_count ON spider_count.create_date <![CDATA[>=]]> #{date}
+			AND spider_seed.id = spider_count.seed_id 
+			where spider_seed.seed_status = 1
+			<if test="websiteName != null and websiteName !=''">
+			   and spider_seed.website_id in (select id from spider_website where website_name = #{websiteName})
+			</if>
+			) gathervalue
+			JOIN spider_seed_config config ON gathervalue.id = config.seed_id 
+			join spider_website website on website.id = websiteid where gathervalue.todaynum BETWEEN #{min} and #{max} ORDER BY todaynum
+	</select>
+	
+	
+	<select id="getKeywordList" resultType="com.stonedt.spider.entity.KeyWord">
+		SELECT * FROM yqt.`yqt_keywords`
+	</select>
+	
+	<select id="getKeywordById" resultType="com.stonedt.spider.entity.KeyWord">
+		SELECT * FROM yqt.`yqt_keywords` Where id = #{id}
+	</select>
+	
+	<insert id="addKeyWord" parameterType="String">
+		INSERT INTO yqt.`yqt_keywords`(keyword,createtime) VALUES (#{keyword},#{createtime});
+	</insert>
+	
+	<update id="updateSpiderSeed">
+		update spider_seed 
+		set level = #{level}
+		where id = #{seedid}
+	</update>
+	
+</mapper> 

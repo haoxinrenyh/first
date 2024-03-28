@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.WechatDao">
+
+<select id="listWechat" parameterType="com.stonedt.spider.entity.Wechat" resultType="com.stonedt.spider.entity.Wechat">
+  
+	select * from wechat_weibo_carrier where 1=1 
+	<if test="type==1">
+	 and type = #{type} or type =0
+	</if>
+	<if test="type==2">
+	 and type = #{type}
+	</if>
+	
+</select>
+	
+<insert id="saveWechat" parameterType="com.stonedt.spider.entity.Wechat">
+	insert into wechat_weibo_carrier(name,alias,origin,avatar_url,qrcode_url,introduction,fans_num_estimate,type,create_date)
+	value(#{name},#{alias},#{origin},#{avatar_url},#{qrcode_url},#{introduction},#{fans_num_estimate},#{type},#{create_date})
+</insert>	
+
+<select id="listArticle" parameterType="int" resultType="com.stonedt.spider.entity.SpiderArticle">
+	select s.*,w.avatar_url from spider_article as s,wechat_weibo_carrier as w
+	where article_type = #{article_type} and 
+	s.source_name = w.name
+	order by publish_time desc
+</select> 
+
+<select id="getWeboInformationList" parameterType="int" resultType="com.stonedt.spider.entity.SpiderArticle">
+
+select s.*,w.avatar_url from spider_article as s,wechat_weibo_carrier as w
+	where article_type = 8 and 
+	s.seed_id = w.id
+	and seed_id = #{id}
+	order by publish_time desc
+
+
+</select>
+
+
+
+
+
+</mapper> 

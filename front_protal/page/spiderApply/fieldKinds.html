@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+    <style>
+        #addModal label,
+        #editModal label {
+            min-width: 96px;
+        }
+
+        .form-group {
+            position: relative;
+        }
+
+        .invalid-feedback {
+            position: absolute;
+            left: 96px;
+            top: 45px;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a class="pointer" onclick="rollBack()">采集应用</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">采集字段列表</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="filter-params">
+                <div class="input-group input-group-lg medium-input mb-3">
+                    <input type="text" class="form-control search-field" placeholder="请输入关键词进行检索">
+                    <button class="btn btn-primary" type="button" onclick="searchKeyword()">搜索</button>
+                </div>
+            </div>
+            <div class="table-list">
+                <div class="table-top">
+                    <div class="table-title">采集字段列表</div>
+                    <div class="table-btn-group">
+                        <button type="button" class="btn btn-primary" onclick="addField()">字段添加</button>
+                    </div>
+                </div>
+                <div class="table_mark">
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">英文名称</th>
+                                <th scope="col">中文名称</th>
+                                <th scope="col">修改时间</th>
+                                <th scope="col" class="center">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-content">
+
+                        </tbody>
+                    </table>
+                    <div class="table_empty" style="display: none;">暂无数据</div>
+                    <!-- 加载状态 遮罩层 -->
+                    <div class="modal fade marklayer">
+                        <div class="load_item">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pagination"></div>
+            </div>
+        </div>
+        <div class="modal fade " id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">添加采集字段</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="row needs-validation field-form" novalidate onsubmit="return false;"
+                        style="--bs-gutter-x:0">
+                        <div class="modal-body">
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom01">字段英文名称：</label>
+                                <input type="text" class="form-control english-name" id="validationCustom01" value=""
+                                    placeholder="请输入字段英文名称(必填)" required
+                                    oninput="this.value=this.value.replace(/[^a-zA-Z]/g, '')">
+                                <div class="invalid-feedback">
+                                    字段英文名称不能为空
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom02">字段中文名称：</label>
+                                <input type="text" class="form-control chinese-name" id="validationCustom02" value=""
+                                    placeholder="请输入字段中文名称(必填)" required
+                                    onkeyup="this.value=this.value.replace(/[^\u4e00-\u9fa5]/g,'')">
+                                <div class="invalid-feedback">
+                                    字段中文名称不能为空
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">确定</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                    line-height: 24px;
+                    font-size: 18px;
+                    color: #303133;
+                  ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+                                    确定要删除吗？
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitDelete()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade " id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">修改采集字段</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form class="row needs-validation edit-field-form" novalidate onsubmit="return false;"
+                        style="--bs-gutter-x:0">
+                        <div class="modal-body">
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom06">字段英文名称：</label>
+                                <input type="text" class="form-control new-english-name" id="validationCustom06"
+                                    value="" placeholder="请输入字段英文名称(必填)" required
+                                    oninput="this.value=this.value.replace(/[^a-zA-Z]/g, '')">
+                                <div class="invalid-feedback">
+                                    字段英文名称不能为空
+                                </div>
+                            </div>
+                            <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                                <label for="validationCustom07">字段中文名称：</label>
+                                <input type="text" class="form-control new-chinese-name" id="validationCustom07"
+                                    value="" placeholder="请输入字段中文名称(必填)" required
+                                    onkeyup="this.value=this.value.replace(/[^\u4e00-\u9fa5]/g,'')">
+                                <div class="invalid-feedback">
+                                    字段中文名称不能为空
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">确定</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderApply/fieldKinds.js"></script>
+</body>
+
+</html>

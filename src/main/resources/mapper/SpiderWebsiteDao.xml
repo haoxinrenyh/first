@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SpiderWebsiteDao">
+
+
+	<!-- <select id="listwebsite" parameterType="int" resultType="map"> SELECT 
+		* FROM (SELECT webinfo.*, IFNULL(sum(gathering_value),0) AS all_gathering_value 
+		FROM ( SELECT web.*,IFNULL(COUNT(seed.id),0)as seednum FROM spider_website 
+		web LEFT JOIN spider_seed seed ON web.id = seed.website_id GROUP BY web.id 
+		) webinfo LEFT JOIN spider_count ON webinfo.id = spider_count.website_id 
+		GROUP BY webinfo.id) alldata WHERE alldata.create_user_id = #{userid} order 
+		by create_date desc </select> -->
+	<select id="listwebsite" resultType="map">
+		SELECT
+		web.*
+		FROM
+		spider_website web
+		WHERE
+		web.create_user_id = 1
+		<if test='searchText != "" and searchText != null'>
+			AND web.website_name like CONCAT('%',#{searchText},'%')
+		</if>
+		GROUP BY
+		web.id
+		ORDER BY
+		web.create_date DESC
+		<!-- SELECT web.*, IFNULL(COUNT(seed.id) , 0) AS seednum , 0 as all_gathering_value 
+			,0 AS todayvalue FROM spider_website web LEFT JOIN spider_seed seed ON web.id 
+			= seed.website_id AND web.create_user_id = 1 GROUP BY web.id Order by web.create_date 
+			desc -->
+		<!-- SELECT numnum.id,numnum.website_name,numnum.website_url,numnum.website_remark,numnum.website_type, 
+			numnum.website_status,numnum.create_user_id,numnum.create_date,numnum.website_ico,numnum.seednum, 
+			numnum.all_gathering_value,IFNULL( sum( gathering_value ), 0 ) AS todayvalue 
+			FROM ( SELECT * FROM ( SELECT webinfo.*, IFNULL( sum( gathering_value ), 
+			0 ) AS all_gathering_value FROM ( SELECT web.*, IFNULL( COUNT( seed.id ), 
+			0 ) AS seednum FROM spider_website web LEFT JOIN spider_seed seed ON web.id 
+			= seed.website_id GROUP BY web.id ) webinfo LEFT JOIN spider_count ON webinfo.id 
+			= spider_count.website_id GROUP BY webinfo.id ) alldata WHERE alldata.create_user_id 
+			= 1 ORDER BY create_date DESC ) numnum left JOIN spider_count count2 ON numnum.id 
+			= count2.website_id AND count2.create_date = #{now} and numnum.create_user_id 
+			= #{userid} GROUP BY numnum.id ORDER BY numnum.create_date desc -->
+
+	</select>
+
+
+	<select id="getAllwebsite" resultType="com.stonedt.spider.entity.SpiderWebsite">
+		SELECT
+		*
+		FROM
+		spider_website
+		GROUP BY id, website_name Order by create_date desc
+	</select>
+
+	<insert id="savewebsite" parameterType="com.stonedt.spider.entity.SpiderWebsite">
+		insert into
+		spider_website(
+		website_name,
+		website_url,
+		website_remark,
+		website_type,
+		website_status,
+		create_user_id,
+		create_date,
+		website_ico,
+		url_contains_str,
+		url_shield_str,
+		explain_contains_str,
+		explain_shield_str,
+		capture_type,
+		website_province,
+		website_city
+		)
+		values(
+		#{website_name},
+		#{website_url},
+		#{website_remark},
+		#{website_type},
+		#{website_status},
+		#{create_user_id},
+		#{create_date},
+		#{website_ico},
+		#{url_contains_str},
+		#{url_shield_str},
+		#{explain_contains_str},
+		#{explain_shield_str},
+		0,
+		#{website_province},
+		#{website_city}
+		)
+
+
+
+
+	</insert>
+
+	<insert id="saveforeignwebsite" parameterType="com.stonedt.spider.entity.SpiderWebsite">
+		insert into
+		international.spider_website(
+		website_name,
+		website_url,
+		website_remark,
+		website_type,
+		website_status,
+		create_user_id,
+		create_date,
+		website_ico,
+		url_contains_str,
+		url_shield_str,
+		explain_contains_str,
+		explain_shield_str,
+		capture_type,
+		website_province,
+		website_city
+		)
+		values(
+		#{website_name},
+		#{website_url},
+		#{website_remark},
+		#{website_type},
+		#{website_status},
+		#{create_user_id},
+		#{create_date},
+		#{website_ico},
+		#{url_contains_str},
+		#{url_shield_str},
+		#{explain_contains_str},
+		#{explain_shield_str},
+		0,
+		#{website_province},
+		#{website_city}
+		)
+
+
+
+
+	</insert>
+
+
+
+	<select id="getInfo" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderWebsite">
+		select web.*,count(m.id) unfinishedmappings from spider_website web left join mapping_spider m on web.id =m.website_id and m.status = 0 where web.id = #{websiteId}
+	</select>
+
+	<select id="getForeignInfo" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderWebsite">
+		select * from international.spider_website where id =
+		#{websiteId}
+	</select>
+
+	<update id="updatewebsite" parameterType="com.stonedt.spider.entity.SpiderWebsite">
+		UPDATE spider_website
+		<trim prefix="set" suffixOverrides=",">
+			<if test="website_name!=null and website_name!=''">website_name=#{website_name},</if>
+			<if test="website_url!=null and website_url!=''">website_url=#{website_url},</if>
+			<if test="website_remark!=null and website_remark!=''">website_remark=#{website_remark},</if>
+			<if test="website_type!=null and website_type!=''">website_type=#{website_type},</if>
+			<if test="website_status!=null and website_status!=''">website_status=#{website_status},</if>
+			<if test="create_user_id!=null and create_user_id!=''">create_user_id=#{create_user_id},</if>
+			<if test="create_date!=null and create_date!=''">create_date=#{create_date},</if>
+			<if test="url_contains_str!=null and url_contains_str!=''">url_contains_str=#{url_contains_str},</if>
+			<if test="url_shield_str!=null and url_shield_str!=''">url_shield_str=#{url_shield_str},</if>
+			<if test="explain_contains_str!=null and explain_contains_str!=''">explain_contains_str=#{explain_contains_str},</if>
+			<if test="explain_shield_str!=null and explain_shield_str!=''">explain_shield_str=#{explain_shield_str},</if>
+			<if test="capture_date!=null and capture_date!=''">capture_date=#{capture_date},</if>
+			<if test="website_ico !=null and website_ico!=''">website_ico=#{website_ico},</if>
+			<if test="capture_type!=null ">capture_type=#{capture_type},</if>
+			<if test="website_province !=null and website_province !=''">website_province=#{website_province},</if>
+			<if test="website_city !=null and website_city !=''">website_city=#{website_city},</if>
+		</trim>
+		where id = #{id}
+
+	</update>
+
+	<update id="updateforeignwebsite" parameterType="com.stonedt.spider.entity.SpiderWebsite">
+		UPDATE international.spider_website
+		<trim prefix="set" suffixOverrides=",">
+			<if test="website_name!=null and website_name!=''">website_name=#{website_name},</if>
+			<if test="website_url!=null and website_url!=''">website_url=#{website_url},</if>
+			<if test="website_remark!=null and website_remark!=''">website_remark=#{website_remark},</if>
+			<if test="website_type!=null and website_type!=''">website_type=#{website_type},</if>
+			<if test="website_status!=null and website_status!=''">website_status=#{website_status},</if>
+			<if test="create_user_id!=null and create_user_id!=''">create_user_id=#{create_user_id},</if>
+			<if test="create_date!=null and create_date!=''">create_date=#{create_date},</if>
+			<if test="url_contains_str!=null and url_contains_str!=''">url_contains_str=#{url_contains_str},</if>
+			<if test="url_shield_str!=null and url_shield_str!=''">url_shield_str=#{url_shield_str},</if>
+			<if test="explain_contains_str!=null and explain_contains_str!=''">explain_contains_str=#{explain_contains_str},</if>
+			<if test="explain_shield_str!=null and explain_shield_str!=''">explain_shield_str=#{explain_shield_str},</if>
+			<if test="capture_date!=null and capture_date!=''">capture_date=#{capture_date},</if>
+			<if test="website_ico !=null and website_ico!=''">website_ico=#{website_ico},</if>
+			<if test="capture_type!=null ">capture_type=#{capture_type},</if>
+			<if test="website_province !=null and website_province !=''">website_province=#{website_province},</if>
+			<if test="website_city !=null and website_city !=''">website_city=#{website_city},</if>
+		</trim>
+		where id = #{id}
+
+	</update>
+
+
+
+	<select id="foreignlistwebsite" resultType="map">
+
+		SELECT
+		web.*, IFNULL(COUNT(seed.id) , 0) AS seednum , 0 as all_gathering_value ,0
+		AS todayvalue
+		FROM
+		international.spider_website web
+		LEFT JOIN international.spider_seed seed ON web.id = seed.website_id
+		AND web.create_user_id = 1
+		GROUP BY
+		web.id
+		Order by web.create_date desc
+
+	</select>
+
+	<update id="updatemapping" parameterType="com.stonedt.spider.entity.SpiderWebsite">
+		update
+		`spider_factory`.`mapping_spider` set status = 2 where website_id
+		=#{id}
+	</update>
+	<update id="updatewebsitemapping" parameterType="com.stonedt.spider.entity.SpiderWebsite">
+		update
+		`spider_factory`.`spider_website` set matchingstatus = 1 where id =#{id}
+	</update>
+
+</mapper> 

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.TemplateDao">
+
+    <select id="templatePage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlowTemplate">
+        SELECT
+            sft.id, sft.template_name, sft.environment, sft.status, sft.create_time, sft.update_time,
+            sft.create_user_name, sft.create_user_id, sft.update_user_name, sft.update_user_id, sft.type_id,
+            wt.typename, wt.bloomname, wt.estype, wt.hbase_table, wt.kafka_queue_name,wt.esindex,
+            (select count(id) from spider_flow where temp_id=sft.id) as  temp_use_count
+        FROM spider_flow_template sft left join websitetype wt  on sft.type_id=wt.id
+        <where>
+            sft.is_del=0
+            <if test="environment!=null and environment!=-1 ">
+                and sft.environment=#{environment}
+            </if>
+            <if test="status!=null and status!=-1 ">
+                and sft.status=#{status}
+            </if>
+        </where>
+        order by sft.update_time desc
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="templateCount" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        SELECT
+            count(id)
+        FROM spider_flow_template
+        <where>
+            is_del=0
+            <if test="environment!=null and environment!=-1 ">
+                and environment=#{environment}
+            </if>
+            <if test="status!=null and status!=-1 ">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
+
+    <select id="templates" parameterType="java.lang.Object" resultType="java.util.Map">
+        SELECT
+        id,template_name
+        FROM spider_flow_template
+        where is_del=0 and status=0
+    </select>
+
+    <select id="templateInfo" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlowTemplate">
+        SELECT *
+        FROM spider_flow_template
+        where is_del=0  and id=#{id}
+    </select>
+
+    <insert id="saveTemplate" parameterType="com.stonedt.spider.entity.SpiderFlowTemplate" >
+        insert into
+        spider_flow_template(
+            <if test="template.template_name!=null  ">template_name,</if>
+            <if test="template.xml!=null ">xml,</if>
+            <if test="template.environment!=null">environment,</if>
+            <if test="template.status!=null">status,</if>
+            <if test="template.create_user_name!=null and template.create_user_name!='' ">create_user_name,</if>
+            <if test="template.create_user_id>0 ">create_user_id,</if>
+            <if test="template.update_user_name!=null and template.update_user_name!='' ">update_user_name,</if>
+            <if test="template.update_user_id>0 ">update_user_id,</if>
+            <if test="template.is_del!=null">is_del,</if>
+            <if test="template.type_id!=null">type_id,</if>
+            create_time
+        )
+        values (
+            <if test="template.template_name!=null  ">#{template.template_name},</if>
+            <if test="template.xml!=null ">#{template.xml},</if>
+            <if test="template.environment!=null">#{template.environment},</if>
+            <if test="template.status!=null">#{template.status},</if>
+            <if test="template.create_user_name!=null and template.create_user_name!='' ">#{template.create_user_name},</if>
+            <if test="template.create_user_id>0 ">#{template.create_user_id},</if>
+            <if test="template.update_user_name!=null and template.update_user_name!='' ">#{template.update_user_name},</if>
+            <if test="template.update_user_id>0 ">#{template.update_user_id},</if>
+            <if test="template.is_del!=null">#{template.is_del},</if>
+            <if test="template.type_id!=null">#{template.type_id},</if>
+            now()
+        )
+    </insert>
+
+    <update id="updateTemplate" parameterType="com.stonedt.spider.entity.SpiderFlowTemplate">
+        update spider_flow_template
+        <trim prefix="set" suffixOverrides=",">
+            <if test="template.template_name !=null and template.template_name !=''">
+                template_name=#{template.template_name},
+            </if>
+            <if test="template.xml!=null ">
+                xml=#{template.xml},
+            </if>
+            <if test="template.environment!=null">
+                environment=#{template.environment},
+            </if>
+            <if test="template.status!=null">
+                status=#{template.status},
+            </if>
+            <if test="template.create_user_name!=null and template.create_user_name!='' ">
+                create_user_name=#{template.create_user_name},
+            </if>
+            <if test="template.create_user_id>0 ">
+                create_user_id=#{template.create_user_id},
+            </if>
+            <if test="template.update_user_name!=null and template.update_user_name!='' ">
+                update_user_name=#{template.update_user_name},
+            </if>
+            <if test="template.update_user_id>0 ">
+                update_user_id=#{template.update_user_id},
+            </if>
+            <if test="template.is_del!=null ">
+                is_del=#{template.is_del},
+            </if>
+            <if test="template.type_id!=null">
+                type_id=#{template.type_id},
+            </if>
+        </trim>
+        where id = #{template.id}
+    </update>
+
+</mapper>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+
+    <link rel="stylesheet" href="/css/resourceManage/addCompute.css">
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item"><a class="pointer" onclick="rollBack()">采集资源监管</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">添加计算资源</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <form class="row g-3 needs-validation compute-form" novalidate onsubmit="return false;">
+                <div class="col-md-4">
+                    <label for="validationCustom01" class="form-label"><span class="require">*</span>IP地址</label>
+                    <input type="text" class="form-control ipAddress" id="validationCustom01" value=""
+                        placeholder="请输入真实服务器IP地址(必填)" required oninput="checkIPvalid()">
+                    <div class="invalid-feedback">
+                        IP地址格式不正确
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="validationCustom02" class="form-label"><span class="require">*</span>web端口</label>
+                    <input type="text" class="form-control webPort" id="validationCustom02" value=""
+                        placeholder="请输入远程管理web端口(必填)" required>
+                    <div class="invalid-feedback">
+                        web端口不能为空
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="validationCustom03" class="form-label"><span class="require">*</span>root管理密码</label>
+                    <input type="text" class="form-control rootCode" id="validationCustom03"
+                        placeholder="请输入root管理密码(必填)" required>
+                    <div class="invalid-feedback">
+                        root管理密码不能为空
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="" class="form-label"><span class="require">*</span>计算环境</label>
+                    <div class="form-check-group compute-environment">
+                        <div class="form-check mt-1">
+                            <input type="radio" class="form-check-input" id="validationFormCheck2" name="radio-stacked"
+                                value="测试环境" required>
+                            <label class="form-check-label" for="validationFormCheck2">测试环境</label>
+                        </div>
+                        <div class="form-check mt-1">
+                            <input type="radio" class="form-check-input" id="validationFormCheck3" name="radio-stacked"
+                                value="正式环境" required>
+                            <label class="form-check-label" for="validationFormCheck3">正式环境</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label for="validationCustom04" class="form-label"><span class="require">*</span>机器配置</label>
+                    <input type="text" class="form-control machine-config" id="validationCustom04"
+                        placeholder="请输入机器配置(必填)" required>
+                    <div class="invalid-feedback">
+                        机器配置不能为空
+                    </div>
+                </div>
+                <div class="col-12">
+                    <label for="validationCustom05" class="form-label">备注</label>
+                    <textarea name="" id="" cols="30" rows="5" class="form-control compute-note" id="validationCustom05"
+                        placeholder="请输入相关备注信息"></textarea>
+                </div>
+                <div class="col-12">
+                    <button class="btn btn-primary" type="submit">确认添加</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/resourceManage/addCompute.js"></script>
+</body>
+
+</html>

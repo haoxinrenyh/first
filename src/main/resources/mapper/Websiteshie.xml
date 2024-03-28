@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.WebsiteshieDao">
+
+	<select id="Webcheak" resultType="com.stonedt.spider.entity.Websiteshie">
+		SELECT
+		id,create_date,web_url,remark
+		FROM
+		invalid_site 
+		order by create_date desc
+
+	</select>
+	
+	<insert id="Webadd" parameterType="com.stonedt.spider.entity.Websiteshie">
+		INSERT INTO invalid_site (
+			  web_url,
+			  remark,
+			  create_date
+			) 
+			VALUES
+			  (
+			    #{web_url},
+			    #{remark},
+			    #{create_date}
+			  ) ;
+	</insert>
+	<delete id="delte">
+	DELETE 
+	FROM
+	  invalid_site
+	WHERE id = #{id} ;
+	</delete>
+	<resultMap id="BaseResultMap" type="com.stonedt.spider.entity.DataSource">
+
+		<result column="id"  property="id"/>
+		<result column="website_name"  property="websiteName"/>
+		<result column="website_url"  property="websiteUrl"/>
+		<result column="sitedomain"  property="sitedomain"/>
+		<result column="website_remark" property="websiteRemark"/>
+		<result column="new_website_type"  property="newWebsiteType"/>
+		<result column="website_ico"  property="websiteIco"/>
+		<result column="mainstream_flag"  property="mainstreamFlag"/>
+		<result column="icp_info" property="icpInfo"/>
+		<result column="audit_time"  property="auditTime"/>
+		<result column="sponsor"  property="sponsor"/>
+		<result column="sponsor_nature" property="sponsorNature"/>
+		<result column="website_pr"  property="websitePr"/>
+		<result column="one_domain" property="oneDomain"/>
+		<result column="two_domain"  property="twoDomain"/>
+		<result column="website_explain"  property="websiteExplain"/>
+		<result column="website_status"  property="websiteStatus"/>
+		<result column="create_user_id"  property="createUserId"/>
+		<result column="create_date"  property="createDate"/>
+		<result column="url_contains_str"  property="urlContainsStr"/>
+		<result column="url_shield_str"  property="urlShieldStr"/>
+		<result column="explain_contains_str"  property="explainContainsStr"/>
+		<result column="explain_shield_str"  property="explainShieldStr"/>
+		<result column="capture_date"  property="captureDate"/>
+		<result column="capture_type"  property="captureType"/>
+		<result column="website_city"  property="websiteCity"/>
+		<result column="website_province"  property="websiteProvince"/>
+		<result column="websiteprimaryid"  property="websiteprimaryid"/>
+		<result column="matchingstatus"  property="matchingstatus"/>
+		<result column="website_type"  property="websiteType"/>
+		<result column="site_rank"  property="siteRank"/>
+		<result column="websitetype"  property="websitetype"/>
+		<result column="area" property="area"/>
+		<result column="baidu_weight"  property="baiduWeight"/>
+		<result column="thas_weight"  property="thasWeight"/>
+		<result column="alexa_rank"  property="alexaRank"/>
+		<result column="manually_review"  property="manuallyReview"/>
+		<result column="intelligent_match" property="intelligentMatch"/>
+		<result column="rounds" property="rounds"/>
+		<result column="message_status" property="messageStatus"/>
+		<result column="create_user_id" property="createUserId"/>
+		<result column="create_user" property="create_user"/>
+	</resultMap>
+
+	<select id="seleteWebsiteByTwoDomain" resultMap="BaseResultMap">
+		select id,website_name,website_url  from data_source where is_del=0 and two_domain =#{two_domain}
+	</select>
+
+	<select id="findCheckUpdateWeb" parameterType="java.lang.Object" resultMap="BaseResultMap">
+		select id,website_name,website_url  from data_source where two_domain =#{two_domain} and id!=#{id}
+	</select>
+
+	<update id="updateWebSite" >
+
+		UPDATE data_source
+		<set>
+			<if test="dataSource.websiteName != null">
+				website_name=#{dataSource.websiteName},
+			</if>
+			<if test="dataSource.websiteUrl != null">
+				website_url=#{dataSource.websiteUrl},
+			</if>
+			<if test="dataSource.sitedomain != null">
+				sitedomain=#{dataSource.sitedomain},
+			</if>
+			<if test="dataSource.websiteRemark != null">
+				website_remark=#{dataSource.websiteRemark},
+			</if>
+			<if test="dataSource.newWebsiteType != null">
+				new_website_type=#{dataSource.newWebsiteType},
+			</if>
+			<if test="dataSource.websiteIco != null">
+				website_ico=#{dataSource.websiteIco},
+			</if>
+			<if test="dataSource.mainstreamFlag != null">
+				mainstream_flag=#{dataSource.mainstreamFlag},
+			</if>
+			<if test="dataSource.icpInfo != null">
+				icp_info=#{dataSource.icpInfo},
+			</if>
+			<if test="dataSource.auditTime != null">
+				audit_time=#{dataSource.auditTime},
+			</if>
+			<if test="dataSource.sponsor != null">
+				sponsor=#{dataSource.sponsor},
+			</if>
+			<if test="dataSource.sponsorNature != null">
+				sponsor_nature=#{dataSource.sponsorNature},
+			</if>
+			<if test="dataSource.websitePr != null ">
+				website_pr=#{dataSource.websitePr},
+			</if>
+			<if test="dataSource.oneDomain != null ">
+				one_domain=#{dataSource.oneDomain},
+			</if>
+			<if test="dataSource.twoDomain != null ">
+				two_domain=#{dataSource.twoDomain},
+			</if>
+			<if test="dataSource.websiteExplain != null">
+				website_explain=#{dataSource.websiteExplain},
+			</if>
+			<if test="dataSource.websiteStatus != null">
+				website_status=#{dataSource.websiteStatus},
+			</if>
+			<if test="dataSource.websiteCity != null">
+				website_city=#{dataSource.websiteCity},
+			</if>
+			<if test="dataSource.websiteProvince != null">
+				website_province=#{dataSource.websiteProvince},
+			</if>
+			<if test="dataSource.siteRank != null ">
+				site_rank=#{dataSource.siteRank},
+			</if>
+			<if test="dataSource.area != null ">
+				area=#{dataSource.area},
+			</if>
+			<if test="dataSource.baiduWeight != null ">
+				baidu_weight=#{dataSource.baiduWeight},
+			</if>
+			<if test="dataSource.thasWeight != null ">
+				thas_weight=#{dataSource.thasWeight},
+			</if>
+			<if test="dataSource.alexaRank != null ">
+				alexa_rank=#{dataSource.alexaRank},
+			</if>
+			<if test="dataSource.manuallyReview !=  null ">
+				manually_review=#{dataSource.manuallyReview},
+			</if>
+			<if test="dataSource.intelligentMatch != null ">
+				intelligent_match=#{dataSource.intelligentMatch},
+			</if>
+			<if test="dataSource.rounds != null ">
+				rounds=#{dataSource.rounds},
+			</if>
+			<if test="dataSource.messageStatus != null ">
+				message_status=#{dataSource.messageStatus},
+			</if>
+			<if test="dataSource.createUserId != null ">
+				create_user_id=#{dataSource.createUserId},
+			</if>
+			<if test="dataSource.create_user != null ">
+				create_user=#{dataSource.create_user},
+			</if>
+
+		</set>
+		WHERE id = #{dataSource.id}
+
+	</update>
+
+	<insert id="insertWebSite" keyProperty="dataSource.id" keyColumn="id" useGeneratedKeys="true">
+
+		insert INTO data_source
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dataSource.websiteName != null">
+				website_name,
+			</if>
+			<if test="dataSource.websiteUrl != null">
+				website_url,
+			</if>
+			<if test="dataSource.sitedomain != null">
+				sitedomain,
+			</if>
+			<if test="dataSource.websiteRemark != null">
+				website_remark,
+			</if>
+			<if test="dataSource.newWebsiteType != null">
+				new_website_type,
+			</if>
+			<if test="dataSource.websiteIco != null">
+				website_ico,
+			</if>
+			<if test="dataSource.mainstreamFlag != null">
+				mainstream_flag,
+			</if>
+			<if test="dataSource.icpInfo != null">
+				icp_info,
+			</if>
+			<if test="dataSource.auditTime != null">
+				audit_time,
+			</if>
+			<if test="dataSource.sponsor != null">
+				sponsor,
+			</if>
+			<if test="dataSource.sponsorNature != null">
+				sponsor_nature,
+			</if>
+			<if test="dataSource.websitePr != null ">
+				website_pr,
+			</if>
+			<if test="dataSource.oneDomain != null ">
+				one_domain,
+			</if>
+			<if test="dataSource.twoDomain != null ">
+				two_domain,
+			</if>
+			<if test="dataSource.websiteExplain != null">
+				website_explain,
+			</if>
+			<if test="dataSource.websiteStatus != null">
+				website_status,
+			</if>
+			<if test="dataSource.websiteCity != null">
+				website_city,
+			</if>
+			<if test="dataSource.websiteProvince != null">
+				website_province,
+			</if>
+			<if test="dataSource.siteRank != null ">
+				site_rank,
+			</if>
+			<if test="dataSource.area != null ">
+				area,
+			</if>
+			<if test="dataSource.baiduWeight != null ">
+				baidu_weight,
+			</if>
+			<if test="dataSource.thasWeight != null ">
+				thas_weight,
+			</if>
+			<if test="dataSource.alexaRank != null ">
+				alexa_rank,
+			</if>
+			<if test="dataSource.manuallyReview !=  null ">
+				manually_review,
+			</if>
+			<if test="dataSource.intelligentMatch != null ">
+				intelligent_match,
+			</if>
+			<if test="dataSource.rounds != null ">
+				rounds,
+			</if>
+			<if test="dataSource.messageStatus != null ">
+				message_status,
+			</if>
+			<if test="dataSource.createUserId != null ">
+				create_user_id,
+			</if>
+			<if test="dataSource.create_user != null ">
+				create_user,
+			</if>
+			create_date
+		</trim>
+		values
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="dataSource.websiteName != null">
+				#{dataSource.websiteName},
+			</if>
+			<if test="dataSource.websiteUrl != null">
+				#{dataSource.websiteUrl},
+			</if>
+			<if test="dataSource.sitedomain != null">
+				#{dataSource.sitedomain},
+			</if>
+			<if test="dataSource.websiteRemark != null">
+				#{dataSource.websiteRemark},
+			</if>
+			<if test="dataSource.newWebsiteType != null">
+				#{dataSource.newWebsiteType},
+			</if>
+			<if test="dataSource.websiteIco != null">
+				#{dataSource.websiteIco},
+			</if>
+			<if test="dataSource.mainstreamFlag != null">
+				#{dataSource.mainstreamFlag},
+			</if>
+			<if test="dataSource.icpInfo != null">
+				#{dataSource.icpInfo},
+			</if>
+			<if test="dataSource.auditTime != null">
+				#{dataSource.auditTime},
+			</if>
+			<if test="dataSource.sponsor != null">
+				#{dataSource.sponsor},
+			</if>
+			<if test="dataSource.sponsorNature != null">
+				#{dataSource.sponsorNature},
+			</if>
+			<if test="dataSource.websitePr != null ">
+				#{dataSource.websitePr},
+			</if>
+			<if test="dataSource.oneDomain != null ">
+				#{dataSource.oneDomain},
+			</if>
+			<if test="dataSource.twoDomain != null ">
+				#{dataSource.twoDomain},
+			</if>
+			<if test="dataSource.websiteExplain != null">
+				#{dataSource.websiteExplain},
+			</if>
+			<if test="dataSource.websiteStatus != null">
+				#{dataSource.websiteStatus},
+			</if>
+			<if test="dataSource.websiteCity != null">
+				#{dataSource.websiteCity},
+			</if>
+			<if test="dataSource.websiteProvince != null">
+				#{dataSource.websiteProvince},
+			</if>
+			<if test="dataSource.siteRank != null ">
+				#{dataSource.siteRank},
+			</if>
+			<if test="dataSource.area != null ">
+				#{dataSource.area},
+			</if>
+			<if test="dataSource.baiduWeight != null ">
+				#{dataSource.baiduWeight},
+			</if>
+			<if test="dataSource.thasWeight != null ">
+				#{dataSource.thasWeight},
+			</if>
+			<if test="dataSource.alexaRank != null ">
+				#{dataSource.alexaRank},
+			</if>
+			<if test="dataSource.manuallyReview !=  null ">
+				#{dataSource.manuallyReview},
+			</if>
+			<if test="dataSource.intelligentMatch != null ">
+				#{dataSource.intelligentMatch},
+			</if>
+			<if test="dataSource.rounds != null ">
+				#{dataSource.rounds},
+			</if>
+			<if test="dataSource.messageStatus != null ">
+				#{dataSource.messageStatus},
+			</if>
+			<if test="dataSource.createUserId != null ">
+				#{dataSource.createUserId},
+			</if>
+			<if test="dataSource.create_user != null ">
+				#{dataSource.create_user},
+			</if>
+			SYSDATE()
+		</trim>
+
+	</insert>
+</mapper>

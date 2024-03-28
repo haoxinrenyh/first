@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SeedConfigUtilDao">
+	<select id="selectUtilByWebSite" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfigUtilOb">
+		select * from spider_seed_config_util where
+		website_id=#{websiteId}
+	</select>
+
+	<select id="getUtilByForeignWebSite" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfigUtilOb">
+		select * from international.spider_seed_config_util where
+		website_id=#{websiteId}
+	</select>
+
+
+	<select id="getDetail" parameterType="int"
+		resultType="com.stonedt.spider.entity.SpiderSeedConfigUtilOb">
+		select * from spider_seed_config_util where id=#{id}
+	</select>
+
+	<select id="getlist" parameterType="int"
+		resultType="com.stonedt.spider.entity.MappingSpider">
+		SELECT
+		m.*,
+		c.id AS ConfigUtilId,
+		c.seed_util_name
+		FROM
+		mapping_spider m
+		LEFT JOIN spider_seed_config_util c ON m.config_id = c.id
+		WHERE
+		<!-- m.status = 1 and -->
+		flag != 1 and m.website_id = #{websiteId}
+		<if test="type == 1">
+			and m.config_id is not null
+		</if>
+		<if test="type == 2">
+			and m.config_id is null
+		</if>
+		ORDER BY
+		length( TRIM( m.url ) )
+	</select>
+
+
+	<select id="getMappingSpiderConfigs" resultType="map">
+		SELECT
+		m.*,
+		c.id AS ConfigUtilId,
+		c.seed_util_name,
+		c.seed_title_config,
+		c.seed_date_config,
+		c.seed_text_config,
+		c.seed_text_config_type,
+		c.seed_interval_config,
+		c.seed_thread_config,
+		c.website_id,
+		c.create_user_id,
+		c.create_date,
+		c.seed_origin_config,
+		c.seed_sleep_config,
+		c.seed_linkurl_config,
+		c.seed_origin_url_config,
+		c.seed_spider_type,
+		c.other_seed_id,
+		c.other_website_id,
+		c.url_reg,
+		c.seed_type,
+		c.seed_list_url,
+		c.seed_author_config,
+		c.seed_author_url_config,
+		c.seed_author_avatar_config,
+		c.seed_page_rule_config,
+		c.seed_url_config
+		FROM
+		mapping_spider m
+		LEFT JOIN spider_seed_config_util c ON m.config_id = c.id
+		WHERE
+		m.status = 1 and m.id in
+		<foreach item="item" index="index" collection="ids" open="("
+			separator="," close=")">
+			#{item}
+		</foreach>
+	</select>
+
+	<insert id="insertWebSiteSeedconfig">
+		insert into spider_seed_config_util
+		(
+		seed_util_name,
+		seed_title_config,
+		seed_date_config,
+		seed_text_config,
+		seed_text_config_type,
+		seed_interval_config,
+		seed_thread_config,
+		website_id,
+		create_user_id,
+		create_date,
+		seed_origin_config,
+		seed_sleep_config,
+		seed_linkurl_config,
+		seed_origin_url_config,
+		seed_spider_type,
+		other_seed_id,
+		url_reg,
+		other_website_id,
+		seed_type,
+		seed_list_url,
+		seed_author_config,
+		seed_author_url_config,
+		seed_author_avatar_config,
+		seed_page_rule_config,
+		seed_url_config
+		)values(
+		#{seed_util_name},
+		#{seed_title_config},
+		#{seed_date_config},
+		#{seed_text_config},
+		#{seed_text_config_type},
+		#{seed_interval_config},
+		#{seed_thread_config},
+		#{website_id},
+		#{create_user_id},
+		#{create_date},
+		#{seed_origin_config},
+		#{seed_sleep_config},
+		#{seed_linkurl_config},
+		#{seed_origin_url_config},
+		#{seed_spider_type},
+		#{other_seed_id},
+		#{url_reg},
+		#{other_website_id},
+		#{seed_type},
+		#{seed_list_url},
+		#{seed_author_config},
+		#{seed_author_url_config},
+		#{seed_author_avatar_config},
+		#{seed_page_rule_config},
+		#{seed_url_config}
+		)
+
+	</insert>
+
+
+
+	<insert id="insertWebSiteSeedconfigtest">
+		insert into spider_seed_config_util_test
+		(
+		seed_util_name,
+		seed_title_config,
+		seed_date_config,
+		seed_text_config,
+		seed_text_config_type,
+		seed_interval_config,
+		seed_thread_config,
+		website_id,
+		create_user_id,
+		create_date,
+		seed_origin_config,
+		seed_sleep_config,
+		seed_linkurl_config,
+		seed_origin_url_config,
+		seed_spider_type,
+		other_seed_id,
+		url_reg,
+		other_website_id,
+		seed_type,
+		seed_list_url,
+		seed_author_config,
+		seed_author_url_config,
+		seed_author_avatar_config,
+		seed_page_rule_config,
+		seed_url_config
+		)values(
+		#{seed_util_name},
+		#{seed_title_config},
+		#{seed_date_config},
+		#{seed_text_config},
+		#{seed_text_config_type},
+		#{seed_interval_config},
+		#{seed_thread_config},
+		#{website_id},
+		#{create_user_id},
+		#{create_date},
+		#{seed_origin_config},
+		#{seed_sleep_config},
+		#{seed_linkurl_config},
+		#{seed_origin_url_config},
+		#{seed_spider_type},
+		#{other_seed_id},
+		#{url_reg},
+		#{other_website_id},
+		#{seed_type},
+		#{seed_list_url},
+		#{seed_author_config},
+		#{seed_author_url_config},
+		#{seed_author_avatar_config},
+		#{seed_page_rule_config},
+		#{seed_url_config}
+		)
+
+	</insert>
+
+	<update id="updateWebSiteSeedconfig">
+		update spider_seed_config_util
+		set
+		seed_util_name = #{seed_util_name},
+		seed_title_config = #{seed_title_config},
+		seed_date_config = #{seed_date_config},
+		seed_text_config = #{seed_text_config},
+		seed_text_config_type = #{seed_text_config_type},
+		seed_interval_config = #{seed_interval_config},
+		seed_thread_config = #{seed_thread_config},
+		website_id = #{website_id},
+		create_user_id = #{create_user_id},
+		create_date = #{create_date},
+		seed_origin_config = #{seed_origin_config},
+		seed_sleep_config = #{seed_sleep_config},
+		seed_linkurl_config = #{seed_linkurl_config},
+		seed_origin_url_config = #{seed_origin_url_config},
+		seed_spider_type = #{seed_spider_type},
+		other_seed_id = #{other_seed_id},
+		url_reg=#{url_reg},
+		other_website_id = #{other_website_id}
+		where id = #{id}
+
+	</update>
+
+	<update id="updateMappingSpider" parameterType="map">
+		update mapping_spider
+		set
+		config_id = #{configId},
+		status = 1
+		where id = #{MappingSpiderId}
+	</update>
+	
+	<update id="updateUrlName" parameterType="map">
+		update mapping_spider
+		set
+		url_name = #{url_name}
+		where id = #{MappingSpiderId}
+	</update>
+	
+	<insert id="insertUrlName" parameterType="map">
+	INSERT INTO mapping_spider 
+			( url, url_name, website_id, status, flag, title_flag )
+		VALUES
+			( #{url}, #{url_name}, #{websiteId}, 0, 0, 0 );
+	</insert>
+
+
+
+
+
+</mapper> 

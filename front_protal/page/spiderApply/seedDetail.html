@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link type="image/x-icon" rel="shortcut icon" href="/images/logo.png">
+<title>思通数科 Open-Spider</title>
+<script>
+    if (!localStorage.getItem("token")) {
+        window.location.replace("/page/login/index.html");
+    }
+
+    // var spiderFlowUrl = 'http://s1.stonedt.com:5395/';
+    var spiderFlowUrl = "http://spider.dingxincloud.com/"
+    var detailId = '';
+    var websiteId = '';
+    function getRealPath() {
+        return window.location.origin + "/spider_factory"
+        // return "http://192.168.71.52:35209/spider_factory"
+//         return "http://spider.dingxincloud.com/bupt"
+    }
+
+    if (window.location.search) {
+        var url = window.location.search;
+        var urlParmas = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                urlParmas[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+            }
+        }
+        // console.log(urlParmas);
+        websiteId = urlParmas.id;
+        if (urlParmas.taskId) {
+            detailId = urlParmas.taskId;
+        } else {
+            detailId = null;
+        }
+
+    }
+</script>
+
+<head>
+    <script src="/js/rem.js"></script>
+
+    <link rel="stylesheet" href="/spiderflow/js/layui/css/layui.css" />
+    <link rel="stylesheet" href="/spiderflow/css/layui-blue.css" />
+    <link rel="stylesheet" href="/spiderflow/css/editor.css" />
+    <link rel="stylesheet" href="/spiderflow/js/codemirror/codemirror.css" />
+    <link rel="stylesheet" href="/spiderflow/js/codemirror/idea.css" />
+    <link rel="stylesheet" href="/spiderflow/js/codemirror/show-hint.css" />
+    <link rel="stylesheet" href="/spiderflow/js/jsontree/jsontree.css" />
+    <link href="/spiderflow/css/jquery.searchableSelect.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/spiderflow/js/jquery/css/select2.min.css" />
+
+    <script type="text/javascript" src="/spiderflow/js/layui/layui.all.js"></script>
+    <link id="layuicss-layer" rel="stylesheet" href="/spiderflow/js/layui/css/modules/layer/default/layer.css?v=3.1.1"
+        media="all">
+    <link id="layuicss-skincodecss" rel="stylesheet" href="/spiderflow/js/layui/css/modules/code.css" media="all">
+    <script>
+        mxBasePath = 'js/mxgraph';
+        $ = layui.$
+    </script>
+    <script type="text/javascript" src="/spiderflow/js/mxgraph/mxgraph.js"></script>
+    <link rel="stylesheet" href="/spiderflow/js/mxgraph/css/common.css" charset="UTF-8" type="text/css">
+    <script type="text/javascript" src="/spiderflow/js/common.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/spider-editor.js"></script>
+
+    <script type="text/javascript" src="/spiderflow/js/canvas-viewer.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/codemirror/codemirror.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/codemirror/spiderflow.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/codemirror/placeholder.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/codemirror/sql.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/codemirror/show-hint.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/codemirror/spiderflow-hint.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/jsontree/jsontree.js"></script>
+
+    <script type="text/javascript" src="/spiderflow/js/editor.js"></script>
+    <script type="text/javascript" src="/spiderflow/js/newEditor.js"></script>
+
+    <link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="/spiderflow/js/jquery.searchableSelect.js"></script>
+    <script src="/spiderflow/js/jquery/select2.min.js"></script>
+
+    <link rel="stylesheet" href="/layui/css/layui.css">
+    <link rel="stylesheet" href="/icon/iconfont.css">
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/spiderflow.css">
+</head>
+
+<body>
+    <div class="page">
+        <!-- 接口调用成功提示 -->
+        <div class="message message-success message-hide" style="top: 20px; z-index: 2014">
+            <i class="iconfont icon-check-circle"></i>
+            <p class="message_content"></p>
+        </div>
+        <!-- 接口调用失败提示 -->
+        <div class="message message-error message-hide" style="top: 20px; z-index: 2014">
+            <i class="iconfont icon-times-circle"></i>
+            <p class="message_content"></p>
+        </div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">采集应用</li>
+                    <li class="breadcrumb-item website-name"></li>
+                    <li class="breadcrumb-item active page-name" aria-current="page"></li>
+                    </li>
+                </ol>
+            </nav>
+        </div>
+        <div class="form-group choose-template">
+            <label for="">采集模板：</label>
+            <select class="form-select" id="seed_template" onchange="pickTemplate()">
+                <option selected hidden value="">请选择采集模板</option>
+            </select>
+        </div>
+        <div class="main-content">
+            <div class="main-container">
+                <div class="toolbar-container">
+                    <ul>
+                        <li class="btn-return" title="返回列表"></li>
+                        <span>|</span>
+                        <li class="btn-save" title="保存（Ctrl+S）"></li>
+                        <li class="btn-test" title="测试（Ctrl+Q）"></li>
+                        <span>|</span>
+                        <li class="btn-undo" title="撤销（Ctrl+Z）"></li>
+                        <li class="btn-redo" title="反撤销（Ctrl+Y）"></li>
+                        <li class="btn-history" title="历史版本"></li>
+                        <span>|</span>
+                        <li class="btn-selectAll" title="全选（Ctrl+A）"></li>
+                        <li class="btn-cut" title="剪切（Ctrl+X）"></li>
+                        <li class="btn-copy" title="复制（Ctrl+C）"></li>
+                        <li class="btn-paste" title="粘贴（Ctrl+V）"></li>
+                        <li class="btn-delete" title="删除（Delete）"></li>
+                        <span>|</span>
+                        <li class="btn-edit-xml" title="XML编辑"></li>
+                        <li class="btn-console-xml" title="打印XML"></li>
+                        <span>|</span>
+                        <li class="btn-debug" title="调试（Ctrl+Q）"></li>
+                        <li class="btn-resume disabled" title="下一步"></li>
+                        <li class="btn-stop disabled" title="停止"></li>
+                        <span>|</span>
+                        <li class="btn-dock-right" title="Dock to right"></li>
+                        <li class="btn-dock-bottom" title="Dock to bottom"></li>
+                    </ul>
+                </div>
+                <div class="sidebar-container"></div>
+                <div class="xml-container">
+                    <textarea></textarea>
+                </div>
+                <div class="editor-container"></div>
+                <div class="resize-container"></div>
+                <div class="properties-container"></div>
+
+                <!-- <div class="disposition-container">
+                    <span class="disposition-params">
+                        种子url：<input id="sole_sign" name="sole_sign" placeholder="请输入种子链接地址" type="text" />
+                    </span>
+
+                    <span class="disposition-params">
+                        爬虫名称：<input id="seed_name" name="seed_name" placeholder="请输入爬虫名称" type="text" />
+                    </span>
+
+                    <span class="disposition-params">
+                        任务类型：<select id="seed_type">
+                            <option hidden value="">任务类型</option>
+                            <option value="1">html</option>
+                            <option value="2">json</option>
+                            <option value="3">html>cdata</option>
+                        </select>
+                    </span>
+
+                    <span class="disposition-params">
+                        任务状态：<select id="seed_status">
+                            <option hidden value="">任务状态</option>
+                            <option value="0">关闭</option>
+                            <option value="1">正常</option>
+                        </select>
+                    </span>
+
+                    <span class="disposition-params">
+                        cron：<input id="cron" name="cron" placeholder="请输入cron" onclick="cron()" type="text" />
+                    </span>
+
+                    <span class="disposition-params">
+                        数据类型：
+                        <select id="data_type_id">
+                            <option hidden value="">数据类型</option>
+                        </select>
+                    </span>
+
+                    <span class="disposition-params">
+                        优先级：<select id="spider_level">
+                            <option hidden value="">优先级</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </span>
+
+                    <span class="disposition-params">
+                        重点信源：<select id="key_sources_flag">
+                            <option hidden value="">重点信源</option>
+                            <option value="1">重点</option>
+                            <option value="2">非重点</option>
+                        </select>
+                    </span>
+
+                    <span class="disposition-params">
+                        采集类型：<select id="spider_type">
+                            <option hidden value="">采集类型</option>
+                            <option value="1">搜索引擎</option>
+                            <option value="2">栏目抓取</option>
+                            <option value="3">整站抓取</option>
+                            <option value="4">站内搜索</option>
+                        </select>
+                    </span>
+
+                </div> -->
+            </div>
+
+        </div>
+        <div class="modal fade " id="seedDetailModal" tabindex="-1" aria-labelledby="seedDetailModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog  modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">种子详情信息</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>爬虫名称：</label>
+                            <input type="text" class="form-control" id="seed_name" placeholder="请输入爬虫名称(必填)" required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>任务类型：</label>
+                            <select class="form-select" id="seed_type" required>
+                                <option selected hidden value="">请选择任务类型(必选)</option>
+                                <option value="1">html</option>
+                                <option value="2">json</option>
+                                <option value="3">html>cdata</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;width: 100%;">
+                            <label for=""><span class="require">*</span>种子url：</label>
+                            <input type="text" class="form-control" id="sole_sign" value="" placeholder="请输入种子url(必填)"
+                                required>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>任务状态：</label>
+                            <select class="form-select" id="seed_status" required>
+                                <option selected hidden value="">请选择任务状态(必选)</option>
+                                <option value="0">关闭</option>
+                                <option value="1">正常</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>corn：</label>
+                            <input type="text" class="form-control" id="cron" placeholder="请输入corn(必填)" required
+                                onclick="editCron()">
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>数据类型：</label>
+                            <select class="form-select" id="data_type_id" required><span class="require">*</span>
+                                <option selected hidden value="">请选择数据类型(必选)</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>优先级：</label>
+                            <select class="form-select" id="spider_level" required>
+                                <option selected hidden value="">请选择优先级(必选)</option>
+                                <option value="1">高</option>
+                                <option value="2">中</option>
+                                <option value="3">低</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>采集方式：</label>
+                            <select class="form-select" id="gather_type" required>
+                                <option selected hidden value="">请选择采集方式(必选)</option>
+                                <option value="0">网站采集</option>
+                                <option value="1">文件采集</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-bottom: 0;padding: 15px 0;">
+                            <label for=""><span class="require">*</span>采集类型：</label>
+                            <select class="form-select" id="spider_type" required>
+                                <option selected hidden value="">请选择采集类型(必选)</option>
+                                <option value="1">搜索引擎</option>
+                                <option value="2">栏目抓取</option>
+                                <option value="3">整站抓取</option>
+                                <option value="4">站内搜索</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="Save()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="corn-dialog" class="wrapper" style="display: none;">
+        <div class="corn-container">
+            <nav>
+                <ul class="nav nav-underline" id="nav-tab" role="tablist">
+                    <li class="nav-link active" id="nav-second-tab" data-bs-toggle="tab" data-bs-target="#nav-second"
+                        type="button" role="tab" aria-controls="nav-second" aria-selected="true">秒</li>
+                    <li class="nav-link" id="nav-minute-tab" data-bs-toggle="tab" data-bs-target="#nav-minute"
+                        type="button" role="tab" aria-controls="nav-minute" aria-selected="false">分钟</li>
+                    <li class="nav-link" id="nav-hour-tab" data-bs-toggle="tab" data-bs-target="#nav-hour" type="button"
+                        role="tab" aria-controls="nav-hour" aria-selected="false">小时</li>
+                    <li class="nav-link" id="nav-day-tab" data-bs-toggle="tab" data-bs-target="#nav-day" type="button"
+                        role="tab" aria-controls="nav-day" aria-selected="false">日</li>
+                    <li class="nav-link" id="nav-month-tab" data-bs-toggle="tab" data-bs-target="#nav-month"
+                        type="button" role="tab" aria-controls="nav-month" aria-selected="false">月</li>
+                    <li class="nav-link" id="nav-week-tab" data-bs-toggle="tab" data-bs-target="#nav-week" type="button"
+                        role="tab" aria-controls="nav-week" aria-selected="false">周</li>
+                    <li class="nav-link" id="nav-year-tab" data-bs-toggle="tab" data-bs-target="#nav-year" type="button"
+                        role="tab" aria-controls="nav-year" aria-selected="false">年</li>
+                </ul>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-second" role="tabpanel" aria-labelledby="nav-second-tab"
+                    tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="secondType" value="All" checked="checked">
+                            每秒 允许的通配符[, - * /]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="secondType" value="Cyclic">
+                            周期从
+                            <input type="number" maxlength="2" max="59" min="0" value="0" id="secondTypeCyclic_1">
+                            -
+                            <input type="number" maxlength="2" max="59" min="1" value="1" id="secondTypeCyclic_2">
+                            秒
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="secondType" value="Interval">
+                            从
+                            <input type="number" maxlength="2" max="59" min="0" value="0" id="secondTypeInterval_1">
+                            秒开始，每
+                            <input type="number" maxlength="2" max="59" min="1" value="1" id="secondTypeInterval_2">
+                            秒执行一次
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="secondType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="secondTypeAssigned_1" class="zhiding"></div>
+                    </div>
+
+                </div>
+                <div class="tab-pane fade" id="nav-minute" role="tabpanel" aria-labelledby="nav-minute-tab"
+                    tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="minuteType" value="All" checked="checked">
+                            每分钟 允许的通配符[, - * /]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="minuteType" value="Cyclic">
+                            周期从
+                            <input type="number" maxlength="2" max="59" min="0" value="0" id="minuteTypeCyclic_1">
+                            -
+                            <input type="number" maxlength="2" max="59" min="1" value="1" id="minuteTypeCyclic_2">
+                            分钟
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="minuteType" value="Interval">
+                            从
+                            <input type="number" maxlength="2" max="59" min="0" value="0" id="minuteTypeInterval_1">
+                            分钟开始，每
+                            <input type="number" maxlength="2" max="59" min="1" value="1" id="minuteTypeInterval_2">
+                            分钟执行一次
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="minuteType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+
+                        <div id="minuteTypeAssigned_1" class="zhiding"></div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-hour" role="tabpanel" aria-labelledby="nav-hour-tab" tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="hourType" value="All" checked="checked">
+                            每小时 允许的通配符[, - * /]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="hourType" value="Cyclic">
+                            周期从
+                            <input type="number" maxlength="2" max="23" min="0" value="0" id="hourTypeCyclic_1">
+                            -
+                            <input type="number" maxlength="2" max="23" min="1" value="1" id="hourTypeCyclic_2">
+                            小时
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="hourType" value="Interval">
+                            从
+                            <input type="number" maxlength="2" max="23" min="0" value="0" id="hourTypeInterval_1">
+                            时开始，每
+                            <input type="number" maxlength="2" max="23" min="1" value="1" id="hourTypeInterval_2">
+                            小时执行一次
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="hourType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="hourTypeAssigned_1" class="zhiding"></div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-day" role="tabpanel" aria-labelledby="nav-day-tab" tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="All" checked="checked">
+                            每日 允许的通配符[, - * / L W]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="Cyclic">
+                            周期从
+                            <input type="number" maxlength="2" max="31" min="1" value="1" id="dayTypeCyclic_1">
+                            -
+                            <input type="number" maxlength="2" max="31" min="2" value="2" id="dayTypeCyclic_2">
+                            日
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="Interval">
+                            从
+                            <input type="number" maxlength="2" max="31" min="1" value="1" id="dayTypeInterval_1">
+                            日开始，每
+                            <input type="number" maxlength="2" max="31" min="1" value="1" id="dayTypeInterval_2">
+                            日执行一次
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="dayTypeAssigned_1" class="zhiding"></div>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="NotAssigned">
+                            不指定
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="RecentDays">
+                            每月
+                            <input type="number" id="dayTypeRecentDays_1" value="">
+                            号最近的那个工作日
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="LastDayOfMonth">
+                            本月最后一天
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="dayType" value="LastDayOfMonthRecentDays">
+                            本月最后一个工作日
+                        </label>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-month" role="tabpanel" aria-labelledby="nav-month-tab" tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="monthType" value="All" checked="checked">
+                            每月 允许的通配符[, - * /]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="monthType" value="Cyclic">
+                            周期从
+                            <input type="number" maxlength="2" max="12" min="1" value="1" id="monthTypeCyclic_1">
+                            -
+                            <input type="number" maxlength="2" max="12" min="1" value="2" id="monthTypeCyclic_2">
+                            月
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="monthType" value="Interval">
+                            从
+                            <input type="number" maxlength="2" max="12" min="1" value="1" id="monthTypeInterval_1">
+                            月开始，每
+                            <input type="number" maxlength="2" max="12" min="1" value="1" id="monthTypeInterval_2">
+                            月执行一次
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="monthType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="monthTypeAssigned_1" class="zhiding"></div>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="monthType" value="NotAssigned">
+                            不指定
+                        </label>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-week" role="tabpanel" aria-labelledby="nav-week-tab" tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="weekType" value="All" checked="checked">
+                            每周 允许的通配符[, - * / L #]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="weekType" value="Cyclic">
+                            周期从
+                            <input type="number" maxlength="2" max="7" min="1" value="1" id="weekTypeCyclic_1">
+                            -
+                            <input type="number" maxlength="2" max="7" min="1" value="1" id="weekTypeCyclic_2">
+                            周
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="weekType" value="WeeksOfWeek">
+                            第
+                            <input type="number" maxlength="2" max="7" min="1" value="1" id="weekTypeWeeksOfWeek_1">
+                            周 的星期
+                            <input type="number" maxlength="2" max="7" min="1" value="1" id="weekTypeWeeksOfWeek_2">
+
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="weekType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="weekTypeAssigned_1" class="zhiding"></div>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="weekType" value="NotAssigned">
+                            不指定
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="weekType" value="LastWeekOfMonth">
+                            本月最后一个星期
+                            <input type="number" id="weekTypeLastWeekOfMonth_1" value="1">
+
+                        </label>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-year" role="tabpanel" aria-labelledby="nav-year-tab" tabindex="0">
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="yearType" value="All" checked="checked">
+                            每年 允许的通配符[, - * /]
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="yearType" value="NotAssigned">
+                            不指定
+                        </label>
+                    </div>
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="yearType" value="Cyclic">
+                            周期从
+                            <input type="number" id="yearTypeCyclic_1" value="2015">
+                            -
+                            <input type="number" id="yearTypeCyclic_2" value="2299">
+                            年
+                        </label>
+                    </div>
+
+                    <div class="radio">
+                        <label>
+                            <input type="radio" name="yearType" value="Assigned">
+                            指定
+                        </label>
+                    </div>
+                    <div style="margin-left: 20px;">
+                        <div id="yearTypeAssigned_1" class="zhiding"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="line"></div>
+
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">结果</h3>
+            </div>
+
+            <div class="panel-body">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <table style="height: 100px;">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                    </td>
+                                    <td align="center">
+                                        秒
+                                    </td>
+                                    <td align="center">
+                                        分钟
+                                    </td>
+                                    <td align="center">
+                                        小时
+                                    </td>
+                                    <td align="center">
+                                        日
+                                    </td>
+                                    <td align="center">
+                                        月
+                                        <br>
+                                    </td>
+                                    <td align="center">
+                                        星期
+                                    </td>
+                                    <td align="center">
+                                        年
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        表达式字段：
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_secondType" class="col" value="*"
+                                            readonly="readonly">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_minuteType" class="col" value="*"
+                                            readonly="readonly">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_hourType" class="col" value="*"
+                                            readonly="readonly">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_dayType" class="col" value="*"
+                                            readonly="readonly">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_monthType" class="col" value="*"
+                                            readonly="readonly">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_weekType" class="col" value="?"
+                                            readonly="readonly">
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled name="v_yearType" class="col" readonly="readonly">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Cron 表达式：</td>
+                                    <td colspan="6">
+                                        <input type="text" name="cron" id="result" style="width:98%;">
+                                    </td>
+                                    <td>
+                                        <input type="button" class="btn btn-info btn-sm" value="反解析到UI" id="analysis">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8">最近5次运行时间：</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="8" id="runTime">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div>
+            <button id="transmit" type="button" class="layui-btn layui-btn-normal" style="margin-top:10px;">确定</button>
+        </div>
+    </div>
+    <script type="text/html" id="parameter-name-tmpl">
+        <input type="text" name="parameter-name" placeholder="请输入参数名" autocomplete="off" class="layui-input array" value="{{=d['parameter-name']}}">
+    </script>
+    <script type="text/html" id="parameter-description-tmpl">
+        <input type="text" name="parameter-description" placeholder="请输入参数描述" autocomplete="off" class="layui-input array" value="{{=d['parameter-description']}}">
+    </script>
+    <script type="text/html" id="parameter-value-tmpl">
+        <div class="layui-input-block array" placeholder="请输入参数值" codemirror="parameter-value" data-value="{{=d['parameter-value']}}"></div>
+    </script>
+    <script type="text/html" id="parameter-type-tmpl">
+        <select name="parameter-form-type" class="array">
+            <option value="text" {{d['parameter-form-type'] == 'text' ? 'selected': '' }}">text</option>
+            <option value="file" {{d['parameter-form-type'] == 'file' ? 'selected': '' }}>file</option>
+        </select>
+    </script>
+    <script type="text/html" id="parameter-from-name-tmpl">
+        <input type="text" name="parameter-form-name" placeholder="请输入参数名" autocomplete="off" class="layui-input array" value="{{=d['parameter-form-name']}}">
+    </script>
+    <script type="text/html" id="parameter-from-description-tmpl">
+        <input type="text" name="parameter-form-description" placeholder="请输入参数描述" autocomplete="off" class="layui-input array" value="{{=d['parameter-form-description']}}">
+    </script>
+    <script type="text/html" id="parameter-from-value-tmpl">
+        <div class="layui-input-block array" placeholder="请输入参数值" codemirror="parameter-form-value" data-value="{{=d['parameter-form-value']}}"></div>
+    </script>
+    <script type="text/html" id="parameter-from-type-tmpl">
+        <select name="parameter-form-type" class="array">
+            <option value="text" {{d['parameter-form-type'] == 'text' ? 'selected': '' }}">text</option>
+            <option value="file" {{d['parameter-form-type'] == 'file' ? 'selected': '' }}>file</option>
+        </select>
+    </script>
+    <script type="text/html" id="parameter-from-filename-tmpl">
+        <div class="layui-input-block array" placeholder="请输入文件名" codemirror="parameter-form-filename" data-value="{{=d['parameter-form-filename']}}"></div>
+    </script>
+
+    <script type="text/html" id="cookie-name-tmpl">
+        <input type="text" name="cookie-name" placeholder="请输入Cookie名" autocomplete="off" class="layui-input array" value="{{=d['cookie-name']}}">
+    </script>
+    <script type="text/html" id="cookie-description-tmpl">
+        <input type="text" name="cookie-description" placeholder="请输入Cookie描述" autocomplete="off" class="layui-input array" value="{{=d['cookie-description']}}">
+    </script>
+    <script type="text/html" id="cookie-value-tmpl">
+        <div class="layui-input-block array" placeholder="请输入Cookie值" codemirror="cookie-value" data-value="{{=d['cookie-value']}}"></div>
+    </script>
+
+    <script type="text/html" id="header-name-tmpl">
+        <input type="text" name="header-name" placeholder="请输入Header名" autocomplete="off" class="layui-input array" value="{{=d['header-name']}}">
+    </script>
+    <script type="text/html" id="header-description-tmpl">
+        <input type="text" name="header-description" placeholder="请输入Header描述" autocomplete="off" class="layui-input array" value="{{=d['header-description']}}">
+    </script>
+    <script type="text/html" id="header-value-tmpl">
+        <div class="layui-input-block array" placeholder="请输入Header值" codemirror="header-value" data-value="{{=d['header-value']}}"></div>
+    </script>
+
+    <script type="text/html" id="variable-name-tmpl">
+        <input type="text" name="variable-name" placeholder="请输入变量名" autocomplete="off" class="layui-input array" value="{{=d['variable-name']}}">
+    </script>
+    <script type="text/html" id="variable-description-tmpl">
+        <input type="text" name="variable-description" placeholder="请输入变量描述" autocomplete="off" class="layui-input array" value="{{=d['variable-description']}}">
+    </script>
+    <script type="text/html" id="variable-value-tmpl">
+        <div class="layui-input-block array" placeholder="请输入变量值" codemirror="variable-value" data-value="{{=d['variable-value']}}"></div>
+    </script>
+
+    <script type="text/html" id="output-name-tmpl">
+        <input type="text" name="output-name" placeholder="输出项" autocomplete="off" class="layui-input array" value="{{=d['output-name']}}">
+    </script>
+    <script type="text/html" id="output-value-tmpl">
+        <div class="layui-input-block array" codemirror="output-value" placeholder="输出值" data-value="{{=d['output-value']}}"></div>
+    </script>
+
+    <script type="text/html" id="history-version-tmpl">
+        <ul class="history-version">
+            {{# layui.each(d,function(index,item){ }}
+                <li data-timestamp="{{item.timestamp}}">{{item.time}}</li>
+            {{# });}}
+        </ul>
+    </script>
+
+    <script type="text/html" id="common-operation">
+        <a class="layui-btn layui-btn-sm table-row-up">上移</a>
+        <a class="layui-btn layui-btn-sm table-row-down">下移</a>
+        <a class="layui-btn layui-btn-sm" lay-event="del">删除</a>
+    </script>
+    <script>
+        $('#customlable').select2({ placeholder: '选择客户', allowClear: true, width: 320 })
+    </script>
+    <script src="/spiderflow/js/cron/cron.js"></script>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderApply/seedDetail.js"></script>
+</body>
+
+</html>

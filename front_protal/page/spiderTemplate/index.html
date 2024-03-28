@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <script>
+        try {
+            if (isindex) {
+            }
+        } catch (e) {
+            window.location.href = "/index.html";
+        }
+    </script>
+</head>
+
+<body>
+    <div>
+        <div class="page-title align-items-center">
+            <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                <ol class="breadcrumb mb-0">
+                    <li class="breadcrumb-item">数据采集模板</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="main-content">
+            <div class="table-list">
+                <div class="table-top">
+                    <div class="table-title">采集模板列表</div>
+                </div>
+                <div class="table_mark">
+                    <table class="table table-hover mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">模板名称</th>
+                                <th scope="col">创建者</th>
+                                <th scope="col">创建时间</th>
+                                <th scope="col">状态</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-content">
+
+                        </tbody>
+                    </table>
+                    <!-- 加载状态 遮罩层 -->
+                    <div class="modal fade marklayer">
+                        <div class="load_item">
+                            <div class="spinner-border" role="status">
+                                <span class="visually-hidden"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="pagination"></div>
+            </div>
+        </div>
+        <div class="modal fade" id="controlModal" tabindex="-1" aria-labelledby="controlModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header" style="padding: 20px 20px 10px; border: none">
+                        <div class="modal-title" id="stopTaskModalLabel" style="
+                    line-height: 24px;
+                    font-size: 18px;
+                    color: #303133;
+                  ">
+                            提示
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form onsubmit="return false;">
+                            <div class="form-group">
+                                <div class="col-form-label" style="color: #606266; font-size: 14px">
+
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer" style="border: none">
+                        <button type="button" class="btn btn-primary" onclick="submitControl()">确定</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/js/intercept.js"></script>
+    <script src="/js/spiderTemplate/index.js"></script>
+</body>
+
+</html>

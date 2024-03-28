@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.NewsTableDao">
+
+	<select id="getSecondType" parameterType="String" resultType="String">
+		SELECT
+		id
+		FROM
+		spider_seed
+		WHERE
+		first_type = #{first_type}
+
+	</select>
+
+
+	<select id="getSecLabels" parameterType="String"
+		resultType="com.stonedt.spider.entity.SecLabel">
+		SELECT
+		id AS seed_id,seed_name
+		FROM
+		spider_seed
+		WHERE
+		first_type = #{first_type}
+
+	</select>
+
+	<select id="getSeedIds" resultType="com.stonedt.spider.entity.SecLabel">
+		
+		SELECT
+		id AS
+		seed_id,seed_name
+		FROM
+		frist_type
+
+	</select>
+	
+	
+	<select id="getType" resultType="com.stonedt.spider.entity.SecLabel" parameterType="map">
+		SELECT
+		id as seed_id,type_name as seed_name
+		FROM
+		article_type
+		<if test="flag!=null and flag!=''">
+		where first_type=#{flag}
+		</if>
+
+	</select>
+
+
+
+
+</mapper>

@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stonedt.spider.dao.SpiderFlowDao">
+    <select id="searchSpiderFlows" parameterType="int"
+            resultType="com.stonedt.spider.entity.SpiderFlow">
+        SELECT s.id,
+               s.seed_name,
+               s.website_id,
+               s.data_type_id,
+               s.spider_level,
+               s.create_date,
+               s.cron,
+               s.seed_status,
+               t.typename
+        FROM spider_flow s,
+             data_source w,
+             websitetype t
+        WHERE s.website_id = w.id
+          AND s.data_type_id = t.id
+          and w.id = #{website_id}
+    </select>
+
+    <select id="searchSpiderFlow" parameterType="int"
+            resultType="com.stonedt.spider.entity.SpiderFlow">
+        SELECT w.website_name,
+               w.website_ico,
+               w.new_website_type,
+               s.id,
+               s.seed_name,
+               s.website_id,
+               s.data_type_id,
+               s.spider_level,
+               s.create_date,
+               s.cron,
+               s.seed_status,
+               s.xml,
+               s.seed_type,
+               s.sole_sign,
+               s.from_smart_crawler,
+               s.update_time,
+               s.type,
+               s.key_sources_flag,
+               s.spider_type,
+               s.temp_id,
+               t.estype,
+               t.esindex,
+               t.hbase_table,
+               t.kafka_queue_name,
+               t.bloomname,
+               t.typename
+
+        FROM spider_flow s,
+             data_source w,
+             websitetype t
+        WHERE s.website_id = w.id
+          AND s.data_type_id = t.id
+          and s.id = #{id}
+    </select>
+
+    <update id="updateSpiderFlowById">
+        update spider_flow
+        <trim prefix="set" suffixOverrides=",">
+            <if test="spiderFlow.seed_name !=null and spiderFlow.seed_name !=''">
+                seed_name=#{spiderFlow.seed_name},
+            </if>
+            <if test="spiderFlow.seed_type !=null ">
+                seed_type=#{spiderFlow.seed_type},
+            </if>
+            <if test="spiderFlow.seed_status !=null ">
+                seed_status=#{spiderFlow.seed_status},
+            </if>
+            <if test="spiderFlow.cron !=null and spiderFlow.cron !=''">
+                cron=#{spiderFlow.cron},
+            </if>
+            <if test="spiderFlow.website_id != null ">
+                website_id =#{spiderFlow.website_id},
+            </if>
+            <if test="spiderFlow.xml !=null and spiderFlow.xml !=''">
+                `xml`=#{spiderFlow.xml},
+            </if>
+            <if test="spiderFlow.data_type_id !=null">
+                data_type_id=#{spiderFlow.data_type_id},
+            </if>
+            <if test="spiderFlow.spider_level !=null ">
+                spider_level=#{spiderFlow.spider_level},
+            </if>
+            <if test="spiderFlow.sole_sign !=null and spiderFlow.sole_sign != '' ">
+                sole_sign=#{spiderFlow.sole_sign},
+            </if>
+            <if test="spiderFlow.customlable !=null and spiderFlow.customlable != '' ">
+                customlable=#{spiderFlow.customlable},
+            </if>
+            <if test="spiderFlow.key_sources_flag !=null and spiderFlow.key_sources_flag != '' ">
+                key_sources_flag = #{spiderFlow.key_sources_flag},
+            </if>
+             <if test="spiderFlow.spider_type !=null and spiderFlow.spider_type != '' ">
+                spider_type = #{spiderFlow.spider_type},
+            </if>
+            
+            <if test="spiderFlow.sole_sign !=null and spiderFlow.sole_sign != '' ">
+                sole_sign=#{spiderFlow.sole_sign},
+            </if>
+             <if test="spiderFlow.create_user !=null and spiderFlow.create_user != '' ">
+                create_user=#{spiderFlow.create_user},
+            </if>
+             <if test="spiderFlow.create_user_id !=null and spiderFlow.create_user_id != '' ">
+                create_user_id=#{spiderFlow.create_user_id},
+            </if>
+            
+             <if test="spiderFlow.update_user !=null and spiderFlow.update_user != '' ">
+                update_user=#{spiderFlow.update_user},
+            </if>
+            
+             <if test="spiderFlow.update_user_id !=null and spiderFlow.update_user_id != '' ">
+                update_user_id=#{spiderFlow.update_user_id},
+            </if>
+            <if test="spiderFlow.type!=null ">
+                type=#{spiderFlow.type},
+            </if>
+            <if test="spiderFlow.temp_id!=null ">
+                temp_id=#{spiderFlow.temp_id},
+            </if>
+            <if test="spiderFlow.is_del!=null ">
+                is_del=#{spiderFlow.is_del},
+            </if>
+        </trim>
+        where id = #{spiderFlow.id}
+    </update>
+
+    <insert id="insertSpiderFlow" useGeneratedKeys="true" keyProperty="spiderFlow.id" keyColumn="id">
+        insert into
+        spider_flow(
+        <if test="spiderFlow.seed_name !=null and spiderFlow.seed_name !=''">
+            seed_name,
+        </if>
+        <if test="spiderFlow.seed_type !=null ">
+            seed_type,
+        </if>
+        <if test="spiderFlow.seed_status !=null ">
+            seed_status,
+        </if>
+        <if test="spiderFlow.cron !=null and spiderFlow.cron !=''">
+            cron,
+        </if>
+        <if test="spiderFlow.website_id != null">
+            website_id,
+        </if>
+        <if test="spiderFlow.xml !=null and spiderFlow.xml !=''">
+            `xml`,
+        </if>
+        <if test="spiderFlow.data_type_id !=null">
+            data_type_id,
+        </if>
+        <if test="spiderFlow.spider_level !=null ">
+            spider_level,
+        </if>
+        <if test="spiderFlow.sole_sign !=null and spiderFlow.sole_sign != '' ">
+            sole_sign,
+        </if>
+        <if test="spiderFlow.customlable !=null and spiderFlow.customlable != '' ">
+            customlable,
+        </if>
+        <if test="spiderFlow.key_sources_flag !=null and spiderFlow.key_sources_flag != '' ">
+            key_sources_flag,
+        </if>
+        <if test="spiderFlow.spider_type !=null and spiderFlow.spider_type != '' ">
+            spider_type,
+        </if>
+        <if test="spiderFlow.create_user !=null and spiderFlow.create_user != '' ">
+            create_user,
+        </if>
+        <if test="spiderFlow.create_user_id !=null and spiderFlow.create_user_id != '' ">
+            create_user_id,
+        </if>
+        <if test="spiderFlow.update_user !=null and spiderFlow.update_user != '' ">
+            update_user,
+        </if>
+        <if test="spiderFlow.update_user_id !=null and spiderFlow.update_user_id != '' ">
+            update_user_id,
+        </if>
+        <if test="spiderFlow.type!=null ">
+            type,
+        </if>
+        <if test="spiderFlow.temp_id!=null ">
+            temp_id,
+        </if>
+        create_date,update_time
+        )values (
+        <if test="spiderFlow.seed_name !=null and spiderFlow.seed_name !=''">
+            #{spiderFlow.seed_name},
+        </if>
+        <if test="spiderFlow.seed_type !=null ">
+            #{spiderFlow.seed_type},
+        </if>
+        <if test="spiderFlow.seed_status !=null ">
+            #{spiderFlow.seed_status},
+        </if>
+        <if test="spiderFlow.cron !=null and spiderFlow.cron !=''">
+            #{spiderFlow.cron},
+        </if>
+        <if test="spiderFlow.website_id != null ">
+            #{spiderFlow.website_id},
+        </if>
+        <if test="spiderFlow.xml !=null and spiderFlow.xml !=''">
+            #{spiderFlow.xml},
+        </if>
+        <if test="spiderFlow.data_type_id !=null">
+            #{spiderFlow.data_type_id},
+        </if>
+        <if test="spiderFlow.spider_level !=null ">
+            #{spiderFlow.spider_level},
+        </if>
+        <if test="spiderFlow.sole_sign !=null and spiderFlow.sole_sign != '' ">
+            #{spiderFlow.sole_sign},
+        </if>
+        <if test="spiderFlow.customlable !=null and spiderFlow.customlable != '' ">
+            #{spiderFlow.customlable},
+        </if>
+        <if test="spiderFlow.key_sources_flag !=null and spiderFlow.key_sources_flag != '' ">
+            #{spiderFlow.key_sources_flag},
+        </if>
+        <if test="spiderFlow.spider_type !=null and spiderFlow.spider_type != '' ">
+            #{spiderFlow.spider_type},
+        </if>
+        
+        <if test="spiderFlow.create_user !=null and spiderFlow.create_user != '' ">
+            #{spiderFlow.create_user},
+        </if>
+        
+        <if test="spiderFlow.create_user_id !=null and spiderFlow.create_user_id != '' ">
+            #{spiderFlow.create_user_id},
+        </if>
+        
+        <if test="spiderFlow.update_user !=null and spiderFlow.update_user != '' ">
+            #{spiderFlow.update_user},
+        </if>
+        
+        <if test="spiderFlow.update_user_id !=null and spiderFlow.update_user_id != '' ">
+            #{spiderFlow.update_user_id},
+        </if>
+
+        <if test="spiderFlow.type!=null ">
+            #{spiderFlow.type},
+        </if>
+        <if test="spiderFlow.temp_id!=null ">
+            #{spiderFlow.temp_id},
+        </if>
+        sysdate(), sysdate()
+        )
+    </insert>
+
+    <select id="getTypeJson" resultType="java.util.Map">
+        SELECT w.website_name,
+               w.website_ico,
+               w.new_website_type,
+               t.estype,
+               t.esindex,
+               t.hbase_table,
+               t.kafka_queue_name,
+               t.bloomname,
+               t.typename
+
+        FROM data_source w,
+             websitetype t
+        where w.id = #{websiteId}
+          and t.id = #{typeid}
+    </select>
+
+    <select id="selectIdByWebId" resultType="java.lang.Integer">
+        select id
+        from spider_flow
+        where website_id = #{webid}
+    </select>
+
+    <select id="selectTypeWebById" resultType="com.stonedt.spider.entity.SpiderFlow">
+        SELECT w.website_name,
+               w.website_ico,
+               w.new_website_type,
+               s.id,
+               s.seed_name,
+               s.website_id,
+               s.data_type_id,
+               t.estype,
+               t.esindex,
+               t.hbase_table,
+               t.kafka_queue_name,
+               t.bloomname,
+               t.typename
+
+        FROM spider_flow s,
+             data_source w,
+             websitetype t
+        WHERE s.website_id = w.id
+          AND s.data_type_id = t.id
+          and s.id = #{id}
+    </select>
+    
+    <select id="spiderFlowPage" parameterType="java.lang.Object" resultType="com.stonedt.spider.entity.SpiderFlow">
+        select * from spider_flow
+        <where>
+            is_del=0
+            <if test="seed_status!=null and seed_status>0">
+                and seed_status=#{seed_status}
+            </if>
+            <if test="cron!=null and cron!='' ">
+                and cron=#{cron}
+            </if>
+        </where>
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="spiderFlowPage_map" parameterType="java.lang.Object" resultType="java.util.Map">
+        select sf.*, wt.kafka_queue_name,esindex, estype, hbase_table, kafka_queue_name, bloomname, typename as datasource_type
+        from spider_flow sf left join websitetype wt
+        on  sf.data_type_id=wt.id
+        <where>
+            sf.is_del=0
+            <if test="seed_status!=null and seed_status>0">
+                and sf.seed_status=#{seed_status}
+            </if>
+            <if test="cron!=null and cron!='' ">
+                and sf.cron=#{cron}
+            </if>
+        </where>
+        <if test="limit!=null and limit!='' ">
+            ${limit}
+        </if>
+    </select>
+
+    <select id="checkSoleSign" parameterType="java.lang.Object" resultType="java.lang.Integer">
+        select count(id) from spider_flow
+        <where>
+            <if test="sole_sign!=null and  sole_sign!='' ">
+                and sole_sign = #{sole_sign}
+            </if>
+            <if test="id!=null and  id>0 ">
+                and id!=#{id}
+            </if>
+        </where>
+    </select>
+
+    <select id="findWebsiteByCategoryId" resultType="java.lang.Integer">
+        select id from data_source where is_del=0 and new_website_type=#{categoryId}
+    </select>
+
+
+    <insert id="insertEsRecord" parameterType="com.stonedt.spider.entity.EsRecord">
+        insert into es_record(website_id, seed_id, es_index, spider_time, publish_time, type, article_public_id, create_time, update_time)
+        values
+            <foreach collection="list" separator="," item="item" >
+                (#{item.website_id}, #{item.seed_id}, #{item.es_index}, #{item.spider_time}, #{item.publish_time}, #{item.type}, #{item.article_public_id}, now(), now())
+            </foreach>
+    </insert>
+
+</mapper>

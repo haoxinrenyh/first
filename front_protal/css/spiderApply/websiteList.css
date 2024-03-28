@@ -1,0 +1,49 @@
+.table-btn-group button {
+  margin-right: 15px;
+}
+
+.table-btn-group button:last-child {
+  margin-right: 0;
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-group label {
+  min-width: 72px;
+}
+
+.invalid-feedback {
+  position: absolute;
+  left: 72px;
+  top: 50px;
+  margin-top: 0 !important;
+}
+
+.warn-icon {
+  margin-left: 5px;
+}
+
+.warn-icon img {
+  width: 14px;
+  height: 14px;
+  margin-bottom: 3px;
+}
+
+.sorting_asc::before {
+  opacity: 1;
+  color: #000;
+}
+
+.sorting_desc::after {
+  opacity: 1;
+  color: #000;
+}
+
+.table tbody tr td:nth-child(2) {
+  max-width: 350px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

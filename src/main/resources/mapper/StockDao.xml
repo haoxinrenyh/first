@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >  
+<mapper namespace="com.stonedt.spider.dao.StockDao">
+
+	<select id="stockList" parameterType="int" resultType="com.stonedt.spider.entity.Stock">
+			select * from bigdata.stock where stocktype = #{stocktype}
+	</select>
+	<select id="getstockbaseinfo" parameterType="String" resultType="com.stonedt.spider.entity.Stock">
+	
+	select * from bigdata.stock where code LIKE CONCAT(CONCAT('%',#{code}))
+	
+	</select>
+	
+	<select id="getStockInfoByCode" resultType="com.stonedt.spider.entity.StockInfo">
+	SELECT
+		id,
+		NAME,
+		CODE,
+		data_one,
+		data_two,
+		data_three,
+		openPrice,
+		highestPrice,
+		lowestPrice,
+		epsttm,
+		pettm,
+		pe,
+		totalEquity,
+		marketValue,
+		preClosePrice,
+		latestYearMax,
+		latestYearMin,
+		bps,
+		pb,
+		negEquity,
+		negMarketValue,
+		kjson,
+		coreTheme,
+		senior,
+		gudong
+	FROM
+		bigdata.stock_k 
+	WHERE
+		CODE = #{code}
+	</select>
+	
+	<select id="getFinancial" resultType="com.stonedt.spider.entity.StockFinancial">
+		SELECT
+			id, 
+			code,  
+			cwzy_json,
+			zcfz_json,
+			lr_json,  
+			xjll_json,
+			zygc_json,
+			mgzb_json,
+			ylnl_json,
+			zjjg_json,
+			yynl_json,
+			cznl_json,
+			zb_xjll_json,
+			cwbb_json
+		FROM
+			bigdata.stock_cwzy
+		WHERE
+			CODE = #{code}
+	</select>
+	
+	<select id="getStockJson" resultType="String">
+		SELECT
+			xwyq_data
+		FROM
+			bigdata.stock_xwyq 
+		WHERE
+			CODE = #{code}
+	</select>
+	
+	
+	<select id="getStockRevenue" resultType="String">
+		SELECT
+			revenue_json
+		FROM
+			bigdata.stock_revenue
+		WHERE
+			code = #{code}
+	</select>
+	
+	<select id="getStockEarning" resultType="String">
+		SELECT
+			earning_json
+		FROM
+			bigdata.stock_earning
+		WHERE
+			code = #{code}
+	</select>
+	
+	<select id="getStockNetProfit" resultType="String">
+		SELECT
+			netProfit_json
+		FROM
+			bigdata.stock_netProfit
+		WHERE
+			code = #{code}
+	</select>
+	
+	<select id="getStockResearch" resultType="String">
+		SELECT
+			research_json
+		FROM
+			bigdata.stock_research
+		WHERE
+			code = #{code}
+	</select>
+	
+	<select id="getPatent" resultType="com.stonedt.spider.entity.Patent">
+	select 
+	id, 
+	code,   
+	firm_code,  
+	trademark_json, 
+	patent_json,
+	certificate_json,   
+	copyright_json, 
+	software_json,  
+	website_json,   
+	update_date from bigdata.stock_zscq 
+	where code = #{code} order by update_date  limit 1
+	</select>
+
+</mapper> 

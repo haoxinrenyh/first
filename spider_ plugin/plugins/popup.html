@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <script src="/assets/js/jquery.js"></script>
+    <script src="/assets/bootstrap/js/popper.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/assets/icon/iconfont.css">
+    <link rel="stylesheet" href="/assets/css/base.css">
+</head>
+
+<body>
+    <div class="page">
+        <!-- 接口调用成功提示 -->
+        <div class="message message-success message-hide" style="top: 20px; z-index: 2014">
+            <i class="iconfont icon-check-circle"></i>
+            <p class="message_content"></p>
+        </div>
+        <!-- 接口调用失败提示 -->
+        <div class="message message-error message-hide" style="top: 20px; z-index: 2014">
+            <i class="iconfont icon-times-circle"></i>
+            <p class="message_content"></p>
+        </div>
+        <div class="page-title">
+            <img src="/images/logo.png" alt="">
+            <span>思通数科采集系统浏览器插件</span>
+        </div>
+        <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-link active" id="nav-list-tab" data-bs-toggle="tab" data-bs-target="#nav-list" role="tab"
+                    aria-controls="nav-list" aria-selected="true">列表解析</a>
+                <a class="nav-link" id="nav-detail-tab" data-bs-toggle="tab" data-bs-target="#nav-detail" role="tab"
+                    aria-controls="nav-detail" aria-selected="false">详情解析</a>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-list" role="tabpanel" aria-labelledby="nav-list-tab"
+                tabindex="0">
+                <div class="table_mark mt-2">
+                    <table class="table table-bordered list-preview">
+                        <thead class="list-thead">
+
+                        </thead>
+                        <tbody class="list-tbody">
+
+                        </tbody>
+                    </table>
+                    <div class="table_empty">暂无数据</div>
+                </div>
+
+                <div class="form">
+                    <div class="form-option input-member mt-2">
+                        <label for="" class="form-label">列表元素xpath：</label>
+                        <input type="text" class="form-control form-control-sm" id="xpath-list"
+                            placeholder="请在网页中点击单条列表数据"></input>
+                        <i class="iconfont icon-daixuanze ready-choose"></i>
+                    </div>
+                    <div class="form-option mt-2">
+                        <label for="" class="form-label">翻页方式：</label>
+                        <div class="radio-member">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault1" checked>
+                                <label class="form-check-label" for="flexRadioDefault1">
+                                    页面局部刷新
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault2" disabled>
+                                <label class="form-check-label" for="flexRadioDefault2">
+                                    页面全局刷新
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault3">
+                                <label class="form-check-label" for="flexRadioDefault3">
+                                    按钮查看更多
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="flexRadioDefault"
+                                    id="flexRadioDefault4">
+                                <label class="form-check-label" for="flexRadioDefault4">
+                                    滚动查看更多
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-option input-member mt-2">
+                        <label for="" class="form-label">翻页按钮xpath：</label>
+                        <input type="text" class="form-control form-control-sm" id="xpath-pagination"
+                            placeholder="请在网页中点击翻页按钮位置"></input>
+                        <i class="iconfont icon-daixuanze ready-choose"></i>
+                    </div>
+                    <div class="form-option mt-2">
+                        <label for="" class="form-label">翻页次数：</label>
+                        <input type="number" class="form-control form-control-sm" id="pagination-times"
+                            placeholder="请输入翻页的次数" min="0"></input>
+                    </div>
+                </div>
+
+                <div class="bottom-btns mt-3">
+                    <button type="button" class="btn btn-primary" id="fetch-list">保存配置并预览</button>
+                    <button type="button" class="btn btn-primary" id="jump-next">下一级页面</button>
+                    <button type="button" class="btn btn-primary" id="jump-prev" style="display: none;">上一级页面</button>
+                    <button type="button" class="btn btn-danger" id="clear-list">清除数据</button>
+                    <button type="button" class="btn btn-success" id="start-fetch">开始采集</button>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab" tabindex="0">
+                <div class="table_mark mt-2">
+                    <table class="table table-bordered detail-preview">
+                        <thead class="detail-thead">
+
+                        </thead>
+                        <tbody class="detail-tbody">
+
+                        </tbody>
+                    </table>
+                    <div class="table_empty">暂无数据</div>
+                </div>
+                <label for="" class="form-label mt-2">详情字段xpath：</label>
+                <div class="input-member-list" id="xpath-detail">
+                    <div class="input-member mb-3">
+                        <input type="text" class="form-control form-control-sm" placeholder="请在网页中点击要获取的数据">
+                        <i class="iconfont icon-daixuanze ready-choose"></i>
+                    </div>
+                </div>
+                <div class="bottom-btns mt-3">
+                    <button type="button" class="btn btn-primary" id="fetch-detail">保存配置并预览</button>
+                    <button type="button" class="btn btn-danger" id="clear-detail">清除数据</button>
+                    <button type="button" class="btn btn-primary" id="add-config">配置新增</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/js/md5.js"></script>
+    <script src="/assets/js/request.js"></script>
+    <script src="/assets/js/popup.js"></script>
+</body>
+
+</html>
